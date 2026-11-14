@@ -1,432 +1,815 @@
-<title>Neural 2.0</title>
+<title>Neural Posthouse</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Neural 2.0: a local AI editing studio that directs, builds, reviews and renders editable After Effects edits.">
+<meta name="description" content="Neural 2.0 — an AI post-production studio that plans, cuts, reviews and delivers your edit in After Effects, with you in the director's chair.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-/* Layout: a fixed 3D cutroom behind a left-hung reading column; each section moves the camera to a new part of the studio. */
-:root {
-  --ink: #0a0d14;          /* cutroom dark, blue-biased */
-  --panel: #121722;
-  --line: #263044;
-  --fg: #e8ecf4;
-  --muted: #8f9ab0;
-  --amber: #ffb547;        /* render / director accent */
-  --cyan: #5fd4e6;         /* signal / events */
-  --rose: #ff6b81;         /* repair */
-  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
-  color-scheme: dark;
+:root{
+  --bg:#0c0a08; --bg-2:#13100d; --panel:#191512; --panel-2:#211c17;
+  --line:rgba(239,231,218,.10); --line-2:rgba(239,231,218,.18);
+  --ink:#efe7da; --ink-2:#bcb09f; --ink-3:#7f7568;
+  --teal:#5fe8d8; --teal-2:#2c9e93; --gold:#f0b552; --gold-2:#ffd48a;
+  --rose:#e48ea6; --lilac:#b7a7ee; --olive:#a7b27a; --sand:#d8c39d;
+  --serif:"Instrument Serif",Georgia,serif; --sans:"Geist",system-ui,sans-serif; --mono:"Geist Mono",ui-monospace,monospace;
+  --gut:max(clamp(16px,4.2vw,56px),env(safe-area-inset-left),env(safe-area-inset-right));
+  --ease:cubic-bezier(.2,.7,.1,1);
+  color-scheme:dark;
 }
-* { box-sizing: border-box; }
-html, body { background: var(--ink); color: var(--fg); }
-body { font: 400 16px/1.6 var(--body); overflow-x: hidden; }
-#stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
-#labels { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
-.nlabel { position: absolute; transform: translate(-50%, -160%); font: 600 11px/1 var(--mono); letter-spacing: .14em; color: var(--fg); white-space: nowrap; padding: 4px 7px; border: 1px solid color-mix(in srgb, var(--fg) 22%, transparent); background: color-mix(in srgb, var(--ink) 70%, transparent); border-radius: 3px; transition: opacity .3s; }
-.nlabel.dir { color: var(--amber); border-color: color-mix(in srgb, var(--amber) 50%, transparent); }
-.nlabel.ae { color: var(--cyan); border-color: color-mix(in srgb, var(--cyan) 50%, transparent); }
-.scrim { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, color-mix(in srgb, var(--ink) 88%, transparent) 0%, color-mix(in srgb, var(--ink) 55%, transparent) 42%, transparent 70%); }
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0a08}}
+:root[data-theme="dark"]{--bg:#0c0a08}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;font-weight:350;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--gold);color:#140f08}
+.wrap{width:100%;max-width:1320px;margin:0 auto;padding-inline:var(--gut)}
+.mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+.ic{font-family:var(--mono);font-size:.82em;letter-spacing:0;text-transform:none;color:var(--teal)}
+em{font-style:italic}
 
-header.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); background: color-mix(in srgb, var(--ink) 72%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ink); }
-.brand { font: 800 18px/1 var(--display); letter-spacing: -.01em; display: flex; align-items: center; gap: 10px; }
-.brand i { width: 10px; height: 10px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 14px var(--amber); display: inline-block; }
-nav.links { display: flex; gap: 18px; flex-wrap: wrap; }
-nav.links a { color: var(--muted); text-decoration: none; font: 500 13px/1 var(--body); }
-nav.links a:hover, nav.links a:focus-visible { color: var(--fg); }
-a:focus-visible, button:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 3px; }
+/* film grain over the whole page */
+body::after{content:"";position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
 
-main { position: relative; z-index: 2; }
-section { min-height: 92vh; display: flex; align-items: center; padding-block: 96px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-.col { width: 100%; max-width: 600px; margin-left: clamp(0px, 6vw, 96px); min-width: 0; display: flex; flex-direction: column; gap: 22px; }
-.eyebrow { font: 600 12px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--amber); }
-h1, h2 { font-family: var(--display); font-weight: 800; letter-spacing: -.025em; line-height: .98; margin: 0; text-wrap: balance; }
-h1 { font-size: clamp(48px, 9vw, 112px); }
-h1 em { font-style: normal; color: var(--amber); }
-h2 { font-size: clamp(34px, 5.4vw, 64px); }
-p { margin: 0; color: color-mix(in srgb, var(--fg) 84%, var(--muted)); max-width: 62ch; }
-.lede { font-size: clamp(17px, 2vw, 20px); }
-.hero { min-height: auto; padding-block: 120px 140px; }
-.cta { display: flex; gap: 12px; flex-wrap: wrap; }
-.btn { font: 600 14px/1 var(--body); padding: 14px 18px; border-radius: 6px; text-decoration: none; border: 1px solid var(--line); color: var(--fg); background: var(--panel); cursor: pointer; }
-.btn.primary { background: var(--amber); color: #1a1205; border-color: var(--amber); }
-.btn:hover { filter: brightness(1.08); }
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .5s var(--ease),border-color .5s;border-bottom:1px solid transparent}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:24px}
+.nav.solid{background:rgba(12,10,8,.72);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border-bottom-color:var(--line)}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-size:22px;letter-spacing:.01em}
+.mark{width:26px;height:26px;border-radius:50%;position:relative;background:radial-gradient(circle at 50% 50%,var(--teal) 0 18%,#0b1514 19% 36%,#d9cfe9 37% 100%);box-shadow:0 0 18px rgba(95,232,216,.35)}
+.mark::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(240,181,82,.7);transform:rotateX(70deg) rotateZ(-20deg)}
+.nav ul{display:flex;list-style:none;gap:30px}
+.nav ul a{font-size:13.5px;color:var(--ink-2);transition:color .25s}
+.nav ul a:hover{color:var(--ink)}
+.tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:99px;padding:6px 12px;color:var(--ink-2)}
+.tag i{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
+@media (max-width:860px){.nav ul{display:none}}
 
-.hud { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 4; font: 400 12px/1.5 var(--mono); color: var(--muted); background: color-mix(in srgb, var(--panel) 85%, transparent); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; min-width: 210px; font-variant-numeric: tabular-nums; }
-.hud b { color: var(--fg); font-weight: 600; }
-.hud .st { display: inline-block; padding: 1px 6px; border-radius: 3px; background: color-mix(in srgb, var(--cyan) 18%, transparent); color: var(--cyan); }
-.hud .st.hr { background: color-mix(in srgb, var(--amber) 20%, transparent); color: var(--amber); }
-.hud .st.rp { background: color-mix(in srgb, var(--rose) 20%, transparent); color: var(--rose); }
-.hud small { display: block; margin-top: 4px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
-
-.stations { display: grid; grid-template-columns: 1fr; gap: 0; border-top: 1px solid var(--line); }
-.station { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.station dt { font: 600 13px/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--fg); }
-.station dd { margin: 0; color: var(--muted); min-width: 0; }
-.station.lead dt { color: var(--amber); }
-.minor { font: 400 13px/1.7 var(--mono); color: var(--muted); }
-.minor b { color: var(--fg); font-weight: 600; }
-
-.track { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; counter-reset: ph; }
-.track li { counter-increment: ph; background: color-mix(in srgb, var(--panel) 80%, transparent); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; font: 600 13px/1.3 var(--mono); }
-.track li::before { content: counter(ph, decimal-leading-zero); display: block; font-size: 10px; color: var(--muted); margin-bottom: 4px; letter-spacing: .1em; }
-.track li span { display: block; font: 400 12px/1.4 var(--body); color: var(--muted); margin-top: 4px; }
-.track li.sup { border-color: color-mix(in srgb, var(--amber) 45%, var(--line)); }
-.track li.end { background: color-mix(in srgb, var(--amber) 16%, var(--panel)); border-color: var(--amber); color: var(--amber); }
-.legend { display: flex; gap: 18px; flex-wrap: wrap; font: 400 12px/1.4 var(--mono); color: var(--muted); }
-.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
-
-.seats { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
-.seats li { display: flex; align-items: baseline; gap: 12px; font: 400 14px/1.4 var(--mono); }
-.seats li b { flex: 0 0 26px; color: var(--cyan); font-weight: 600; }
-.seats li em { font-style: normal; color: var(--muted); font-size: 12px; }
-
-pre { margin: 0; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line); border-radius: 8px; padding: 16px; overflow-x: auto; font: 400 13px/1.6 var(--mono); color: var(--fg); }
-pre .k { color: var(--cyan); } pre .s { color: var(--amber); } pre .c { color: var(--muted); }
-.rules { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
-.rules li { padding: 12px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr; gap: 2px; }
-.rules li b { font: 600 15px/1.4 var(--body); }
-.rules li span { color: var(--muted); font-size: 14px; }
-.cmd { display: flex; gap: 8px; align-items: stretch; min-width: 0; }
-.cmd pre { flex: 1; min-width: 0; }
-.copy { font: 600 12px/1 var(--mono); padding: 0 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; }
-.files { font: 400 13px/1.8 var(--mono); color: var(--muted); }
-.files b { color: var(--fg); font-weight: 600; }
-footer { position: relative; z-index: 2; padding-block: 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); border-top: 1px solid var(--line); color: var(--muted); font: 400 12px/1.6 var(--mono); background: var(--ink); }
-
-@media (max-width: 720px) {
-  nav.links { display: none; }
-  .scrim { background: color-mix(in srgb, var(--ink) 74%, transparent); }
-  .station { grid-template-columns: 92px 1fr; }
-  .hud { display: none; }
-  .nlabel { font-size: 9px; }
-  section { min-height: auto; padding-block: 72px; }
+/* hero */
+.hero{position:relative;height:100svh;min-height:640px;overflow:hidden;isolation:isolate}
+.hero-poster{position:absolute;inset:0;z-index:-3;background:url(media/poster.jpg) center/cover no-repeat;transform:scale(1.04);filter:saturate(.9) brightness(.62)}
+#gl{position:absolute;inset:0;width:100%;height:100%;z-index:-2;opacity:0;transition:opacity 1.6s var(--ease)}
+#gl.ready{opacity:1}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(12,10,8,.86) 0%,rgba(12,10,8,.55) 32%,rgba(12,10,8,0) 58%),linear-gradient(0deg,var(--bg) 0%,rgba(12,10,8,0) 26%),linear-gradient(180deg,rgba(12,10,8,.55) 0%,rgba(12,10,8,0) 18%)}
+.hero .wrap{height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding-top:104px;padding-bottom:clamp(36px,7vh,92px)}
+.eyebrow{display:flex;align-items:center;gap:14px;color:var(--gold);margin-bottom:clamp(14px,2.6vh,26px)}
+.eyebrow::before{content:"";width:34px;height:1px;background:currentColor;opacity:.7}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,min(8.2vw,12.5vh),140px);line-height:.92;letter-spacing:-.02em;max-width:11ch}
+.hero h1 em{display:block;background:linear-gradient(100deg,#f7e6c4 10%,var(--gold) 55%,#d98a3a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+.hero .lede{max-width:500px;margin-top:clamp(16px,3vh,30px);font-size:clamp(16px,1.35vw,19px);color:var(--ink-2);line-height:1.55}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.btn{display:inline-flex;align-items:center;gap:12px;height:50px;padding:0 22px;border-radius:99px;font-size:14.5px;font-weight:500;transition:transform .35s var(--ease),background .3s,border-color .3s,box-shadow .3s;cursor:pointer;border:0;font-family:var(--sans)}
+.btn-gold{background:linear-gradient(180deg,#ffd58e,#e9a443);color:#1b1206;box-shadow:0 10px 40px -12px rgba(240,181,82,.7),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 16px 50px -12px rgba(240,181,82,.85),inset 0 1px 0 rgba(255,255,255,.5)}
+.btn-ghost{color:var(--ink);border:1px solid var(--line-2);background:rgba(239,231,218,.03);backdrop-filter:blur(6px)}
+.btn-ghost:hover{border-color:rgba(239,231,218,.4);transform:translateY(-2px)}
+.btn svg{width:16px;height:16px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 34px;margin-top:clamp(24px,6vh,78px);padding-top:clamp(14px,2.4vh,22px);border-top:1px solid var(--line);color:var(--ink-3)}
+.hero-meta b{color:var(--ink);font-weight:500}
+.hero-hint{position:absolute;right:var(--gut);bottom:clamp(40px,8vh,92px);color:var(--ink-3);display:flex;align-items:center;gap:10px}
+.hero-hint i{width:1px;height:46px;background:linear-gradient(var(--ink-3),transparent);display:block}
+@media (max-width:760px){
+  .hero{min-height:720px}
+  .hero::before{background:linear-gradient(0deg,var(--bg) 6%,rgba(12,10,8,.8) 44%,rgba(12,10,8,.1) 72%),linear-gradient(180deg,rgba(12,10,8,.6),rgba(12,10,8,0) 22%)}
+  .hero-hint{display:none}
+  .hero-meta{gap:8px 20px}
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* sections */
+section{position:relative}
+.sec{padding:clamp(72px,8.5vw,128px) 0}
+.sh{display:flex;align-items:center;gap:16px;color:var(--ink-3);margin-bottom:28px}
+.sh .idx{color:var(--gold)}
+.sh::after{content:"";flex:1;height:1px;background:var(--line)}
+h2.display{font-family:var(--serif);font-weight:400;font-size:clamp(42px,6.4vw,96px);line-height:.95;letter-spacing:-.018em;max-width:16ch}
+h2.display em{color:var(--gold-2)}
+.intro{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(28px,5vw,80px);align-items:end;margin-bottom:clamp(48px,6vw,84px)}
+.intro p{color:var(--ink-2);font-size:clamp(16px,1.25vw,18px);max-width:520px}
+@media (max-width:860px){.intro{grid-template-columns:1fr}}
+
+/* film */
+.film{background:linear-gradient(180deg,var(--bg),var(--bg-2) 60%,var(--bg))}
+.viewer{position:relative;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 60px 140px -40px rgba(0,0,0,.9),0 0 0 1px var(--line-2),0 0 120px -30px rgba(240,181,82,.25)}
+.viewer video{width:100%;aspect-ratio:16/9;background:#000;object-fit:cover}
+.viewer .chrome{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(0deg,rgba(0,0,0,.55),rgba(0,0,0,.05) 40%,rgba(0,0,0,.25));transition:opacity .6s var(--ease)}
+.viewer.playing .chrome{opacity:0;pointer-events:none}
+.ticks span{position:absolute;width:22px;height:22px;border-color:rgba(239,231,218,.55);border-style:solid;border-width:0}
+.ticks span:nth-child(1){top:18px;left:18px;border-top-width:1px;border-left-width:1px}
+.ticks span:nth-child(2){top:18px;right:18px;border-top-width:1px;border-right-width:1px}
+.ticks span:nth-child(3){bottom:18px;left:18px;border-bottom-width:1px;border-left-width:1px}
+.ticks span:nth-child(4){bottom:18px;right:18px;border-bottom-width:1px;border-right-width:1px}
+.play{position:relative;width:112px;height:112px;border-radius:50%;border:0;cursor:pointer;background:rgba(15,12,9,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:grid;place-items:center;color:var(--ink);transition:transform .5s var(--ease)}
+.play::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(240,181,82,.9);box-shadow:0 0 40px rgba(240,181,82,.35),inset 0 0 30px rgba(240,181,82,.15)}
+.play::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(240,181,82,.25);animation:pulse 2.8s var(--ease) infinite}
+@keyframes pulse{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.25);opacity:0}}
+.play:hover{transform:scale(1.06)}
+.play svg{width:30px;height:30px;margin-left:5px}
+.vlabel{position:absolute;left:34px;bottom:30px;right:34px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;color:var(--ink-2);pointer-events:none}
+.vlabel .t{font-family:var(--serif);font-size:clamp(22px,2.6vw,34px);color:var(--ink)}
+.vcap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:20px;color:var(--ink-3)}
+@media (max-width:620px){.play{width:78px;height:78px}.play svg{width:22px;height:22px}.vlabel{left:18px;right:18px;bottom:16px}.vlabel .mono{display:none}.ticks{display:none}.viewer{border-radius:12px}}
+
+/* crew */
+.crew-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.card{position:relative;overflow:hidden;border-radius:16px;background:var(--panel);border:1px solid var(--line);min-height:320px;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1.2s var(--ease),filter .8s;filter:saturate(.92) brightness(.82)}
+.card::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(10,8,6,.96) 0%,rgba(10,8,6,.65) 34%,rgba(10,8,6,0) 64%)}
+.card:hover img{transform:scale(1.045);filter:saturate(1.05) brightness(.95)}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(95,232,216,0);transition:box-shadow .5s;pointer-events:none}
+.card:hover::after{box-shadow:inset 0 0 0 1px rgba(95,232,216,.45)}
+.card .body{padding:24px 26px 26px}
+.card .no{color:var(--gold);margin-bottom:10px}
+.card h3{font-family:var(--serif);font-weight:400;font-size:clamp(30px,3vw,44px);line-height:1;margin-bottom:10px}
+.card p{color:var(--ink-2);font-size:14.5px;max-width:46ch}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:4px 9px;border-radius:99px;border:1px solid var(--line-2);color:var(--ink-2);background:rgba(12,10,8,.4)}
+.c-dir{grid-column:span 7;grid-row:span 2;min-height:660px}
+.c-dir h3{font-size:clamp(44px,5vw,76px)}
+.c-plan,.c-edit{grid-column:span 5}
+.c-rev,.c-del{grid-column:span 6;min-height:300px}
+.chip.lead{border-color:rgba(240,181,82,.55);color:var(--gold-2)}
+@media (max-width:980px){.c-dir,.c-plan,.c-edit,.c-rev,.c-del{grid-column:span 12;grid-row:auto;min-height:380px}.c-dir{min-height:520px}}
+.support{margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--line);gap:1px}
+.support div{background:var(--bg-2);padding:22px 24px}
+.support h4{font-weight:500;font-size:15px;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.support p{color:var(--ink-3);font-size:13.5px;line-height:1.5}
+.support .human{color:var(--gold);font-family:var(--mono);font-size:10px;letter-spacing:.12em;border:1px solid rgba(240,181,82,.4);padding:2px 7px;border-radius:99px}
+@media (max-width:860px){.support{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.support{grid-template-columns:1fr}}
+
+/* pipeline / NLE */
+.pipe{background:radial-gradient(1200px 500px at 70% 0%,rgba(95,232,216,.06),transparent 60%),var(--bg)}
+.nle{border:1px solid var(--line-2);border-radius:16px;background:linear-gradient(180deg,#17130f,#100d0a);box-shadow:0 50px 120px -50px rgba(0,0,0,.9);overflow:hidden}
+.nle-top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--line);color:var(--ink-3)}
+.dots{display:flex;gap:7px}.dots i{width:10px;height:10px;border-radius:50%;background:#2a241e;display:block}
+.tc{font-family:var(--mono);font-size:13px;color:var(--teal);letter-spacing:.06em}
+.nle-scroll{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#3a3129 transparent}
+.nle-inner{position:relative;min-width:880px;padding:0 20px 22px 92px}
+.ruler{height:34px;position:relative;border-bottom:1px solid var(--line);background-image:repeating-linear-gradient(90deg,rgba(239,231,218,.22) 0 1px,transparent 1px 10%),repeating-linear-gradient(90deg,rgba(239,231,218,.09) 0 1px,transparent 1px 2%);background-size:100% 12px,100% 6px;background-position:0 100%,0 100%;background-repeat:no-repeat}
+.ruler span{position:absolute;top:6px;font-family:var(--mono);font-size:10px;color:var(--ink-3);padding-left:4px}
+.track{position:relative;height:66px;margin-top:10px;display:flex;gap:4px}
+.track .lbl{position:absolute;left:-74px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10.5px;color:var(--ink-3);letter-spacing:.1em;width:60px}
+.clip{flex:1;min-width:0;border-radius:7px;padding:9px 10px;font-family:var(--mono);font-size:10.5px;line-height:1.3;color:#120e0a;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;position:relative;overflow:hidden;transition:transform .35s var(--ease),filter .35s,box-shadow .35s;filter:saturate(.75) brightness(.72)}
+.clip small{font-size:9px;opacity:.7;letter-spacing:.08em;text-transform:uppercase}
+.clip::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.08) 0 2px,transparent 2px 8px);mix-blend-mode:multiply;pointer-events:none}
+.clip.on{filter:none;transform:translateY(-3px);box-shadow:0 14px 30px -12px rgba(240,181,82,.7),0 0 0 1px rgba(255,255,255,.35) inset}
+.k-plan{background:linear-gradient(180deg,#8ff3e6,#4cc8bb)}
+.k-dir{background:linear-gradient(180deg,#ffd796,#e7a446)}
+.k-edit{background:linear-gradient(180deg,#d6cbff,#9d8bea)}
+.k-rev{background:linear-gradient(180deg,#f6b3c4,#d47790)}
+.k-del{background:linear-gradient(180deg,#d1da9f,#97a362)}
+.k-you{background:linear-gradient(180deg,#fbf3e6,#d9ccb6)}
+.track.fx{height:30px}
+.fxm{flex:1;display:flex;align-items:center;justify-content:center}
+.fxm b{font-family:var(--mono);font-weight:400;font-size:10px;color:var(--rose);border:1px dashed rgba(228,142,166,.5);border-radius:99px;padding:3px 8px;white-space:nowrap}
+.playhead{position:absolute;top:0;bottom:0;width:2px;left:92px;background:var(--gold);box-shadow:0 0 18px rgba(240,181,82,.8);pointer-events:none;will-change:transform}
+.playhead::before{content:"";position:absolute;top:0;left:-6px;border:7px solid transparent;border-top:9px solid var(--gold)}
+.readout{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;padding:22px 24px;border-top:1px solid var(--line);min-height:104px}
+.readout .ph{font-family:var(--serif);font-size:clamp(28px,3vw,40px);line-height:1;min-width:8ch}
+.readout p{color:var(--ink-2);font-size:15px}
+.readout .st{color:var(--ink-3);text-align:right}
+@media (max-width:760px){.readout{grid-template-columns:1fr;gap:8px}.readout .st{text-align:left}}
+.legend{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;color:var(--ink-3)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:10px;height:10px;border-radius:3px;display:block}
+
+/* band image */
+.band{position:relative;height:clamp(360px,62vw,720px);overflow:hidden}
+.band img{position:absolute;inset:-8% 0;width:100%;height:116%;object-fit:cover;filter:brightness(.7) saturate(.95);will-change:transform}
+.band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0%,rgba(12,10,8,.1) 26%,rgba(12,10,8,.1) 60%,var(--bg) 100%)}
+.band .wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:clamp(36px,6vw,80px)}
+.band blockquote{font-family:var(--serif);font-size:clamp(34px,5.2vw,78px);line-height:.98;max-width:15ch;letter-spacing:-.015em}
+.band blockquote em{color:var(--teal)}
+
+/* routing */
+.split{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(36px,6vw,96px);align-items:start}
+@media (max-width:920px){.split{grid-template-columns:1fr}}
+.split .copy p{color:var(--ink-2);margin-top:22px;max-width:48ch}
+.notes{margin-top:34px;display:grid;gap:12px}
+.notes div{display:flex;gap:14px;align-items:flex-start;color:var(--ink-2);font-size:14.5px}
+.notes svg{flex:none;width:18px;height:18px;margin-top:3px;color:var(--teal)}
+.stack{border:1px solid var(--line-2);border-radius:16px;background:var(--panel);overflow:hidden}
+.stack header{display:flex;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line);color:var(--ink-3)}
+.seat{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line);position:relative}
+.seat .n{font-family:var(--serif);font-size:28px;color:var(--ink-3);line-height:1}
+.seat h5{font-size:16px;font-weight:500}
+.seat p{font-size:13px;color:var(--ink-3)}
+.seat .badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:99px;border:1px solid var(--line-2);color:var(--ink-2);white-space:nowrap}
+.seat.first .badge{color:var(--teal);border-color:rgba(95,232,216,.45)}
+.seat.first .n{color:var(--teal)}
+.reserved{padding:20px 22px;background:linear-gradient(90deg,rgba(240,181,82,.08),transparent)}
+.reserved .mono{color:var(--gold)}
+.reserved div{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.reserved .chip{border-color:rgba(240,181,82,.4);color:var(--gold-2)}
+
+/* AE lane */
+.lane{background:linear-gradient(180deg,var(--bg),#0f0d0b)}
+.lanefig{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;margin-bottom:28px}
+.node{border:1px solid var(--line-2);border-radius:14px;padding:22px;background:var(--panel)}
+.node .mono{color:var(--ink-3)}
+.node h4{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.05;margin:10px 0 8px}
+.node p{color:var(--ink-2);font-size:14px}
+.node code{font-family:var(--mono);font-size:12px;color:var(--teal)}
+.node.ae{border-color:rgba(183,167,238,.45);background:linear-gradient(160deg,rgba(183,167,238,.1),var(--panel) 60%)}
+.wire{position:relative;width:clamp(40px,6vw,96px)}
+.wire::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg,var(--teal-2),var(--gold))}
+.wire i{position:absolute;top:calc(50% - 4px);left:0;width:8px;height:8px;border-radius:2px;background:var(--gold);box-shadow:0 0 14px var(--gold);animation:travel 2.6s linear infinite}
+.wire i:nth-child(2){animation-delay:1.3s}
+@keyframes travel{from{left:0}to{left:calc(100% - 8px)}}
+@keyframes travelv{from{top:0}to{top:calc(100% - 8px)}}
+@media (max-width:920px){.lanefig{grid-template-columns:1fr}.wire{width:auto;height:42px}.wire::before{left:50%;right:auto;top:0;bottom:0;width:1px;height:auto;background:linear-gradient(var(--teal-2),var(--gold))}.wire i{left:calc(50% - 4px);top:0;animation-name:travelv}}
+.json{font-family:var(--mono);font-size:13px;line-height:1.75;color:var(--ink-2);background:#0b0907;border:1px solid var(--line);border-radius:14px;padding:22px 24px;overflow-x:auto;white-space:pre}
+.json .k{color:var(--lilac)}.json .s{color:var(--teal)}.json .c{color:var(--ink-3)}
+.lane-rules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.lane-rules div{border-top:1px solid var(--gold);padding-top:16px}
+.lane-rules h5{font-family:var(--serif);font-weight:400;font-size:24px;margin-bottom:6px}
+.lane-rules p{color:var(--ink-2);font-size:14px}
+.lane-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:start}
+@media (max-width:920px){.lane-grid,.lane-rules{grid-template-columns:1fr}}
+
+/* rules */
+.rules{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.rule{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:30px 0;border-bottom:1px solid var(--line)}
+.rule:nth-child(odd){padding-right:clamp(20px,4vw,56px)}
+.rule:nth-child(even){padding-left:clamp(20px,4vw,56px);border-left:1px solid var(--line)}
+.rule .n{font-family:var(--serif);font-size:44px;line-height:.9;color:var(--gold)}
+.rule h5{font-size:17px;font-weight:500;margin-bottom:6px}
+.rule p{color:var(--ink-2);font-size:14.5px}
+@media (max-width:820px){.rules{grid-template-columns:1fr}.rule:nth-child(n){padding-left:0;padding-right:0;border-left:0}}
+
+/* start */
+.start{background:radial-gradient(900px 500px at 15% 10%,rgba(240,181,82,.08),transparent 60%),var(--bg-2)}
+.steps{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+.step{border:1px solid var(--line);border-radius:16px;padding:26px;background:rgba(12,10,8,.5);min-width:0}
+.step .mono{color:var(--gold)}
+.step h4{font-family:var(--serif);font-weight:400;font-size:30px;margin:8px 0;line-height:1.05}
+.step p{color:var(--ink-2);font-size:14.5px;margin-bottom:14px}
+.cmd{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#0b0907;border:1px solid var(--line);border-radius:10px;padding:10px 10px 10px 14px;margin-top:8px;min-width:0}
+.cmd code{font-family:var(--mono);font-size:12.5px;color:var(--teal);overflow-x:auto;white-space:nowrap;scrollbar-width:none;min-width:0}
+.cmd button{flex:none;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);background:transparent;border:1px solid var(--line-2);border-radius:7px;padding:6px 9px;cursor:pointer;transition:color .2s,border-color .2s}
+.cmd button:hover{color:var(--ink);border-color:var(--ink-3)}
+.cmd button.ok{color:var(--teal);border-color:var(--teal-2)}
+.docs{margin-top:16px;display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.docs div{background:var(--bg-2);padding:18px}
+.docs b{display:block;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px;overflow-wrap:anywhere}
+.docs span{font-size:12.5px;color:var(--ink-3);line-height:1.45;display:block}
+@media (max-width:980px){.docs{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:560px){.docs{grid-template-columns:1fr 1fr}}
+
+/* footer */
+footer{padding:clamp(80px,10vw,140px) 0 calc(40px + env(safe-area-inset-bottom));border-top:1px solid var(--line);overflow:hidden}
+.fbig{font-family:var(--serif);font-size:clamp(52px,12vw,196px);line-height:.85;letter-spacing:-.03em;white-space:nowrap}
+.fbig em{color:var(--gold)}
+.frow{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:40px;color:var(--ink-3)}
+@media (max-width:520px){.fbig{white-space:normal}}
+
+/* reveal */
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+.js .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  body::after{animation:none}
+  .js .rv{opacity:1;transform:none;transition:none}
+  .play::after,.wire i{animation:none}
+  .wire i:nth-child(2){display:none}
+}
 </style>
 
-<canvas id="stage" aria-hidden="true"></canvas>
-<div class="scrim"></div>
-<div id="labels" aria-hidden="true"></div>
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>Neural Posthouse</a>
+    <ul>
+      <li><a href="#film">Film</a></li>
+      <li><a href="#crew">Crew</a></li>
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#lane">AE lane</a></li>
+      <li><a href="#start">Get started</a></li>
+    </ul>
+    <span class="tag mono"><i></i>Neural 2.0</span>
+  </div>
+</nav>
 
-<header class="bar">
-  <div class="brand"><i></i>Neural 2.0</div>
-  <nav class="links" aria-label="Sections">
-    <a href="#stations">Stations</a><a href="#pipeline">Pipeline</a><a href="#routing">Routing</a><a href="#lane">AE lane</a><a href="#rules">Rules</a><a href="#start">Get started</a>
-  </nav>
+<header class="hero" id="top">
+  <div class="hero-poster" aria-hidden="true"></div>
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="eyebrow mono">AI post-production studio · v2.0</div>
+    <h1>Your idea.<em>A whole creative crew.</em></h1>
+    <p class="lede">Neural plans, cuts, reviews and delivers your edit inside After Effects. A director, a crew of specialist stations and one guarded hand on the timeline. You keep the final word.</p>
+    <div class="cta">
+      <a class="btn btn-gold" href="#film"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.8v10.4c0 .6.7 1 1.2.6l8-5.2c.5-.3.5-1 0-1.3l-8-5.2C4.7 1.8 4 2.2 4 2.8z"/></svg>Watch the film</a>
+      <a class="btn btn-ghost" href="#start">Set up Neural 2.0</a>
+    </div>
+    <div class="hero-meta mono"><span><b>9</b> stations</span><span><b>10</b> phases per revision</span><span><b>1</b> guarded AE writer</span><span><b>0</b> paid fallbacks</span></div>
+  </div>
+  <div class="hero-hint mono" aria-hidden="true"><i></i>Real-time scene</div>
 </header>
 
-<aside class="hud" aria-live="off">
-  <div>run <b>r1</b> · rev <b>1</b> · <span id="hudState" class="st">WORKING</span></div>
-  <div>phase <b id="hudPhase">build</b> → <b id="hudStation">Edit</b></div>
-  <div>TC <b id="hudTc">00:00:00:00</b> @ 23.976</div>
-  <small>Simulated run, for illustration</small>
-</aside>
-
-<main>
-  <section class="hero" data-cam="0">
-    <div class="col">
-      <div class="eyebrow">Local AI cutroom for After Effects</div>
-      <h1>Brief in.<br><em>Editable</em> edit out.</h1>
-      <p class="lede">Neural 2.0 runs a crew of AI models on your own PC. A director plans the edit. The other stations scout, build, review and render it inside your own After Effects through one guarded native lane. You only step in to accept or give notes.</p>
-      <div class="cta"><a class="btn primary" href="#start">Set it up</a><a class="btn" href="#stations">See how it works</a></div>
+<section class="sec film" id="film">
+  <div class="wrap">
+    <div class="sh mono rv"><span class="idx">01</span><span>The film</span></div>
+    <div class="intro">
+      <h2 class="display rv">Thirty seconds inside <em>the posthouse.</em></h2>
+      <p class="rv">Delegate. Create. Refine. Every robot in the film is a station in Neural, and every golden cube is a shot moving through the pipeline toward your review.</p>
     </div>
-  </section>
-
-  <section id="stations" data-cam="1">
-    <div class="col">
-      <div class="eyebrow">The crew</div>
-      <h2>Five stations around one director.</h2>
-      <p>Each station is a seat you fill with a model from your own subscriptions. In the scene, they orbit the director, which owns every creative decision.</p>
-      <dl class="stations">
-        <div class="station lead"><dt>Director</dt><dd>Owns the brief, the creative plan and the final calls. Use your strongest model here: Opus, GPT Sol or Gemini high.</dd></div>
-        <div class="station"><dt>Plan</dt><dd>Scouts the footage, music and references, then reviews the director's plan before anything is built.</dd></div>
-        <div class="station"><dt>Edit</dt><dd>Builds the prototype, then the full composition, in After Effects through TonyFX. It also applies the repairs.</dd></div>
-        <div class="station"><dt>Review</dt><dd>A harsh frame-by-frame pass, then a Goldfish pass from a reviewer with no prior context.</dd></div>
-        <div class="station"><dt>Deliver</dt><dd>Renders, exports and hands the cut to you for screening.</dd></div>
-      </dl>
-      <p class="minor"><b>Relay</b>: local Qwen assistant on your CPU · <b>Screening</b>: watch and add timestamped notes · <b>Debug</b>: health and locks · <b>Manual Edit</b>: human only, no AI ever acts here</p>
+    <div class="viewer rv" id="viewer">
+      <video id="video" preload="metadata" playsinline poster="media/poster.jpg" src="media/neural-posthouse-ad.mp4"></video>
+      <div class="chrome">
+        <div class="ticks" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <button class="play" id="play" aria-label="Play the Neural Posthouse film"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.6v14.8c0 .8.9 1.3 1.6.9l11.6-7.4c.6-.4.6-1.3 0-1.7L8.6 3.8C7.9 3.3 7 3.8 7 4.6z"/></svg></button>
+        <div class="vlabel"><span class="t">Neural Posthouse</span><span class="mono">Concept film · 00:30 · Sound on</span></div>
+      </div>
     </div>
-  </section>
+    <div class="vcap mono rv"><span>Neural Posthouse — concept film</span><span>1280 × 720 · H.264 · AAC</span></div>
+  </div>
+</section>
 
-  <section id="pipeline" data-cam="2">
-    <div class="col">
-      <div class="eyebrow">One revision</div>
-      <h2>Ten phases. Reviews can send it back.</h2>
-      <p>The frames spiralling around the core are one revision moving through the pipeline. Any review can send the work to <b style="color:var(--rose)">repair</b>, which loops back to Edit. Nothing ships until you accept it.</p>
-      <ol class="track">
-        <li>scout<span>Plan</span></li>
-        <li class="sup">plan<span>Director</span></li>
-        <li class="sup">plan_review<span>Plan</span></li>
-        <li>prototype<span>Edit</span></li>
-        <li class="sup">prototype_review<span>Review</span></li>
-        <li>build<span>Edit</span></li>
-        <li>render<span>Deliver</span></li>
-        <li class="sup">harsh_review<span>Review</span></li>
-        <li class="sup">goldfish_review<span>Review</span></li>
-        <li class="end">HUMAN_REVIEW<span style="color:inherit">You</span></li>
-      </ol>
-      <div class="legend"><span><i style="background:var(--amber)"></i>Director judges</span><span><i style="background:var(--rose)"></i>Repair loop → Edit</span><span><i style="background:var(--cyan)"></i>Waits on AE or render</span></div>
+<section class="sec" id="crew">
+  <div class="wrap">
+    <div class="sh mono rv"><span class="idx">02</span><span>The crew</span></div>
+    <div class="intro">
+      <h2 class="display rv">Five stations. <em>One director.</em></h2>
+      <p class="rv">Each station is a seat you fill with the model you trust: Claude, Codex, OpenCode or Gemini. The director owns the edit; the crew does the work and argues with it.</p>
     </div>
-  </section>
-
-  <section id="routing" data-cam="3">
-    <div class="col">
-      <div class="eyebrow">Routing and events</div>
-      <h2>Cheap seats first. No polling.</h2>
-      <p>Every station has an ordered list of seats. When a seat is unavailable or out of quota, the gateway moves to the next one at a safe boundary. It never moves in the middle of an AE command, and it never adds a paid API.</p>
-      <ol class="seats">
-        <li><b>1</b>Free OpenCode models <em>worker default</em></li>
-        <li><b>2</b>Claude Sonnet</li>
-        <li><b>3</b>Claude Haiku</li>
-        <li><b>4</b>Codex Terra / Luna <em>last</em></li>
-      </ol>
-      <p>Reserved directors are <b>opus</b>, <b>gpt-6.1-sol</b>, <b>gpt-6-sol</b> and <b>astra</b>. Stations wait on real completion events instead of polling, so idle time costs no tokens:</p>
-      <pre><span class="c"># blocks until a result exists, then acknowledge after reading it</span>
-python station_cli.py <span class="k">wait</span> --recipient <span class="s">Director</span></pre>
+    <div class="crew-grid">
+      <article class="card c-dir rv">
+        <img src="media/director.jpg" alt="A lilac sphere robot with a glowing teal eye directs a golden shot card" loading="lazy" width="1100" height="619">
+        <div class="body">
+          <div class="no mono">Station 01</div>
+          <h3>Director</h3>
+          <p>Owns the edit: the brief, the creative plan and every final call. Supervises each review gate and decides when a cut goes back for repair. Seat it with your strongest model.</p>
+          <div class="chips"><span class="chip lead">plan</span><span class="chip">plan_review</span><span class="chip">prototype_review</span><span class="chip">harsh_review</span><span class="chip">goldfish_review</span></div>
+        </div>
+      </article>
+      <article class="card c-plan rv">
+        <img src="media/plan.jpg" alt="A pink robot at a mixing desk studies an audio waveform" loading="lazy" width="1100" height="619">
+        <div class="body">
+          <div class="no mono">Station 02</div>
+          <h3>Plan</h3>
+          <p>Scouts the footage and music, then pressure-tests the director's plan.</p>
+          <div class="chips"><span class="chip lead">scout</span><span class="chip lead">plan_review</span></div>
+        </div>
+      </article>
+      <article class="card c-edit rv">
+        <img src="media/edit.jpg" alt="A boxy cream robot edits a timeline at a console" loading="lazy" width="1100" height="474">
+        <div class="body">
+          <div class="no mono">Station 03</div>
+          <h3>Edit</h3>
+          <p>Builds the prototype and the full composition in After Effects through TonyFX, and applies repairs.</p>
+          <div class="chips"><span class="chip lead">prototype</span><span class="chip lead">build</span><span class="chip lead">repair</span></div>
+        </div>
+      </article>
+      <article class="card c-rev rv">
+        <img src="media/review.jpg" alt="A robot sends a golden cube through a glowing portal" loading="lazy" width="1100" height="619">
+        <div class="body">
+          <div class="no mono">Station 04</div>
+          <h3>Review</h3>
+          <p>Harsh frame-by-frame review against the brief, then a fresh-eyes Goldfish pass.</p>
+          <div class="chips"><span class="chip lead">prototype_review</span><span class="chip lead">harsh_review</span><span class="chip lead">goldfish_review</span></div>
+        </div>
+      </article>
+      <article class="card c-del rv">
+        <img src="media/deliver.jpg" alt="A projector-headed robot screens the finished cut" loading="lazy" width="1100" height="619">
+        <div class="body">
+          <div class="no mono">Station 05</div>
+          <h3>Deliver</h3>
+          <p>Renders and exports each revision, ready for your screening.</p>
+          <div class="chips"><span class="chip lead">render</span></div>
+        </div>
+      </article>
     </div>
-  </section>
-
-  <section id="lane" data-cam="4">
-    <div class="col">
-      <div class="eyebrow">The native lane</div>
-      <h2>One writer into After Effects.</h2>
-      <p>The cyan beam in the scene is the only path into AE. The station holding the lease writes a command. The TonyFX panel runs it inside After Effects and writes back a signed result. If a result is missing, the lane inspects AE. It never sends the command again.</p>
-      <pre><span class="c">Documents/ae-mcp-bridge/ae_command.json</span>
-{ <span class="k">"id"</span>: <span class="s">"cmd_0412"</span>, <span class="k">"op"</span>: <span class="s">"add_layer"</span>, <span class="k">"comp"</span>: <span class="s">"MAIN_1080x1920"</span> }
-
-<span class="c">ae_mcp_result.json</span>
-{ <span class="k">"id"</span>: <span class="s">"cmd_0412"</span>, <span class="k">"ok"</span>: true, <span class="k">"_servicedBy"</span>: <span class="s">"TonyFX"</span> }</pre>
-      <p>The build stays editable: labelled precomps, real keyframes and native effects. You can take over any layer by hand.</p>
+    <div class="support rv">
+      <div><h4>Relay</h4><p>A local assistant (Qwen on your CPU) for quick questions and voice.</p></div>
+      <div><h4>Screening</h4><p>Watch renders and leave timestamped notes.</p></div>
+      <div><h4>Debug</h4><p>Service, provider and lock health in one place.</p></div>
+      <div><h4>Manual Edit <span class="human">HUMAN ONLY</span></h4><p>Your hands on the project. AIs never act here.</p></div>
+      <div><h4>Executive Director</h4><p>An optional supervising seat, off by default.</p></div>
+      <div><h4>Director notebook</h4><p>The director's running log of decisions.</p></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="rules" data-cam="5">
-    <div class="col">
-      <div class="eyebrow">House rules</div>
-      <h2>What keeps the edits clean.</h2>
-      <ul class="rules">
-        <li><b>Never replay UNKNOWN.</b><span>An unconfirmed AE command is inspected, never re-sent.</span></li>
-        <li><b>Beats before effects.</b><span>Story-first footage flow, with cuts locked to the music and ramps only on impact moments.</span></li>
-        <li><b>Fresh eyes once.</b><span>One Goldfish reviewer with no context, at most one targeted recheck. No endless loops.</span></li>
-        <li><b>Substitute, never fake.</b><span>If a plugin or font is missing, the plan says so and uses a native substitute.</span></li>
-        <li><b>Only you accept.</b><span>Tests, sampled frames and listening are gates. Acceptance is human.</span></li>
-      </ul>
+<section class="sec pipe" id="pipeline">
+  <div class="wrap">
+    <div class="sh mono rv"><span class="idx">03</span><span>The pipeline</span></div>
+    <div class="intro">
+      <h2 class="display rv">One revision, <em>cut in ten passes.</em></h2>
+      <p class="rv">Every revision runs the same timeline. Any review can send the work back to Edit for repair. It ends with you: watch it, accept it, or write the notes for revision two.</p>
     </div>
-  </section>
+    <div class="nle rv">
+      <div class="nle-top"><div class="dots"><i></i><i></i><i></i></div><span class="mono">Revision 01 · Sequence</span><span class="tc" id="tc">00:00:00:00</span></div>
+      <div class="nle-scroll">
+        <div class="nle-inner" id="nle">
+          <div class="ruler" id="ruler"></div>
+          <div class="track" id="trackV"><span class="lbl">V1 · phase</span></div>
+          <div class="track fx"><span class="lbl">FX · loop</span>
+            <div class="fxm"></div><div class="fxm"></div><div class="fxm"></div><div class="fxm"></div>
+            <div class="fxm"><b>↺ repair → Edit</b></div><div class="fxm"></div><div class="fxm"></div>
+            <div class="fxm"><b>↺ repair</b></div><div class="fxm"><b>↺ repair</b></div><div class="fxm"></div>
+          </div>
+          <div class="playhead" id="ph"></div>
+        </div>
+      </div>
+      <div class="readout" aria-live="polite">
+        <div class="ph" id="rName">scout</div>
+        <p id="rDesc">Scouts the footage and music; logs the moments, beats and usable shots.</p>
+        <div class="st mono" id="rSt">Plan station</div>
+      </div>
+    </div>
+    <div class="legend mono rv">
+      <span><i class="k-plan"></i>Plan</span><span><i class="k-dir"></i>Director</span><span><i class="k-edit"></i>Edit</span><span><i class="k-rev"></i>Review</span><span><i class="k-del"></i>Deliver</span><span><i class="k-you"></i>You</span>
+    </div>
+  </div>
+</section>
 
-  <section id="start" data-cam="6">
-    <div class="col">
-      <div class="eyebrow">Get started</div>
-      <h2>Clone, set up, sign in.</h2>
-      <p>You need Windows, Python 3.12+, After Effects and at least one AI CLI. Setup downloads the Electron runtime, installs the TonyFX panel and adds a desktop shortcut. Add <code>-Voice</code> for the local voice and dictation models.</p>
-      <div class="cmd"><pre id="c1">Setup-Neural2.cmd</pre><button class="copy" type="button" data-copy="c1">Copy</button></div>
-      <div class="cmd"><pre id="c2">claude    codex login    opencode auth login    agy</pre><button class="copy" type="button" data-copy="c2">Copy</button></div>
-      <p class="files"><b>README.md</b> quick start · <b>REQUIREMENTS.md</b> every external tool · <b>SETUP.md</b> install steps · <b>ARCHITECTURE.md</b> internals · <b>WORKFLOW_RULES.md</b> house rules · <b>AI_START_HERE.md</b> for your assistant</p>
+<div class="band">
+  <img src="media/flow.jpg" alt="Golden shot cubes travel along glowing teal trails across the studio floor" loading="lazy" id="bandImg">
+  <div class="wrap"><blockquote class="rv">Every shot travels <em>one guarded lane.</em></blockquote></div>
+</div>
+
+<section class="sec" id="routing">
+  <div class="wrap split">
+    <div class="copy">
+      <div class="sh mono rv"><span class="idx">04</span><span>Routing</span></div>
+      <h2 class="display rv">Seats, <em>not subscriptions.</em></h2>
+      <p class="rv">Every seat is a provider, a model and an effort level from <code class="ic">model_catalog.json</code>. For each station you pick an ordered list. When a seat is unavailable, out of quota or failing, the gateway moves to the next one.</p>
+      <div class="notes rv">
+        <div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10.5l4 4 8-9"/></svg>Hand-offs happen only at safe boundaries, never in the middle of an After Effects command.</div>
+        <div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10.5l4 4 8-9"/></svg>No paid fallback. Neural never switches you to a paid API or changes billing.</div>
+        <div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10.5l4 4 8-9"/></svg><span>Workers wait on real completion events with <code class="ic">station_cli.py&nbsp;wait</code>, so nothing burns tokens polling.</span></div>
+      </div>
     </div>
-  </section>
-</main>
-<footer>Neural 2.0 · runs locally on 127.0.0.1 · your AI accounts stay yours · After Effects is a trademark of Adobe. Plugins and models named here belong to their owners.</footer>
+    <div class="stack rv">
+      <header class="mono"><span>Worker seat order</span><span>Fallback ↓</span></header>
+      <div class="seat first"><span class="n">1</span><div><h5>OpenCode · free models</h5><p>First in line for bounded worker tasks</p></div><span class="badge">Free</span></div>
+      <div class="seat"><span class="n">2</span><div><h5>Claude Sonnet</h5><p>Capable worker for suitable bounded work</p></div><span class="badge">Worker</span></div>
+      <div class="seat"><span class="n">3</span><div><h5>Claude Haiku</h5><p>Fast, light worker passes</p></div><span class="badge">Worker</span></div>
+      <div class="seat"><span class="n">4</span><div><h5>Codex</h5><p>Last in the worker chain</p></div><span class="badge">Last</span></div>
+      <div class="reserved"><span class="mono">Reserved for the director's chair</span>
+        <div><span class="chip">opus</span><span class="chip">gpt-6.1-sol</span><span class="chip">gpt-6-sol</span><span class="chip">astra</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec lane" id="lane">
+  <div class="wrap">
+    <div class="sh mono rv"><span class="idx">05</span><span>The native AE lane</span></div>
+    <div class="intro">
+      <h2 class="display rv">One hand <em>on the timeline.</em></h2>
+      <p class="rv">Exactly one station holds the After Effects lease at a time. Commands travel through the TonyFX panel, and the build stays editable so you can take over at any layer.</p>
+    </div>
+    <div class="lanefig rv">
+      <div class="node"><span class="mono">Neural service</span><h4>Lease holder</h4><p><code>native_lane.py</code> writes one guarded command to <code>ae_command.json</code>.</p></div>
+      <div class="wire" aria-hidden="true"><i></i><i></i></div>
+      <div class="node ae"><span class="mono">After Effects</span><h4>TonyFX CEP panel</h4><p>Executes the command inside AE: precomps, labelled layers, keyframes.</p></div>
+      <div class="wire" aria-hidden="true"><i></i><i></i></div>
+      <div class="node"><span class="mono">Result</span><h4>Verified answer</h4><p>Writes <code>ae_mcp_result.json</code>, stamped <code>"_servicedBy": "TonyFX"</code>.</p></div>
+    </div>
+    <div class="lane-grid">
+      <pre class="json rv"><span class="c">// Documents/ae-mcp-bridge/ae_mcp_result.json</span>
+{
+  <span class="k">"_servicedBy"</span>: <span class="s">"TonyFX"</span>,
+  <span class="k">"status"</span>: <span class="s">"…"</span>
+}
+<span class="c">// Missing or ambiguous? The lane stops and inspects AE.</span>
+<span class="c">// It never re-sends: an UNKNOWN is never replayed.</span></pre>
+      <div class="lane-rules rv">
+        <div><h5>One writer</h5><p>The <code class="ic">tfx_skill_client.lock</code> lease admits one station at a time.</p></div>
+        <div><h5>No replays</h5><p>An unclear result is inspected, never re-sent, so edits never double-apply.</p></div>
+        <div><h5>Editable</h5><p>No baked renders. Every layer stays labelled and yours to take over.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="rules">
+  <div class="wrap">
+    <div class="sh mono rv"><span class="idx">06</span><span>House rules</span></div>
+    <div class="intro">
+      <h2 class="display rv">The rules <em>that keep it honest.</em></h2>
+      <p class="rv">Distilled from the source studio's operating policy. Your own brief and corrections always override the creative defaults, but these seven are never broken.</p>
+    </div>
+    <div class="rules">
+      <div class="rule rv"><span class="n">1</span><div><h5>One native AE writer</h5><p>Only the lease holder sends TonyFX commands. Never two AE instances, never a second bridge.</p></div></div>
+      <div class="rule rv"><span class="n">2</span><div><h5>Never replay an UNKNOWN</h5><p>If it is unclear whether a command ran, inspect AE first.</p></div></div>
+      <div class="rule rv"><span class="n">3</span><div><h5>Never delete locks by hand</h5><p>Not while a run is live. Use Debug → maintenance.</p></div></div>
+      <div class="rule rv"><span class="n">4</span><div><h5>Manual Edit is human-only</h5><p>The AIs never act in your station.</p></div></div>
+      <div class="rule rv"><span class="n">5</span><div><h5>No billing or provider changes</h5><p>No paid fallback. OpenCode seats stay on free models unless you say otherwise.</p></div></div>
+      <div class="rule rv"><span class="n">6</span><div><h5>Never print or commit secrets</h5><p>Service tokens, cookies and CLI credentials stay on your machine.</p></div></div>
+      <div class="rule rv"><span class="n">7</span><div><h5>Report AE crashes at once</h5><p>A crash or hang goes straight to the human.</p></div></div>
+      <div class="rule rv"><span class="n">∞</span><div><h5>Only the human accepts</h5><p>Tests, sampled pixels, full-speed playback and listening are separate gates. Acceptance is yours.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec start" id="start">
+  <div class="wrap">
+    <div class="sh mono rv"><span class="idx">07</span><span>Get started</span></div>
+    <div class="intro">
+      <h2 class="display rv">Open the doors <em>on your machine.</em></h2>
+      <p class="rv">Windows, After Effects with the TonyFX panel, and your own AI accounts. If an AI is helping you set up, point it at <code class="ic">AI_START_HERE.md</code> first.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv"><span class="mono">Step 1</span><h4>Check the requirements</h4><p>Install each tool listed in REQUIREMENTS.md, then dry-run the setup.</p>
+        <div class="cmd"><code>Setup-Neural2.cmd -CheckOnly</code><button>Copy</button></div></div>
+      <div class="step rv"><span class="mono">Step 2</span><h4>Sign in to your CLIs</h4><p>Each provider signs in with its own account. Neural never handles your passwords.</p>
+        <div class="cmd"><code>claude</code><button>Copy</button></div>
+        <div class="cmd"><code>codex login</code><button>Copy</button></div>
+        <div class="cmd"><code>opencode auth login</code><button>Copy</button></div>
+        <div class="cmd"><code>agy</code><button>Copy</button></div></div>
+      <div class="step rv"><span class="mono">Step 3</span><h4>Run the setup</h4><p>Add <code class="ic">-Voice</code> for local voice and dictation.</p>
+        <div class="cmd"><code>Setup-Neural2.cmd</code><button>Copy</button></div></div>
+      <div class="step rv"><span class="mono">Step 4</span><h4>Health check, then launch</h4><p>Open Services in the app and confirm each provider reports ready.</p>
+        <div class="cmd"><code>python NEURAL_STUDIO_2\check_services.py</code><button>Copy</button></div>
+        <div class="cmd"><code>python NEURAL_STUDIO_2\check_events.py</code><button>Copy</button></div></div>
+    </div>
+    <div class="docs rv">
+      <div><b>README</b><span>What Neural is and the quick start</span></div>
+      <div><b>REQUIREMENTS</b><span>Every tool to install</span></div>
+      <div><b>SETUP</b><span>The setup script, step by step</span></div>
+      <div><b>ARCHITECTURE</b><span>Stations, phases, routing, AE lane</span></div>
+      <div><b>WORKFLOW_RULES</b><span>Safety and efficiency rules</span></div>
+      <div><b>AI_START_HERE</b><span>The briefing for your AI</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fbig rv">Neural <em>Posthouse</em></div>
+    <div class="frow mono"><span>Neural 2.0 · private build · shared by invitation</span><span>You stay the director.</span></div>
+  </div>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Reflector.js"></script>
 <script>
-(function () {
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const small = innerWidth < 720;
-  const css = getComputedStyle(document.documentElement);
-  const C = n => new THREE.Color(css.getPropertyValue(n).trim());
-  const AMBER = C('--amber'), CYAN = C('--cyan'), ROSE = C('--rose'), FG = C('--fg'), LINE = C('--line');
+document.documentElement.classList.add('js');
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- HUD (simulated run) ----
-  const phases = [['scout','Plan'],['plan','Director'],['plan_review','Plan'],['prototype','Edit'],['prototype_review','Review'],['build','Edit'],['render','Deliver'],['harsh_review','Review'],['goldfish_review','Review'],['HUMAN_REVIEW','You']];
-  const hs = document.getElementById('hudState'), hp = document.getElementById('hudPhase'), hst = document.getElementById('hudStation'), htc = document.getElementById('hudTc');
-  let hudFrame = 0, phaseIdx = 5;
-  function tc(f) { const p = n => String(n).padStart(2, '0'); const fps = 24; return p(Math.floor(f / (fps*3600))) + ':' + p(Math.floor(f / (fps*60)) % 60) + ':' + p(Math.floor(f / fps) % 60) + ':' + p(f % fps); }
-  function setPhase(i) {
-    const [ph, st] = phases[i]; hp.textContent = ph; hst.textContent = st;
-    const s = ph === 'HUMAN_REVIEW' ? ['HUMAN_REVIEW','st hr'] : (ph === 'render' || ph === 'build') ? ['WAIT_MEDIA','st'] : ['WORKING','st'];
-    hs.textContent = s[0]; hs.className = s[1];
-  }
-  setPhase(phaseIdx);
-  if (!reduce) setInterval(() => { phaseIdx = (phaseIdx + 1) % phases.length; setPhase(phaseIdx); }, 3200);
+/* ---------- page UI ---------- */
+(function(){
+  const nav=document.getElementById('nav');
+  const onScroll=()=>nav.classList.toggle('solid',scrollY>40);
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
 
-  // ---- copy buttons ----
-  document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', () => {
-    const el = document.getElementById(b.dataset.copy); const t = el.textContent.replace(/ {2,}/g, '\n');
-    const done = () => { b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1400); };
-    const fallback = () => { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected'; };
-    try { navigator.clipboard.writeText(t).then(done, fallback); } catch (e) { fallback(); }
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)*70+'ms';io.observe(el)});
+
+  // film
+  const viewer=document.getElementById('viewer'),video=document.getElementById('video'),play=document.getElementById('play');
+  play.addEventListener('click',()=>{video.controls=true;viewer.classList.add('playing');const p=video.play();if(p&&p.catch)p.catch(()=>{});});
+  video.addEventListener('ended',()=>{viewer.classList.remove('playing');video.controls=false;});
+
+  // copy buttons
+  document.querySelectorAll('.cmd button').forEach(b=>b.addEventListener('click',async()=>{
+    const t=b.previousElementSibling.textContent;
+    try{await navigator.clipboard.writeText(t);b.textContent='Copied';b.classList.add('ok');}catch(e){b.textContent='Select';}
+    setTimeout(()=>{b.textContent='Copy';b.classList.remove('ok')},1600);
   }));
 
-  if (!window.THREE) return;
-  const canvas = document.getElementById('stage');
+  // band parallax
+  const band=document.getElementById('bandImg');
+  if(!REDUCE){addEventListener('scroll',()=>{const r=band.parentElement.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;const k=(r.top+r.height/2-innerHeight/2)/innerHeight;band.style.transform='translate3d(0,'+(k*-6)+'%,0)';},{passive:true});}
+
+  // NLE timeline
+  const phases=[
+    ['scout','plan','Plan station','Scouts the footage and music; logs the moments, beats and usable shots.'],
+    ['plan','dir','Director station','Writes the creative plan: story, structure, beats and look.'],
+    ['plan_review','plan','Plan station','Pressure-tests the director’s plan before anything is built.'],
+    ['prototype','edit','Edit station','Builds a fast proof in After Effects through TonyFX.'],
+    ['prototype_review','rev','Review station · director supervises','Checks the proof. Repair goes back to Edit; a pass moves to the full build.'],
+    ['build','edit','Edit station','Assembles the full editable composition: precomps, labelled layers, keyframes.'],
+    ['render','del','Deliver station','Renders the revision for review.'],
+    ['harsh_review','rev','Review station · director supervises','Frame by frame against the brief: beats, captions, transitions, colour, black frames, audio.'],
+    ['goldfish_review','rev','Review station · director supervises','One fresh reviewer with no context watches it like a first-time viewer.'],
+    ['HUMAN_REVIEW','you','You','You watch it. Accept, or write notes for revision two.']
+  ];
+  const tv=document.getElementById('trackV'),ruler=document.getElementById('ruler');
+  for(let i=0;i<10;i++){const s=document.createElement('span');s.style.left=(i*10)+'%';s.textContent='00:00:'+String(i*3).padStart(2,'0');ruler.appendChild(s);}
+  const clips=phases.map((p,i)=>{const c=document.createElement('div');c.className='clip k-'+p[1];c.innerHTML='<small>'+String(i+1).padStart(2,'0')+'</small>'+p[0].split('_').join('_<wbr>');tv.appendChild(c);return c;});
+  const nle=document.getElementById('nle'),ph=document.getElementById('ph'),tc=document.getElementById('tc');
+  const rN=document.getElementById('rName'),rD=document.getElementById('rDesc'),rS=document.getElementById('rSt');
+  let cur=-1,hold=-1;const t0=performance.now(),D=20000;
+  function show(i){if(i===cur)return;cur=i;clips.forEach((c,j)=>c.classList.toggle('on',j===i));rN.textContent=phases[i][0];rD.textContent=phases[i][3];rS.textContent=phases[i][2];}
+  function place(f){const W=nle.clientWidth-112;ph.style.transform='translateX('+(f*W)+'px)';const secs=f*30,fr=Math.floor((secs%1)*25);tc.textContent='00:00:'+String(Math.floor(secs)).padStart(2,'0')+':'+String(fr).padStart(2,'0');}
+  clips.forEach((c,i)=>{c.addEventListener('mouseenter',()=>{hold=i;show(i);place((i+.5)/10)});c.addEventListener('mouseleave',()=>{hold=-1});c.addEventListener('click',()=>{hold=hold===i?-1:i;show(i);place((i+.5)/10)})});
+  let nleVis=false;new IntersectionObserver(e=>{nleVis=e[0].isIntersecting},{threshold:0}).observe(nle);
+  function loop(now){requestAnimationFrame(loop);if(!nleVis||hold>=0)return;const f=((now-t0)%D)/D;place(f);show(Math.min(9,Math.floor(f*10)));}
+  if(REDUCE){place(.05);show(0);}else requestAnimationFrame(loop);
+})();
+
+/* ---------- hero 3D scene ---------- */
+(function(){
+  const canvas=document.getElementById('gl'),hero=document.getElementById('top');
+  if(!window.THREE||!THREE.EffectComposer||!THREE.UnrealBloomPass)return;
+  const small=matchMedia('(max-width: 760px)').matches||(navigator.hardwareConcurrency||8)<=4;
   let renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false }); } catch (e) { return; }
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  renderer.setClearColor(new THREE.Color(css.getPropertyValue('--ink').trim()), 1);
-  const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(new THREE.Color(css.getPropertyValue('--ink').trim()), 0.045);
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 200);
+  try{renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'high-performance',alpha:false});}catch(e){return;}
+  try{
+  const DPR=Math.min(window.devicePixelRatio||1,small?1.5:1.75);
+  renderer.setPixelRatio(DPR);
+  renderer.shadowMap.enabled=!small;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  const C=h=>new THREE.Color(h).convertSRGBToLinear();
+  const scene=new THREE.Scene();
+  const BG=C(0x0b0907);scene.background=BG;scene.fog=new THREE.FogExp2(BG.getHex(),0.03);
+  const camera=new THREE.PerspectiveCamera(32,1,0.1,120);
 
-  // glow sprite texture
-  function glowTex() {
-    const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
-    const r = g.createRadialGradient(64, 64, 0, 64, 64, 64);
-    r.addColorStop(0, 'rgba(255,255,255,1)'); r.addColorStop(.25, 'rgba(255,255,255,.45)'); r.addColorStop(1, 'rgba(255,255,255,0)');
-    g.fillStyle = r; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c);
+  /* environment: a warm studio of softboxes */
+  const pm=new THREE.PMREMGenerator(renderer);
+  const es=new THREE.Scene();
+  const room=new THREE.Mesh(new THREE.BoxGeometry(34,16,34),new THREE.MeshBasicMaterial({color:C(0x1c140e),side:THREE.BackSide}));room.position.y=6;es.add(room);
+  const panel=(w,h,col,k,p,r)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:C(col).multiplyScalar(k),side:THREE.DoubleSide}));m.position.set(...p);m.rotation.set(...r);es.add(m);};
+  panel(14,7,0xffe0b4,5.5,[0,13.5,0],[Math.PI/2,0,0]);
+  panel(2.2,9,0x6ff3e4,3.2,[-15,5,1],[0,Math.PI/2,0]);
+  panel(2.2,9,0xffae55,3.4,[15,4,-4],[0,-Math.PI/2,0]);
+  panel(18,1.4,0xfff0d8,2.4,[0,7,-16],[0,0,0]);
+  panel(10,1,0xffc27a,1.6,[0,1,16],[0,Math.PI,0]);
+  scene.environment=pm.fromScene(es,0.035).texture;
+
+  /* geometry helpers */
+  function rbox(w,h,d,r,s){s=s||5;const n=2*s+1,g=new THREE.BoxGeometry(1,1,1,n,n,n),P=g.attributes.position,N=g.attributes.normal,v=new THREE.Vector3(),hx=w/2-r,hy=h/2-r,hz=d/2-r;
+    for(let i=0;i<P.count;i++){v.fromBufferAttribute(P,i);const sx=Math.sign(v.x),sy=Math.sign(v.y),sz=Math.sign(v.z);v.normalize();N.setXYZ(i,v.x,v.y,v.z);P.setXYZ(i,v.x*r+sx*hx,v.y*r+sy*hy,v.z*r+sz*hz);}
+    return g;}
+  const ceramic=(c,rough)=>new THREE.MeshPhysicalMaterial({color:C(c),roughness:rough||.36,metalness:0,clearcoat:1,clearcoatRoughness:.1});
+  const graphite=new THREE.MeshPhysicalMaterial({color:C(0x24201c),roughness:.45,metalness:.6,clearcoat:.4});
+  const glass=new THREE.MeshPhysicalMaterial({color:C(0x050708),roughness:.06,metalness:.3,clearcoat:1,clearcoatRoughness:.02});
+  const glow=(c,k)=>new THREE.MeshBasicMaterial({color:C(c).multiplyScalar(k)});
+  const gold=new THREE.MeshPhysicalMaterial({color:C(0xeab45c),metalness:1,roughness:.2,clearcoat:.6,clearcoatRoughness:.08});
+  const shotMat=new THREE.MeshPhysicalMaterial({color:C(0xf3b552),metalness:.85,roughness:.18,clearcoat:1,clearcoatRoughness:.05,emissive:C(0xff8a1a),emissiveIntensity:.9});
+  const cast=o=>{o.traverse(m=>{if(m.isMesh){m.castShadow=true;m.receiveShadow=true}});return o;};
+
+  /* lights */
+  const key=new THREE.SpotLight(C(0xffdcae),3.2,40,.55,.85,1.2);key.position.set(3.5,10,6.5);key.target.position.set(0,.8,0);
+  if(!small){key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.bias=-.0004;key.shadow.radius=6;}
+  scene.add(key,key.target);
+  const rim=new THREE.DirectionalLight(C(0x6ff3e4),1.1);rim.position.set(-6,4,-6);scene.add(rim);
+  const warm=new THREE.DirectionalLight(C(0xffa24a),.8);warm.position.set(7,3,-3);scene.add(warm);
+  scene.add(new THREE.HemisphereLight(C(0x2a2018),C(0x050403),.6));
+
+  /* floor: low-res mirror under a satin overlay */
+  if(!small&&THREE.Reflector){
+    const refl=new THREE.Reflector(new THREE.CircleGeometry(40,96),{clipBias:.003,textureWidth:Math.floor(innerWidth*DPR*.45),textureHeight:Math.floor(innerHeight*DPR*.45),color:new THREE.Color(0x7a7a7a)});
+    refl.rotation.x=-Math.PI/2;scene.add(refl);
   }
-  const GLOW = glowTex();
-  const glow = (color, size, op = 1) => { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: GLOW, color, transparent: true, opacity: op, blending: THREE.AdditiveBlending, depthWrite: false })); s.scale.setScalar(size); return s; };
+  const floor=new THREE.Mesh(new THREE.CircleGeometry(40,96),new THREE.MeshPhysicalMaterial({color:C(0x15110d),roughness:.4,metalness:0,clearcoat:.7,clearcoatRoughness:.22,transparent:!small,opacity:small?1:.8}));
+  floor.rotation.x=-Math.PI/2;floor.position.y=.003;floor.receiveShadow=true;scene.add(floor);
+  const ring=(r,w,col,k,y,seg)=>{const m=new THREE.Mesh(new THREE.RingGeometry(r,r+w,seg||256),glow(col,k));m.rotation.x=-Math.PI/2;m.position.y=y||.008;scene.add(m);return m;};
+  ring(1.55,.016,0x63f2e2,2.2);ring(2.35,.008,0x63f2e2,1.1);ring(3.6,.01,0x63f2e2,1.4);ring(5.6,.008,0xf0b552,1.2);ring(8.2,.008,0x63f2e2,.6);
+  for(let i=0;i<72;i++){const a=i/72*Math.PI*2,t=new THREE.Mesh(new THREE.PlaneGeometry(.012,i%6?.08:.2),glow(0x63f2e2,i%6?1:2));t.rotation.x=-Math.PI/2;t.rotation.z=-a;t.position.set(Math.sin(a)*1.8,.009,Math.cos(a)*1.8);scene.add(t);}
 
-  const world = new THREE.Group(); scene.add(world);
-  // offset so the scene sits right of the reading column on wide screens
-  world.position.x = small ? 0 : 2.6;
+  /* back wall with cove lights and monitors */
+  const th0=Math.PI-1.25,thL=2.5;
+  const wall=new THREE.Mesh(new THREE.CylinderGeometry(14,14,8,160,1,true,th0,thL),new THREE.MeshStandardMaterial({color:C(0x1d1712),roughness:.85,side:THREE.BackSide}));wall.position.y=4;scene.add(wall);
+  [[.15,2.4,0xffc27a],[6.4,2.8,0xffc27a],[3.05,.9,0x63f2e2]].forEach(([y,k,c])=>{const s=new THREE.Mesh(new THREE.CylinderGeometry(13.9,13.9,.035,160,1,true,th0,thL),glow(c,k));s.material.side=THREE.DoubleSide;s.position.y=y;scene.add(s);});
+  function screenTex(kind,seed){const cv=document.createElement('canvas');cv.width=512;cv.height=288;const g=cv.getContext('2d');let r=seed;const rnd=()=>(r=(r*9301+49297)%233280)/233280;
+    g.fillStyle='#071112';g.fillRect(0,0,512,288);g.strokeStyle='rgba(99,242,226,.08)';g.lineWidth=1;for(let x=0;x<512;x+=32){g.beginPath();g.moveTo(x,0);g.lineTo(x,288);g.stroke();}for(let y=0;y<288;y+=32){g.beginPath();g.moveTo(0,y);g.lineTo(512,y);g.stroke();}
+    if(kind==='wave'){g.fillStyle='#63f2e2';for(let x=16;x<496;x+=4){const a=(Math.sin(x*.05+seed)*.5+.5)*(.3+.7*rnd())*90;g.fillRect(x,144-a,2.4,a*2);}}
+    else if(kind==='tl'){const cols=['#63f2e2','#f0b552','#e48ea6','#b7a7ee'];for(let row=0;row<5;row++){let x=12;while(x<500){const w=30+rnd()*90;g.fillStyle=cols[(row+Math.floor(rnd()*3))%4];g.globalAlpha=.85;g.fillRect(x,30+row*48,Math.min(w,500-x),30);x+=w+6;}}g.globalAlpha=1;g.fillStyle='#ffd48a';g.fillRect(200+seed*30,10,3,270);}
+    else{for(let i=0;i<4;i++)for(let j=0;j<3;j++){const gr=g.createLinearGradient(0,0,110,80);const h=Math.floor(rnd()*60)+15;gr.addColorStop(0,'hsl('+h+',55%,'+(30+rnd()*25)+'%)');gr.addColorStop(1,'hsl('+(h+180*rnd())+',45%,18%)');g.save();g.translate(14+i*124,14+j*90);g.fillStyle=gr;g.fillRect(0,0,112,78);g.restore();}}
+    const t=new THREE.CanvasTexture(cv);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t;}
+  ['grid','wave','tl','grid','tl','wave','grid'].forEach((k,i)=>{const a=Math.PI+(i-3)*.27,y=i%2?4.35:2.75,w=i%2?2.6:2.2,m=new THREE.Mesh(new THREE.PlaneGeometry(w,w*.5625),new THREE.MeshBasicMaterial({map:screenTex(k,i+3),color:new THREE.Color(1.15,1.15,1.15)}));
+    m.position.set(Math.sin(a)*13.4,y,Math.cos(a)*13.4);m.lookAt(0,y,0);scene.add(m);
+    const b=new THREE.Mesh(rbox(w+.14,w*.5625+.14,.08,.04,2),graphite);b.position.copy(m.position).multiplyScalar(1.003);b.lookAt(0,y,0);scene.add(b);});
 
-  // Director core
-  const core = new THREE.Group(); world.add(core);
-  const coreMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(1, 1), new THREE.MeshBasicMaterial({ color: AMBER, wireframe: true, transparent: true, opacity: .85 }));
-  const coreInner = new THREE.Mesh(new THREE.IcosahedronGeometry(.55, 0), new THREE.MeshBasicMaterial({ color: AMBER, transparent: true, opacity: .25 }));
-  core.add(coreMesh, coreInner, glow(AMBER, 4.2, .55));
+  /* director core */
+  const coreP=new THREE.Vector3(0,1.45,0);
+  const core=new THREE.Group();core.position.copy(coreP);scene.add(core);
+  const body=new THREE.Group();core.add(body);
+  body.add(new THREE.Mesh(new THREE.SphereGeometry(1,160,120),ceramic(0xbfb0ea,.32)));
+  const lens=new THREE.Mesh(new THREE.SphereGeometry(1.014,128,64,0,Math.PI*2,0,.52),glass);lens.rotation.x=Math.PI/2;body.add(lens);
+  const bezel=new THREE.Mesh(new THREE.TorusGeometry(Math.sin(.52)*1.014,.03,24,160),graphite);bezel.position.z=Math.cos(.52)*1.014;body.add(bezel);
+  const iris=new THREE.Mesh(new THREE.TorusGeometry(.3,.028,24,160),glow(0x63f2e2,4));iris.position.z=Math.sqrt(1.014*1.014-.09)+.008;body.add(iris);
+  const iris2=new THREE.Mesh(new THREE.TorusGeometry(.19,.01,16,120),glow(0x63f2e2,2.2));iris2.position.z=Math.sqrt(1.014*1.014-.036)+.01;body.add(iris2);
+  const pupil=new THREE.Mesh(new THREE.CircleGeometry(.09,64),glow(0xd8fff9,6));pupil.position.z=1.02;body.add(pupil);
+  const seam=new THREE.Mesh(new THREE.TorusGeometry(1.002,.018,16,240),graphite);seam.rotation.x=Math.PI/2;body.add(seam);
+  const thr=new THREE.Mesh(new THREE.CylinderGeometry(.22,.3,.16,64),graphite);thr.position.y=-1.02;body.add(thr);
+  const thrG=new THREE.Mesh(new THREE.CircleGeometry(.2,48),glow(0x63f2e2,3.5));thrG.rotation.x=Math.PI/2;thrG.position.y=-1.105;body.add(thrG);
+  const coreLight=new THREE.PointLight(C(0x63f2e2),1.6,4.5,2);coreLight.position.set(0,-1.3,0);core.add(coreLight);
+  const orbits=[];
+  [[1.62,.016,.42,.2],[1.82,.01,-.3,1.4]].forEach(([R,tb,tx,tz])=>{const piv=new THREE.Group();piv.rotation.set(Math.PI/2+tx,0,tz);piv.add(new THREE.Mesh(new THREE.TorusGeometry(R,tb,20,320),gold));
+    const bead=new THREE.Mesh(new THREE.SphereGeometry(.055,32,24),glow(0xffc46a,4));bead.position.x=R;piv.add(bead);core.add(piv);orbits.push(piv);});
+  cast(body);orbits.forEach(cast);
 
-  // orbit rings + stations
-  const stations = [];
-  const defs = [['PLAN', 0], ['EDIT', Math.PI * .5], ['REVIEW', Math.PI], ['DELIVER', Math.PI * 1.5]];
-  const ringR = 3.4, tilt = new THREE.Euler(1.15, 0, .28);
-  const ringGeo = new THREE.BufferGeometry().setFromPoints(new THREE.EllipseCurve(0, 0, ringR, ringR, 0, Math.PI * 2).getPoints(160).map(p => new THREE.Vector3(p.x, p.y, 0)));
-  const ring = new THREE.LineLoop(ringGeo, new THREE.LineBasicMaterial({ color: LINE.clone().lerp(FG, .25), transparent: true, opacity: .7 }));
-  ring.rotation.copy(tilt); world.add(ring);
-  const ring2 = ring.clone(); ring2.scale.setScalar(1.55); ring2.rotation.set(1.35, .2, -.4); ring2.material = ring.material.clone(); ring2.material.opacity = .3; world.add(ring2);
-  defs.forEach(([name, a]) => {
-    const g = new THREE.Group();
-    const m = new THREE.Mesh(new THREE.OctahedronGeometry(.28, 0), new THREE.MeshBasicMaterial({ color: FG, wireframe: true }));
-    g.add(m, glow(name === 'EDIT' ? CYAN : FG, 1.2, .5)); world.add(g);
-    stations.push({ name, a, g, m });
+  /* station pods */
+  const pods=[];
+  [[-68,0xe28fa7],[-26,0xe8dece],[26,0xd6c29c],[68,0x98a46c]].forEach(([deg,col],i)=>{
+    const a=deg*Math.PI/180,R=4.5,g=new THREE.Group();g.position.set(Math.sin(a)*R,0,-Math.cos(a)*R*.62+.6);
+    const shell=ceramic(col,.4);
+    const base=new THREE.Mesh(new THREE.CylinderGeometry(.44,.52,.12,96),graphite);base.position.y=.06;g.add(base);
+    const bl=new THREE.Mesh(new THREE.TorusGeometry(.5,.012,12,160),glow(0x63f2e2,2.4));bl.rotation.x=Math.PI/2;bl.position.y=.02;g.add(bl);
+    const bod=new THREE.Mesh(rbox(.82,.86,.62,.22,6),shell);bod.position.y=.62;g.add(bod);
+    const chest=new THREE.Mesh(rbox(.3,.12,.04,.03,2),glow(0x63f2e2,1.6));chest.position.set(0,.74,.31);g.add(chest);
+    const neck=new THREE.Mesh(new THREE.CylinderGeometry(.09,.11,.16,32),graphite);neck.position.y=1.1;g.add(neck);
+    const head=new THREE.Group();head.position.y=1.42;g.add(head);
+    head.add(new THREE.Mesh(rbox(.8,.56,.6,.19,6),shell));
+    const visor=new THREE.Mesh(rbox(.62,.32,.1,.07,4),glass);visor.position.z=.27;head.add(visor);
+    [-.13,.13].forEach(x=>{const e=new THREE.Mesh(rbox(.085,.12,.03,.035,3),glow(0x63f2e2,4.5));e.position.set(x,.01,.33);head.add(e);});
+    [-.42,.42].forEach(x=>{const ear=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.06,48),i===0?gold:graphite);ear.rotation.z=Math.PI/2;ear.position.x=x;head.add(ear);});
+    g.lookAt(coreP.x,0,coreP.z);cast(g);scene.add(g);
+    const pr=ring(.62,.01,0x63f2e2,1.2);pr.position.x=g.position.x;pr.position.z=g.position.z;
+    pods.push({g,head,phase:i*1.7});
   });
 
-  // AE node (the lane target)
-  const ae = new THREE.Group(); ae.position.set(4.6, -2.3, -2.6); world.add(ae);
-  const aeBox = new THREE.Mesh(new THREE.BoxGeometry(1.1, .7, .7), new THREE.MeshBasicMaterial({ color: CYAN, wireframe: true }));
-  ae.add(aeBox, glow(CYAN, 2.4, .45));
-  const beamGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
-  const beam = new THREE.Line(beamGeo, new THREE.LineBasicMaterial({ color: CYAN, transparent: true, opacity: .9 })); world.add(beam);
-  const pulses = []; for (let i = 0; i < 4; i++) { const p = glow(CYAN, .45, .95); world.add(p); pulses.push(p); }
+  /* shot paths, trails and golden cubes */
+  const trailV='varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}';
+  const trailF='uniform float uHead,uK,uBase;uniform vec3 uCol;varying vec2 vUv;void main(){float d=uHead-vUv.x;float s=d>0.?exp(-d*5.5):0.;float hd=d>0.?exp(-d*60.):0.;gl_FragColor=vec4(uCol*(uBase+s*uK+hd*uK*1.5),1.);}';
+  const flows=[];
+  pods.forEach((p,i)=>{
+    const pp=p.g.position,dir=new THREE.Vector3(coreP.x-pp.x,0,coreP.z-pp.z).normalize(),side=new THREE.Vector3(-dir.z,0,dir.x);
+    const start=pp.clone().add(dir.clone().multiplyScalar(.5)).setY(.75);
+    const mid=pp.clone().lerp(coreP,.5).add(side.clone().multiplyScalar((i%2?1:-1)*.7)).setY(2.5+(i%2)*.4);
+    const near=coreP.clone().sub(dir.clone().multiplyScalar(1.75)).setY(1.95);
+    const end=coreP.clone().sub(dir.clone().multiplyScalar(1.04));
+    let pts=[start,mid,near,end];const out=i===3;if(out)pts=pts.reverse();
+    const curve=new THREE.CatmullRomCurve3(pts,false,'centripetal');
+    const col=out?C(0xffb547):C(0x63f2e2);
+    const mk=(rad,k,base)=>{const m=new THREE.ShaderMaterial({uniforms:{uHead:{value:0},uK:{value:k},uBase:{value:base},uCol:{value:col}},vertexShader:trailV,fragmentShader:trailF,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false});scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve,320,rad,10,false),m));return m;};
+    const mats=[mk(.011,2.6,.12),mk(.05,.35,.015)];
+    const cube=new THREE.Mesh(rbox(.34,.34,.34,.07,4),shotMat);cube.castShadow=true;scene.add(cube);
+    flows.push({curve,mats,cube,speed:.16+i*.015,off:i*.31,spin:i});
+  });
 
-  // pipeline helix: film frames flowing around the core
-  const helixPts = []; for (let i = 0; i <= 200; i++) { const t = i / 200; const ang = t * Math.PI * 4.2; const r = 1.9 + t * .9; helixPts.push(new THREE.Vector3(Math.cos(ang) * r, -2.2 + t * 4.4, Math.sin(ang) * r)); }
-  const helix = new THREE.CatmullRomCurve3(helixPts);
-  const helixLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(helix.getPoints(300)), new THREE.LineBasicMaterial({ color: LINE.clone().lerp(FG, .2), transparent: true, opacity: .45 }));
-  world.add(helixLine);
-  const N = small ? 70 : 130;
-  const frameGeo = new THREE.PlaneGeometry(.26, .16);
-  const frameMat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, transparent: true, opacity: .9, vertexColors: false });
-  const frames = new THREE.InstancedMesh(frameGeo, frameMat, N);
-  const dummy = new THREE.Object3D(), tmpC = new THREE.Color();
-  const offs = Array.from({ length: N }, (_, i) => i / N);
-  function phaseColor(t) {
-    // 10 phases; supervisor phases amber, render/build cyan, repair band rose near the reviews
-    const i = Math.min(9, Math.floor(t * 10));
-    if (i === 9) return tmpC.copy(AMBER).lerp(FG, .2);
-    if ([1, 2, 4, 7, 8].includes(i)) return tmpC.copy(AMBER);
-    if (i === 5 || i === 6) return tmpC.copy(CYAN);
-    return tmpC.copy(FG).lerp(LINE, .3);
+  /* light shaft over the core */
+  const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.9,2.6,9,64,1,true),new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,
+    uniforms:{uCol:{value:C(0xffd6a0)}},vertexShader:'varying vec2 vUv;varying vec3 vN;varying vec3 vV;void main(){vUv=uv;vec4 mv=modelViewMatrix*vec4(position,1.);vN=normalize(normalMatrix*normal);vV=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}',
+    fragmentShader:'uniform vec3 uCol;varying vec2 vUv;varying vec3 vN;varying vec3 vV;void main(){float f=pow(abs(dot(vN,vV)),2.2);float h=smoothstep(0.,.35,vUv.y)*smoothstep(1.,.6,vUv.y);gl_FragColor=vec4(uCol*f*h*.07,1.);}'}));
+  shaft.position.set(0,5.4,0);scene.add(shaft);
+
+  /* bokeh */
+  const NB=small?90:180,bp=new Float32Array(NB*3),bs=new Float32Array(NB),bd=new Float32Array(NB),bc=new Float32Array(NB*3);
+  const pal=[C(0xffc77a),C(0xffe3b8),C(0xf0a24a),C(0x63f2e2)];
+  for(let i=0;i<NB;i++){const fg=i<NB*.12;bp[i*3]=(Math.random()-.5)*(fg?10:30);bp[i*3+1]=fg?Math.random()*4+.5:Math.random()*8+.4;bp[i*3+2]=fg?4+Math.random()*3:-4-Math.random()*12;
+    bs[i]=fg?28+Math.random()*40:6+Math.random()*20;bd[i]=Math.random();const c=pal[Math.random()<.18?3:Math.floor(Math.random()*3)];bc[i*3]=c.r;bc[i*3+1]=c.g;bc[i*3+2]=c.b;}
+  const bg=new THREE.BufferGeometry();bg.setAttribute('position',new THREE.BufferAttribute(bp,3));bg.setAttribute('aSize',new THREE.BufferAttribute(bs,1));bg.setAttribute('aSeed',new THREE.BufferAttribute(bd,1));bg.setAttribute('aCol',new THREE.BufferAttribute(bc,3));
+  const bokehMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{uTime:{value:0},uPR:{value:DPR}},
+    vertexShader:'attribute float aSize;attribute float aSeed;attribute vec3 aCol;uniform float uTime;uniform float uPR;varying float vA;varying vec3 vC;void main(){vec3 p=position;p.y+=sin(uTime*.18+aSeed*6.28)*.25;p.x+=cos(uTime*.12+aSeed*9.)*.2;vec4 mv=modelViewMatrix*vec4(p,1.);gl_PointSize=aSize*uPR*(9./-mv.z);gl_Position=projectionMatrix*mv;vA=(.25+.75*fract(aSeed*7.31))*(.6+.4*sin(uTime*.5+aSeed*20.));vC=aCol;}',
+    fragmentShader:'varying float vA;varying vec3 vC;void main(){vec2 c=gl_PointCoord-.5;float r=length(c);float disc=smoothstep(.5,.45,r);float rim=smoothstep(.5,.47,r)-smoothstep(.47,.4,r);float a=(disc*.12+rim*.12)*vA;gl_FragColor=vec4(vC*a,1.);}'});
+  scene.add(new THREE.Points(bg,bokehMat));
+
+  /* post: HDR target → bloom → filmic grade */
+  const isGL2=renderer.capabilities.isWebGL2;
+  const rtOpts={type:THREE.HalfFloatType,format:THREE.RGBAFormat,minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter};
+  let rt;if(isGL2&&!small&&THREE.WebGLMultisampleRenderTarget){rt=new THREE.WebGLMultisampleRenderTarget(4,4,rtOpts);rt.samples=4;}else rt=new THREE.WebGLRenderTarget(4,4,rtOpts);
+  const composer=new THREE.EffectComposer(renderer,rt);composer.setPixelRatio(DPR);
+  composer.addPass(new THREE.RenderPass(scene,camera));
+  const bloom=new THREE.UnrealBloomPass(new THREE.Vector2(256,256),.85,.62,.92);composer.addPass(bloom);
+  const grade=new THREE.ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uExp:{value:1.05}},
+    vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+    fragmentShader:'uniform sampler2D tDiffuse;uniform float uTime,uExp;varying vec2 vUv;vec3 aces(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}float hs(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}void main(){vec2 d=vUv-.5;vec2 o=d*dot(d,d)*.018;vec3 c=vec3(texture2D(tDiffuse,vUv+o).r,texture2D(tDiffuse,vUv).g,texture2D(tDiffuse,vUv-o).b);c=aces(c*uExp);c=pow(c,vec3(1./2.2));c*=vec3(1.03,1.,.95);float v=smoothstep(.95,.25,length(d*vec2(1.15,1.)));c*=mix(.42,1.,v);c+=(hs(vUv*vec2(1733.,977.)+fract(uTime*7.))-.5)*.03;gl_FragColor=vec4(c,1.);}'});
+  composer.addPass(grade);
+
+  /* camera rig */
+  let W=0,H=0,sp=0,mx=0,my=0,tx=0,ty=0;
+  const A={p:new THREE.Vector3(0,2.15,10.6),l:new THREE.Vector3(0,1.3,0)},B={p:new THREE.Vector3(1.1,1.7,6.4),l:new THREE.Vector3(0,1.45,0)};
+  const tmpP=new THREE.Vector3(),tmpL=new THREE.Vector3();
+  function size(){W=hero.clientWidth;H=hero.clientHeight;renderer.setSize(W,H,false);composer.setSize(W,H);bloom.resolution.set(W*DPR/2,H*DPR/2);camera.aspect=W/H;
+    camera.fov=W/H<.9?46:32;camera.updateProjectionMatrix();}
+  addEventListener('resize',()=>{size();if(REDUCE)draw(6);});
+  addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-.5)*2;ty=(e.clientY/innerHeight-.5)*2;},{passive:true});
+  addEventListener('scroll',()=>{sp=Math.min(1,Math.max(0,scrollY/(hero.offsetHeight||1)));},{passive:true});
+
+  const ss=x=>{x=Math.min(1,Math.max(0,x));return x*x*(3-2*x);};
+  function draw(t){
+    mx+=(tx-mx)*.05;my+=(ty-my)*.05;
+    const k=ss(sp),wide=W/H>1.15;
+    tmpP.lerpVectors(A.p,B.p,k);tmpL.lerpVectors(A.l,B.l,k);
+    const shiftX=wide?-1.9*(1-k*.6):0;
+    tmpP.x+=shiftX*.35+mx*.55+Math.sin(t*.07)*.35;tmpP.y+=-my*.25+Math.sin(t*.11)*.08;tmpL.x+=shiftX;
+    if(!wide){tmpP.z+=3.2;tmpP.y+=.6;tmpL.y+=.35;}
+    camera.position.copy(tmpP);camera.lookAt(tmpL);
+    core.position.y=coreP.y+Math.sin(t*.9)*.06;
+    body.lookAt(camera.position);body.rotateY(Math.sin(t*.37)*.25);body.rotateX(Math.sin(t*.29)*.06);
+    orbits[0].rotation.z=t*.35;orbits[1].rotation.z=-t*.22+1;orbits[0].rotation.x=Math.PI/2+.42+Math.sin(t*.3)*.05;
+    pupil.scale.setScalar(1+Math.sin(t*2.1)*.08);
+    pods.forEach(p=>{p.g.position.y=Math.sin(t*1.1+p.phase)*.025;p.head.rotation.y=Math.sin(t*.45+p.phase)*.22;p.head.rotation.x=Math.sin(t*.6+p.phase)*.05;});
+    flows.forEach(f=>{const h=(t*f.speed+f.off)%1.3;f.mats.forEach(m=>m.uniforms.uHead.value=h);
+      if(h<=1){f.cube.visible=true;f.cube.position.copy(f.curve.getPointAt(h));const s=Math.min(1,h*8)*Math.min(1,(1-h)*7);f.cube.scale.setScalar(Math.max(.001,s));f.cube.rotation.set(t*.8+f.spin,t*1.1+f.spin,t*.4);}else f.cube.visible=false;});
+    bokehMat.uniforms.uTime.value=t;grade.uniforms.uTime.value=t;
+    composer.render();
   }
-  for (let i = 0; i < N; i++) frames.setColorAt(i, phaseColor(offs[i]));
-  world.add(frames);
-  // repair loop arc (review back to edit)
-  const repairCurve = new THREE.QuadraticBezierCurve3(helix.getPoint(.8), new THREE.Vector3(-3.6, 0, 2.6), helix.getPoint(.32));
-  const repair = new THREE.Line(new THREE.BufferGeometry().setFromPoints(repairCurve.getPoints(80)), new THREE.LineDashedMaterial({ color: ROSE, dashSize: .18, gapSize: .12, transparent: true, opacity: .8 }));
-  repair.computeLineDistances(); world.add(repair);
-  const repairDot = glow(ROSE, .5, .9); world.add(repairDot);
 
-  // dust
-  const dustN = small ? 600 : 1400, dpos = new Float32Array(dustN * 3);
-  for (let i = 0; i < dustN; i++) { const r = 6 + Math.random() * 30, th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1); dpos.set([r * Math.sin(ph) * Math.cos(th), r * Math.cos(ph) * .6, r * Math.sin(ph) * Math.sin(th)], i * 3); }
-  const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.BufferAttribute(dpos, 3));
-  const dust = new THREE.Points(dg, new THREE.PointsMaterial({ color: FG, size: .035, transparent: true, opacity: .55, depthWrite: false })); scene.add(dust);
-
-  // labels
-  const labelsEl = document.getElementById('labels');
-  const mkLabel = (txt, cls) => { const d = document.createElement('div'); d.className = 'nlabel ' + (cls || ''); d.textContent = txt; labelsEl.appendChild(d); return d; };
-  const L = { dir: mkLabel('DIRECTOR', 'dir'), ae: mkLabel('AE · TONYFX', 'ae'), repair: mkLabel('REPAIR', '') };
-  L.repair.style.color = css.getPropertyValue('--rose');
-  stations.forEach(s => s.label = mkLabel(s.name));
-
-  // camera keyframes per section [pos, lookAt]
-  const K = [
-    [[0, 1.2, 11], [0, 0, 0]],          // hero: whole studio
-    [[0, 6.5, 8.5], [0, 0, 0]],         // stations: above the orbit
-    [[-5.5, 1.5, 6.5], [0, 0, 0]],      // pipeline: side view of helix
-    [[6, 3.5, 7], [0, 0, 0]],           // routing
-    [[7.5, -1, 3.5], [4.6, -2.3, -2.6]],// lane: close to AE node
-    [[-2, -3, 9], [0, .5, 0]],          // rules
-    [[0, 2, 13], [0, 0, 0]]             // start
-  ];
-  const secs = [...document.querySelectorAll('main section')];
-  const camPos = new THREE.Vector3(...K[0][0]), camLook = new THREE.Vector3(...K[0][1]);
-  const tgtPos = camPos.clone(), tgtLook = camLook.clone();
-  function scrollTarget() {
-    const mid = innerHeight * .5; let idx = 0, frac = 0;
-    for (let i = 0; i < secs.length; i++) { const r = secs[i].getBoundingClientRect(); if (r.top <= mid) { idx = i; frac = Math.min(1, Math.max(0, (mid - r.top) / r.height)); } }
-    const a = K[Math.min(idx, K.length - 1)], b = K[Math.min(idx + 1, K.length - 1)], f = Math.max(0, frac - .5) * 2 * .6;
-    tgtPos.set(...a[0]).lerp(new THREE.Vector3(...b[0]), f); tgtLook.set(...a[1]).lerp(new THREE.Vector3(...b[1]), f);
-  }
-  let mx = 0, my = 0;
-  addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; }, { passive: true });
-
-  function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
-  addEventListener('resize', resize); resize();
-
-  const v = new THREE.Vector3();
-  function place(el, obj, extraY) {
-    obj.getWorldPosition(v); if (extraY) v.y += extraY; v.project(camera);
-    const vis = v.z < 1 && Math.abs(v.x) < 1.1 && Math.abs(v.y) < 1.1;
-    el.style.opacity = vis ? 1 : 0;
-    el.style.left = ((v.x + 1) / 2 * innerWidth) + 'px'; el.style.top = ((1 - v.y) / 2 * innerHeight) + 'px';
-  }
-  const repairAnchor = new THREE.Object3D(); repairAnchor.position.copy(repairCurve.getPoint(.5)); world.add(repairAnchor);
-
-  const clock = new THREE.Clock(); let t = 0;
-  function frame() {
-    const dt = Math.min(clock.getDelta(), .05); if (!reduce) t += dt;
-    scrollTarget();
-    const k = reduce ? 1 : 1 - Math.pow(.02, dt);
-    camPos.lerp(tgtPos, k); camLook.lerp(tgtLook, k);
-    camera.position.copy(camPos).add(new THREE.Vector3(mx * 1.2, -my * .8, 0));
-    camera.lookAt(camLook.clone().add(world.position));
-
-    coreMesh.rotation.set(t * .21, t * .33, 0); coreInner.rotation.set(-t * .4, t * .2, 0);
-    const pulse = 1 + Math.sin(t * 2.2) * .04; core.scale.setScalar(pulse);
-    stations.forEach(s => {
-      const a = s.a + t * .18; v.set(Math.cos(a) * ringR, Math.sin(a) * ringR, 0).applyEuler(tilt);
-      s.g.position.copy(v); s.m.rotation.y = t * 1.2;
-    });
-    ae.rotation.y = Math.sin(t * .5) * .3; aeBox.rotation.x = t * .3;
-    const edit = stations[1].g.position;
-    const pa = beamGeo.attributes.position; pa.setXYZ(0, edit.x, edit.y, edit.z); pa.setXYZ(1, ae.position.x, ae.position.y, ae.position.z); pa.needsUpdate = true;
-    // one pulse in flight at a time per lane slot: command out, result back
-    pulses.forEach((p, i) => {
-      const u = ((t * .35) + i / pulses.length) % 1, back = i % 2 === 1;
-      p.position.copy(edit).lerp(ae.position, back ? 1 - u : u);
-      p.material.color.copy(back ? AMBER : CYAN);
-    });
-    for (let i = 0; i < N; i++) {
-      const u = (offs[i] + t * .02) % 1; const p = helix.getPointAt(u), tan = helix.getTangentAt(u);
-      dummy.position.copy(p); dummy.lookAt(p.clone().add(tan)); dummy.rotateY(Math.PI / 2); dummy.updateMatrix();
-      frames.setMatrixAt(i, dummy.matrix); frames.setColorAt(i, phaseColor(u));
-    }
-    frames.instanceMatrix.needsUpdate = true; if (frames.instanceColor) frames.instanceColor.needsUpdate = true;
-    repairDot.position.copy(repairCurve.getPoint((t * .22) % 1));
-    dust.rotation.y = t * .01;
-
-    renderer.render(scene, camera);
-    place(L.dir, core, 1.35); place(L.ae, ae, .7); place(L.repair, repairAnchor, .2);
-    stations.forEach(s => place(s.label, s.g, .45));
-    if (!reduce) { hudFrame++; htc.textContent = tc(hudFrame); requestAnimationFrame(frame); }
-  }
-  frame();
-  if (reduce) { addEventListener('scroll', () => requestAnimationFrame(frame), { passive: true }); addEventListener('resize', () => requestAnimationFrame(frame)); }
+  size();
+  let running=false,vis=true,last=performance.now(),T=2.5,shown=false;
+  function first(){if(!shown){shown=true;canvas.classList.add('ready');}}
+  function frame(now){if(!running)return;requestAnimationFrame(frame);const dt=Math.min(.05,(now-last)/1000);last=now;T+=dt;draw(T);first();}
+  function sync(){const want=vis&&!document.hidden&&!REDUCE;if(want&&!running){running=true;last=performance.now();requestAnimationFrame(frame);}else if(!want)running=false;}
+  new IntersectionObserver(e=>{vis=e[0].isIntersecting;sync();},{threshold:0}).observe(hero);
+  document.addEventListener('visibilitychange',sync);
+  if(REDUCE){draw(6);first();}else sync();
+  }catch(err){console.warn('Neural hero scene unavailable:',err);canvas.style.display='none';}
 })();
 </script>
