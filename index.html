@@ -1,815 +1,1016 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Neural Posthouse</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Neural 2.0 — an AI post-production studio that plans, cuts, reviews and delivers your edit in After Effects, with you in the director's chair.">
+<meta name="description" content="Neural 2.0: an AI post-production studio. A director, a crew of specialist stations and one guarded hand on the After Effects timeline.">
+<meta name="theme-color" content="#000000">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
 <style>
-:root{
-  --bg:#0c0a08; --bg-2:#13100d; --panel:#191512; --panel-2:#211c17;
-  --line:rgba(239,231,218,.10); --line-2:rgba(239,231,218,.18);
-  --ink:#efe7da; --ink-2:#bcb09f; --ink-3:#7f7568;
-  --teal:#5fe8d8; --teal-2:#2c9e93; --gold:#f0b552; --gold-2:#ffd48a;
-  --rose:#e48ea6; --lilac:#b7a7ee; --olive:#a7b27a; --sand:#d8c39d;
-  --serif:"Instrument Serif",Georgia,serif; --sans:"Geist",system-ui,sans-serif; --mono:"Geist Mono",ui-monospace,monospace;
-  --gut:max(clamp(16px,4.2vw,56px),env(safe-area-inset-left),env(safe-area-inset-right));
-  --ease:cubic-bezier(.2,.7,.1,1);
-  color-scheme:dark;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0a08}}
-:root[data-theme="dark"]{--bg:#0c0a08}
+:root{--bg:#000;--fg:#f2f2f0;--mute:#8a8a86;--dim:#7a7a76;--line:rgba(255,255,255,.12);--line2:rgba(255,255,255,.2);--gold:#ffcf7a;--teal:#78f0e6;--pad:clamp(16px,4vw,64px);--ease:cubic-bezier(.2,.7,0,1);color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--fg:#f2f2f0}}
+:root[data-theme="dark"]{--bg:#000;--fg:#f2f2f0}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;font-weight:350;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-img,video{display:block;max-width:100%}
+html{background:#000;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:'Inter Tight',system-ui,-apple-system,sans-serif;font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+main{position:relative;z-index:1;overflow-x:clip}
 a{color:inherit;text-decoration:none}
-::selection{background:var(--gold);color:#140f08}
-.wrap{width:100%;max-width:1320px;margin:0 auto;padding-inline:var(--gut)}
-.mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
-.ic{font-family:var(--mono);font-size:.82em;letter-spacing:0;text-transform:none;color:var(--teal)}
-em{font-style:italic}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img,video{display:block;max-width:100%}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:400}
+::selection{background:var(--gold);color:#000}
+:focus-visible{outline:1px solid var(--gold);outline-offset:4px}
+.wrap{max-width:1600px;margin:0 auto;padding:0 var(--pad);position:relative}
+.glass{background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--line)}
+.dbg *,.dbg *::before,.dbg *::after{transition:none!important;animation-play-state:paused!important}
 
-/* film grain over the whole page */
-body::after{content:"";position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.07;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:grain 1.2s steps(6) infinite}
-@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
+/* field */
+#field{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none}
+.nogl-bg{display:none;position:fixed;inset:0;z-index:0;background:radial-gradient(40vmax 40vmax at 62% 42%,rgba(255,240,210,.14),transparent 60%),radial-gradient(60vmax 30vmax at 50% 110%,rgba(255,207,122,.08),transparent 70%),#000}
+html.nogl .nogl-bg{display:block}html.nogl #field{display:none}
 
-/* nav */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .5s var(--ease),border-color .5s;border-bottom:1px solid transparent}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:24px}
-.nav.solid{background:rgba(12,10,8,.72);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border-bottom-color:var(--line)}
-.brand{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-size:22px;letter-spacing:.01em}
-.mark{width:26px;height:26px;border-radius:50%;position:relative;background:radial-gradient(circle at 50% 50%,var(--teal) 0 18%,#0b1514 19% 36%,#d9cfe9 37% 100%);box-shadow:0 0 18px rgba(95,232,216,.35)}
-.mark::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(240,181,82,.7);transform:rotateX(70deg) rotateZ(-20deg)}
-.nav ul{display:flex;list-style:none;gap:30px}
-.nav ul a{font-size:13.5px;color:var(--ink-2);transition:color .25s}
-.nav ul a:hover{color:var(--ink)}
-.tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-2);border-radius:99px;padding:6px 12px;color:var(--ink-2)}
-.tag i{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal)}
-@media (max-width:860px){.nav ul{display:none}}
-
-/* hero */
-.hero{position:relative;height:100svh;min-height:640px;overflow:hidden;isolation:isolate}
-.hero-poster{position:absolute;inset:0;z-index:-3;background:url(media/poster.jpg) center/cover no-repeat;transform:scale(1.04);filter:saturate(.9) brightness(.62)}
-#gl{position:absolute;inset:0;width:100%;height:100%;z-index:-2;opacity:0;transition:opacity 1.6s var(--ease)}
-#gl.ready{opacity:1}
-.hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:linear-gradient(90deg,rgba(12,10,8,.86) 0%,rgba(12,10,8,.55) 32%,rgba(12,10,8,0) 58%),linear-gradient(0deg,var(--bg) 0%,rgba(12,10,8,0) 26%),linear-gradient(180deg,rgba(12,10,8,.55) 0%,rgba(12,10,8,0) 18%)}
-.hero .wrap{height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding-top:104px;padding-bottom:clamp(36px,7vh,92px)}
-.eyebrow{display:flex;align-items:center;gap:14px;color:var(--gold);margin-bottom:clamp(14px,2.6vh,26px)}
-.eyebrow::before{content:"";width:34px;height:1px;background:currentColor;opacity:.7}
-.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,min(8.2vw,12.5vh),140px);line-height:.92;letter-spacing:-.02em;max-width:11ch}
-.hero h1 em{display:block;background:linear-gradient(100deg,#f7e6c4 10%,var(--gold) 55%,#d98a3a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
-.hero .lede{max-width:500px;margin-top:clamp(16px,3vh,30px);font-size:clamp(16px,1.35vw,19px);color:var(--ink-2);line-height:1.55}
-.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
-.btn{display:inline-flex;align-items:center;gap:12px;height:50px;padding:0 22px;border-radius:99px;font-size:14.5px;font-weight:500;transition:transform .35s var(--ease),background .3s,border-color .3s,box-shadow .3s;cursor:pointer;border:0;font-family:var(--sans)}
-.btn-gold{background:linear-gradient(180deg,#ffd58e,#e9a443);color:#1b1206;box-shadow:0 10px 40px -12px rgba(240,181,82,.7),inset 0 1px 0 rgba(255,255,255,.5)}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 16px 50px -12px rgba(240,181,82,.85),inset 0 1px 0 rgba(255,255,255,.5)}
-.btn-ghost{color:var(--ink);border:1px solid var(--line-2);background:rgba(239,231,218,.03);backdrop-filter:blur(6px)}
-.btn-ghost:hover{border-color:rgba(239,231,218,.4);transform:translateY(-2px)}
-.btn svg{width:16px;height:16px}
-.hero-meta{display:flex;flex-wrap:wrap;gap:10px 34px;margin-top:clamp(24px,6vh,78px);padding-top:clamp(14px,2.4vh,22px);border-top:1px solid var(--line);color:var(--ink-3)}
-.hero-meta b{color:var(--ink);font-weight:500}
-.hero-hint{position:absolute;right:var(--gut);bottom:clamp(40px,8vh,92px);color:var(--ink-3);display:flex;align-items:center;gap:10px}
-.hero-hint i{width:1px;height:46px;background:linear-gradient(var(--ink-3),transparent);display:block}
-@media (max-width:760px){
-  .hero{min-height:720px}
-  .hero::before{background:linear-gradient(0deg,var(--bg) 6%,rgba(12,10,8,.8) 44%,rgba(12,10,8,.1) 72%),linear-gradient(180deg,rgba(12,10,8,.6),rgba(12,10,8,0) 22%)}
-  .hero-hint{display:none}
-  .hero-meta{gap:8px 20px}
-}
-
-/* sections */
-section{position:relative}
-.sec{padding:clamp(72px,8.5vw,128px) 0}
-.sh{display:flex;align-items:center;gap:16px;color:var(--ink-3);margin-bottom:28px}
-.sh .idx{color:var(--gold)}
-.sh::after{content:"";flex:1;height:1px;background:var(--line)}
-h2.display{font-family:var(--serif);font-weight:400;font-size:clamp(42px,6.4vw,96px);line-height:.95;letter-spacing:-.018em;max-width:16ch}
-h2.display em{color:var(--gold-2)}
-.intro{display:grid;grid-template-columns:1.25fr 1fr;gap:clamp(28px,5vw,80px);align-items:end;margin-bottom:clamp(48px,6vw,84px)}
-.intro p{color:var(--ink-2);font-size:clamp(16px,1.25vw,18px);max-width:520px}
-@media (max-width:860px){.intro{grid-template-columns:1fr}}
-
-/* film */
-.film{background:linear-gradient(180deg,var(--bg),var(--bg-2) 60%,var(--bg))}
-.viewer{position:relative;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 60px 140px -40px rgba(0,0,0,.9),0 0 0 1px var(--line-2),0 0 120px -30px rgba(240,181,82,.25)}
-.viewer video{width:100%;aspect-ratio:16/9;background:#000;object-fit:cover}
-.viewer .chrome{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(0deg,rgba(0,0,0,.55),rgba(0,0,0,.05) 40%,rgba(0,0,0,.25));transition:opacity .6s var(--ease)}
-.viewer.playing .chrome{opacity:0;pointer-events:none}
-.ticks span{position:absolute;width:22px;height:22px;border-color:rgba(239,231,218,.55);border-style:solid;border-width:0}
-.ticks span:nth-child(1){top:18px;left:18px;border-top-width:1px;border-left-width:1px}
-.ticks span:nth-child(2){top:18px;right:18px;border-top-width:1px;border-right-width:1px}
-.ticks span:nth-child(3){bottom:18px;left:18px;border-bottom-width:1px;border-left-width:1px}
-.ticks span:nth-child(4){bottom:18px;right:18px;border-bottom-width:1px;border-right-width:1px}
-.play{position:relative;width:112px;height:112px;border-radius:50%;border:0;cursor:pointer;background:rgba(15,12,9,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:grid;place-items:center;color:var(--ink);transition:transform .5s var(--ease)}
-.play::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(240,181,82,.9);box-shadow:0 0 40px rgba(240,181,82,.35),inset 0 0 30px rgba(240,181,82,.15)}
-.play::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(240,181,82,.25);animation:pulse 2.8s var(--ease) infinite}
-@keyframes pulse{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.25);opacity:0}}
-.play:hover{transform:scale(1.06)}
-.play svg{width:30px;height:30px;margin-left:5px}
-.vlabel{position:absolute;left:34px;bottom:30px;right:34px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;color:var(--ink-2);pointer-events:none}
-.vlabel .t{font-family:var(--serif);font-size:clamp(22px,2.6vw,34px);color:var(--ink)}
-.vcap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:20px;color:var(--ink-3)}
-@media (max-width:620px){.play{width:78px;height:78px}.play svg{width:22px;height:22px}.vlabel{left:18px;right:18px;bottom:16px}.vlabel .mono{display:none}.ticks{display:none}.viewer{border-radius:12px}}
-
-/* crew */
-.crew-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-.card{position:relative;overflow:hidden;border-radius:16px;background:var(--panel);border:1px solid var(--line);min-height:320px;display:flex;flex-direction:column;justify-content:flex-end;isolation:isolate}
-.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1.2s var(--ease),filter .8s;filter:saturate(.92) brightness(.82)}
-.card::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(10,8,6,.96) 0%,rgba(10,8,6,.65) 34%,rgba(10,8,6,0) 64%)}
-.card:hover img{transform:scale(1.045);filter:saturate(1.05) brightness(.95)}
-.card::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(95,232,216,0);transition:box-shadow .5s;pointer-events:none}
-.card:hover::after{box-shadow:inset 0 0 0 1px rgba(95,232,216,.45)}
-.card .body{padding:24px 26px 26px}
-.card .no{color:var(--gold);margin-bottom:10px}
-.card h3{font-family:var(--serif);font-weight:400;font-size:clamp(30px,3vw,44px);line-height:1;margin-bottom:10px}
-.card p{color:var(--ink-2);font-size:14.5px;max-width:46ch}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
-.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:4px 9px;border-radius:99px;border:1px solid var(--line-2);color:var(--ink-2);background:rgba(12,10,8,.4)}
-.c-dir{grid-column:span 7;grid-row:span 2;min-height:660px}
-.c-dir h3{font-size:clamp(44px,5vw,76px)}
-.c-plan,.c-edit{grid-column:span 5}
-.c-rev,.c-del{grid-column:span 6;min-height:300px}
-.chip.lead{border-color:rgba(240,181,82,.55);color:var(--gold-2)}
-@media (max-width:980px){.c-dir,.c-plan,.c-edit,.c-rev,.c-del{grid-column:span 12;grid-row:auto;min-height:380px}.c-dir{min-height:520px}}
-.support{margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--line);gap:1px}
-.support div{background:var(--bg-2);padding:22px 24px}
-.support h4{font-weight:500;font-size:15px;margin-bottom:4px;display:flex;align-items:center;gap:10px}
-.support p{color:var(--ink-3);font-size:13.5px;line-height:1.5}
-.support .human{color:var(--gold);font-family:var(--mono);font-size:10px;letter-spacing:.12em;border:1px solid rgba(240,181,82,.4);padding:2px 7px;border-radius:99px}
-@media (max-width:860px){.support{grid-template-columns:1fr 1fr}}
-@media (max-width:520px){.support{grid-template-columns:1fr}}
-
-/* pipeline / NLE */
-.pipe{background:radial-gradient(1200px 500px at 70% 0%,rgba(95,232,216,.06),transparent 60%),var(--bg)}
-.nle{border:1px solid var(--line-2);border-radius:16px;background:linear-gradient(180deg,#17130f,#100d0a);box-shadow:0 50px 120px -50px rgba(0,0,0,.9);overflow:hidden}
-.nle-top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--line);color:var(--ink-3)}
-.dots{display:flex;gap:7px}.dots i{width:10px;height:10px;border-radius:50%;background:#2a241e;display:block}
-.tc{font-family:var(--mono);font-size:13px;color:var(--teal);letter-spacing:.06em}
-.nle-scroll{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#3a3129 transparent}
-.nle-inner{position:relative;min-width:880px;padding:0 20px 22px 92px}
-.ruler{height:34px;position:relative;border-bottom:1px solid var(--line);background-image:repeating-linear-gradient(90deg,rgba(239,231,218,.22) 0 1px,transparent 1px 10%),repeating-linear-gradient(90deg,rgba(239,231,218,.09) 0 1px,transparent 1px 2%);background-size:100% 12px,100% 6px;background-position:0 100%,0 100%;background-repeat:no-repeat}
-.ruler span{position:absolute;top:6px;font-family:var(--mono);font-size:10px;color:var(--ink-3);padding-left:4px}
-.track{position:relative;height:66px;margin-top:10px;display:flex;gap:4px}
-.track .lbl{position:absolute;left:-74px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10.5px;color:var(--ink-3);letter-spacing:.1em;width:60px}
-.clip{flex:1;min-width:0;border-radius:7px;padding:9px 10px;font-family:var(--mono);font-size:10.5px;line-height:1.3;color:#120e0a;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;position:relative;overflow:hidden;transition:transform .35s var(--ease),filter .35s,box-shadow .35s;filter:saturate(.75) brightness(.72)}
-.clip small{font-size:9px;opacity:.7;letter-spacing:.08em;text-transform:uppercase}
-.clip::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.08) 0 2px,transparent 2px 8px);mix-blend-mode:multiply;pointer-events:none}
-.clip.on{filter:none;transform:translateY(-3px);box-shadow:0 14px 30px -12px rgba(240,181,82,.7),0 0 0 1px rgba(255,255,255,.35) inset}
-.k-plan{background:linear-gradient(180deg,#8ff3e6,#4cc8bb)}
-.k-dir{background:linear-gradient(180deg,#ffd796,#e7a446)}
-.k-edit{background:linear-gradient(180deg,#d6cbff,#9d8bea)}
-.k-rev{background:linear-gradient(180deg,#f6b3c4,#d47790)}
-.k-del{background:linear-gradient(180deg,#d1da9f,#97a362)}
-.k-you{background:linear-gradient(180deg,#fbf3e6,#d9ccb6)}
-.track.fx{height:30px}
-.fxm{flex:1;display:flex;align-items:center;justify-content:center}
-.fxm b{font-family:var(--mono);font-weight:400;font-size:10px;color:var(--rose);border:1px dashed rgba(228,142,166,.5);border-radius:99px;padding:3px 8px;white-space:nowrap}
-.playhead{position:absolute;top:0;bottom:0;width:2px;left:92px;background:var(--gold);box-shadow:0 0 18px rgba(240,181,82,.8);pointer-events:none;will-change:transform}
-.playhead::before{content:"";position:absolute;top:0;left:-6px;border:7px solid transparent;border-top:9px solid var(--gold)}
-.readout{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;padding:22px 24px;border-top:1px solid var(--line);min-height:104px}
-.readout .ph{font-family:var(--serif);font-size:clamp(28px,3vw,40px);line-height:1;min-width:8ch}
-.readout p{color:var(--ink-2);font-size:15px}
-.readout .st{color:var(--ink-3);text-align:right}
-@media (max-width:760px){.readout{grid-template-columns:1fr;gap:8px}.readout .st{text-align:left}}
-.legend{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;color:var(--ink-3)}
-.legend span{display:inline-flex;align-items:center;gap:8px}
-.legend i{width:10px;height:10px;border-radius:3px;display:block}
-
-/* band image */
-.band{position:relative;height:clamp(360px,62vw,720px);overflow:hidden}
-.band img{position:absolute;inset:-8% 0;width:100%;height:116%;object-fit:cover;filter:brightness(.7) saturate(.95);will-change:transform}
-.band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0%,rgba(12,10,8,.1) 26%,rgba(12,10,8,.1) 60%,var(--bg) 100%)}
-.band .wrap{position:relative;z-index:1;height:100%;display:flex;align-items:flex-end;padding-bottom:clamp(36px,6vw,80px)}
-.band blockquote{font-family:var(--serif);font-size:clamp(34px,5.2vw,78px);line-height:.98;max-width:15ch;letter-spacing:-.015em}
-.band blockquote em{color:var(--teal)}
-
-/* routing */
-.split{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(36px,6vw,96px);align-items:start}
-@media (max-width:920px){.split{grid-template-columns:1fr}}
-.split .copy p{color:var(--ink-2);margin-top:22px;max-width:48ch}
-.notes{margin-top:34px;display:grid;gap:12px}
-.notes div{display:flex;gap:14px;align-items:flex-start;color:var(--ink-2);font-size:14.5px}
-.notes svg{flex:none;width:18px;height:18px;margin-top:3px;color:var(--teal)}
-.stack{border:1px solid var(--line-2);border-radius:16px;background:var(--panel);overflow:hidden}
-.stack header{display:flex;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line);color:var(--ink-3)}
-.seat{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line);position:relative}
-.seat .n{font-family:var(--serif);font-size:28px;color:var(--ink-3);line-height:1}
-.seat h5{font-size:16px;font-weight:500}
-.seat p{font-size:13px;color:var(--ink-3)}
-.seat .badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:99px;border:1px solid var(--line-2);color:var(--ink-2);white-space:nowrap}
-.seat.first .badge{color:var(--teal);border-color:rgba(95,232,216,.45)}
-.seat.first .n{color:var(--teal)}
-.reserved{padding:20px 22px;background:linear-gradient(90deg,rgba(240,181,82,.08),transparent)}
-.reserved .mono{color:var(--gold)}
-.reserved div{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.reserved .chip{border-color:rgba(240,181,82,.4);color:var(--gold-2)}
-
-/* AE lane */
-.lane{background:linear-gradient(180deg,var(--bg),#0f0d0b)}
-.lanefig{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;margin-bottom:28px}
-.node{border:1px solid var(--line-2);border-radius:14px;padding:22px;background:var(--panel)}
-.node .mono{color:var(--ink-3)}
-.node h4{font-family:var(--serif);font-weight:400;font-size:28px;line-height:1.05;margin:10px 0 8px}
-.node p{color:var(--ink-2);font-size:14px}
-.node code{font-family:var(--mono);font-size:12px;color:var(--teal)}
-.node.ae{border-color:rgba(183,167,238,.45);background:linear-gradient(160deg,rgba(183,167,238,.1),var(--panel) 60%)}
-.wire{position:relative;width:clamp(40px,6vw,96px)}
-.wire::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg,var(--teal-2),var(--gold))}
-.wire i{position:absolute;top:calc(50% - 4px);left:0;width:8px;height:8px;border-radius:2px;background:var(--gold);box-shadow:0 0 14px var(--gold);animation:travel 2.6s linear infinite}
-.wire i:nth-child(2){animation-delay:1.3s}
-@keyframes travel{from{left:0}to{left:calc(100% - 8px)}}
-@keyframes travelv{from{top:0}to{top:calc(100% - 8px)}}
-@media (max-width:920px){.lanefig{grid-template-columns:1fr}.wire{width:auto;height:42px}.wire::before{left:50%;right:auto;top:0;bottom:0;width:1px;height:auto;background:linear-gradient(var(--teal-2),var(--gold))}.wire i{left:calc(50% - 4px);top:0;animation-name:travelv}}
-.json{font-family:var(--mono);font-size:13px;line-height:1.75;color:var(--ink-2);background:#0b0907;border:1px solid var(--line);border-radius:14px;padding:22px 24px;overflow-x:auto;white-space:pre}
-.json .k{color:var(--lilac)}.json .s{color:var(--teal)}.json .c{color:var(--ink-3)}
-.lane-rules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.lane-rules div{border-top:1px solid var(--gold);padding-top:16px}
-.lane-rules h5{font-family:var(--serif);font-weight:400;font-size:24px;margin-bottom:6px}
-.lane-rules p{color:var(--ink-2);font-size:14px}
-.lane-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:start}
-@media (max-width:920px){.lane-grid,.lane-rules{grid-template-columns:1fr}}
-
-/* rules */
-.rules{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
-.rule{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:30px 0;border-bottom:1px solid var(--line)}
-.rule:nth-child(odd){padding-right:clamp(20px,4vw,56px)}
-.rule:nth-child(even){padding-left:clamp(20px,4vw,56px);border-left:1px solid var(--line)}
-.rule .n{font-family:var(--serif);font-size:44px;line-height:.9;color:var(--gold)}
-.rule h5{font-size:17px;font-weight:500;margin-bottom:6px}
-.rule p{color:var(--ink-2);font-size:14.5px}
-@media (max-width:820px){.rules{grid-template-columns:1fr}.rule:nth-child(n){padding-left:0;padding-right:0;border-left:0}}
-
-/* start */
-.start{background:radial-gradient(900px 500px at 15% 10%,rgba(240,181,82,.08),transparent 60%),var(--bg-2)}
-.steps{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-@media (max-width:820px){.steps{grid-template-columns:1fr}}
-.step{border:1px solid var(--line);border-radius:16px;padding:26px;background:rgba(12,10,8,.5);min-width:0}
-.step .mono{color:var(--gold)}
-.step h4{font-family:var(--serif);font-weight:400;font-size:30px;margin:8px 0;line-height:1.05}
-.step p{color:var(--ink-2);font-size:14.5px;margin-bottom:14px}
-.cmd{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#0b0907;border:1px solid var(--line);border-radius:10px;padding:10px 10px 10px 14px;margin-top:8px;min-width:0}
-.cmd code{font-family:var(--mono);font-size:12.5px;color:var(--teal);overflow-x:auto;white-space:nowrap;scrollbar-width:none;min-width:0}
-.cmd button{flex:none;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);background:transparent;border:1px solid var(--line-2);border-radius:7px;padding:6px 9px;cursor:pointer;transition:color .2s,border-color .2s}
-.cmd button:hover{color:var(--ink);border-color:var(--ink-3)}
-.cmd button.ok{color:var(--teal);border-color:var(--teal-2)}
-.docs{margin-top:16px;display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.docs div{background:var(--bg-2);padding:18px}
-.docs b{display:block;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink);margin-bottom:4px;overflow-wrap:anywhere}
-.docs span{font-size:12.5px;color:var(--ink-3);line-height:1.45;display:block}
-@media (max-width:980px){.docs{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:560px){.docs{grid-template-columns:1fr 1fr}}
-
-/* footer */
-footer{padding:clamp(80px,10vw,140px) 0 calc(40px + env(safe-area-inset-bottom));border-top:1px solid var(--line);overflow:hidden}
-.fbig{font-family:var(--serif);font-size:clamp(52px,12vw,196px);line-height:.85;letter-spacing:-.03em;white-space:nowrap}
-.fbig em{color:var(--gold)}
-.frow{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:40px;color:var(--ink-3)}
-@media (max-width:520px){.fbig{white-space:normal}}
+/* boot */
+#boot{position:fixed;inset:0;z-index:100;background:#000;display:grid;place-items:center;transition:opacity .9s var(--ease),visibility .9s}
+#boot.out{opacity:0;visibility:hidden}
+.mag.in{transition:transform .5s var(--ease),opacity 1s var(--ease)}
+#boot{animation:bootkill .01s 6s forwards}@keyframes bootkill{to{opacity:0;visibility:hidden}}
+html.js:not(.ready) .rv{animation:rvsafe .8s 6s forwards}@keyframes rvsafe{to{opacity:1;transform:none}}
+#boot .bt{display:grid;gap:14px;justify-items:center}
+#boot .bt span{font-weight:500;letter-spacing:.32em;font-size:12px}
+#boot .bt i{display:block;width:180px;height:1px;background:rgba(255,255,255,.14);overflow:hidden}
+#boot .bt i b{display:block;height:100%;width:100%;background:var(--gold);transform-origin:left;transform:scaleX(0);animation:bootbar 1.1s var(--ease) forwards}
+#boot .bt em{font-style:normal;font-size:10px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
+@keyframes bootbar{to{transform:scaleX(1)}}
 
 /* reveal */
-.js .rv{opacity:0;transform:translateY(26px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
-.js .rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  body::after{animation:none}
-  .js .rv{opacity:1;transform:none;transition:none}
-  .play::after,.wire i{animation:none}
-  .wire i:nth-child(2){display:none}
+html.js .rv{opacity:0;transform:translateY(26px);transition:opacity 1s var(--ease),transform 1.2s var(--ease);transition-delay:var(--d,0s)}
+html.js .rv.in{opacity:1;transform:none}
+.ln{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.ln>span{display:block}
+html.js .split .ln>span{transform:translateY(108%);transition:transform 1.2s var(--ease)}
+html.js .split .ln:nth-child(2)>span{transition-delay:.09s}
+html.js .split .ln:nth-child(3)>span{transition-delay:.18s}
+html.js .split.in .ln>span{transform:none}
+
+/* type */
+h2{font-weight:200;font-size:clamp(40px,min(5.8vw,9.6vh),96px);letter-spacing:-.045em;line-height:.95}
+h2 b{font-weight:500}
+.k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);display:flex;gap:10px;align-items:center;margin-bottom:22px}
+.k b{color:var(--fg);font-weight:500}
+.k::before{content:"";width:22px;height:1px;background:var(--gold)}
+.lede{font-size:18px;line-height:1.6;color:#a6a6a2;max-width:520px;margin-top:26px}
+
+/* nav */
+#nav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:26px var(--pad);transition:padding .5s var(--ease),background .5s,border-color .5s;border-bottom:1px solid transparent}
+#nav.solid{padding-top:16px;padding-bottom:16px;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+.logo{font-weight:500;letter-spacing:.32em;font-size:12.5px;display:flex;align-items:center;gap:12px;white-space:nowrap}
+.logo i{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+#nav ul{display:flex;gap:40px;list-style:none;font-size:13px;color:var(--mute)}
+#nav ul a{position:relative;transition:color .3s}
+#nav ul a:hover,#nav ul a.on{color:var(--fg)}
+#nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+#nav ul a.on::after{transform:scaleX(1)}
+.pill{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line2);padding:10px 18px;border-radius:40px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;transition:background .3s,color .3s,border-color .3s,transform .5s var(--ease)}
+.pill:hover{background:var(--fg);color:#000;border-color:var(--fg)}
+
+/* rail + hud */
+#rail{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:30;display:grid;gap:12px}
+#rail button{display:flex;align-items:center;justify-content:flex-end;gap:10px;height:10px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+#rail button span{opacity:0;transform:translateX(6px);transition:opacity .3s,transform .4s var(--ease);white-space:nowrap}
+#rail button:hover span,#rail button:focus-visible span{opacity:1;transform:none}
+#rail button i{display:block;width:10px;height:1px;background:rgba(255,255,255,.35);transition:width .5s var(--ease),background .3s}
+#rail button.on i{width:24px;background:var(--gold)}
+#hud{position:fixed;right:56px;bottom:20px;z-index:30;display:flex;gap:18px;font-size:10px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;pointer-events:none}
+#hud b{color:var(--mute);font-weight:500}
+#hud #hform{color:var(--fg)}
+
+/* cursor */
+#cur{position:fixed;left:0;top:0;z-index:90;pointer-events:none;display:none}
+html.cur #cur{display:block}
+#cur i{position:absolute;left:-18px;top:-18px;width:36px;height:36px;border:1px solid rgba(255,255,255,.55);border-radius:50%;transition:transform .4s var(--ease),border-color .3s,background .3s}
+#cur::after{content:"";position:absolute;left:-2px;top:-2px;width:4px;height:4px;border-radius:50%;background:#fff}
+#cur.hov i{transform:scale(1.7);border-color:var(--gold);background:rgba(255,207,122,.06)}
+#cur.hide{opacity:0}
+html.cur,html.cur *{cursor:none}
+html.cur video{cursor:auto}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:12px;padding:15px 24px;border-radius:40px;font-size:14px;font-weight:400;transition:background .35s,color .35s,border-color .35s,transform .5s var(--ease);will-change:transform}
+.btn.pri{background:var(--fg);color:#000}
+.btn.pri:hover{background:var(--gold)}
+.btn.ghost{border:1px solid var(--line2)}
+.btn.ghost:hover{border-color:var(--fg)}
+.btn svg{width:12px;height:12px}
+
+/* hero */
+.hero{position:relative;min-height:640px;height:100vh;height:100svh}
+#heroAnchor{position:absolute;inset:0;pointer-events:none}
+.node{position:absolute;display:flex;gap:10px;align-items:center;font-size:11px;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;transform:translate(-4.5px,-50%);transition:opacity .4s}
+.node i{position:relative;flex:none;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.1),0 0 22px #fff}
+.node i::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid #fff;animation:ping 3.2s var(--ease) infinite;animation-delay:var(--pd,0s);opacity:0}
+.node em{font-style:normal;font-weight:500}
+.node span{color:#777;letter-spacing:.1em;text-transform:none;font-family:'IBM Plex Mono',monospace}
+.node.gold i{background:var(--gold);box-shadow:0 0 0 5px rgba(255,207,122,.15),0 0 24px var(--gold)}
+.node.gold i::after{border-color:var(--gold)}
+.node.gold em{color:var(--gold)}
+.node.flip{flex-direction:row-reverse;transform:translate(calc(-100% + 4.5px),-50%)}
+@keyframes ping{0%{transform:scale(.6);opacity:.9}70%,100%{transform:scale(3.4);opacity:0}}
+html.js .hx{opacity:0;transform:translateY(28px);transition:opacity 1.1s var(--ease),transform 1.3s var(--ease);transition-delay:var(--d,0s)}
+html.ready .hx{opacity:1;transform:none}
+html.js .hero h1 .ln>span{transform:translateY(108%);transition:transform 1.5s var(--ease) .15s}
+html.ready .hero h1 .ln>span{transform:none}
+.coords{position:absolute;left:var(--pad);top:120px;font-size:11px;letter-spacing:.16em;color:#8a8a86;line-height:2;text-transform:uppercase}
+.coords b{color:var(--fg);font-weight:500}
+.hero h1{position:absolute;left:calc(var(--pad) - .04em);bottom:calc(15vh - .08em);font-weight:200;font-size:clamp(84px,14vw,240px);letter-spacing:-.065em;line-height:.8}
+.hero h1 b{font-weight:600;color:var(--gold)}
+.side{position:absolute;right:var(--pad);bottom:15vh;width:min(390px,32vw);color:#a6a6a2;font-size:16.5px;line-height:1.6}
+.side::before{content:"";position:absolute;inset:-60px -60px -40px -80px;background:radial-gradient(closest-side,rgba(0,0,0,.78),rgba(0,0,0,.4) 60%,transparent);z-index:-1}
+.side .kick{display:block;font-size:11px;letter-spacing:.2em;color:#fff;margin-bottom:16px;text-transform:uppercase}
+.side .lead{font-size:24px;line-height:1.25;color:var(--fg);font-weight:300;letter-spacing:-.015em;margin-bottom:14px}
+.side .btns{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.stats{position:absolute;left:var(--pad);right:var(--pad);bottom:26px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.stats div{display:flex;align-items:baseline;gap:12px;padding-top:14px}
+.stats b{font-size:26px;font-weight:300;letter-spacing:-.03em;color:var(--fg);min-width:1ch}
+.stats span{font-size:10.5px;letter-spacing:.16em;color:var(--mute);text-transform:uppercase}
+.stats div:first-child b,.stats div:nth-child(3) b{color:var(--gold)}
+.cue{position:absolute;left:50%;bottom:calc(26px + 62px);transform:translateX(-50%);font-size:10px;letter-spacing:.3em;color:var(--dim);display:grid;justify-items:center;gap:10px;text-transform:uppercase}
+.cue i{display:block;width:1px;height:38px;background:linear-gradient(var(--gold),transparent);transform-origin:top;animation:cue 2.4s var(--ease) infinite}
+@keyframes cue{0%{transform:scaleY(0)}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+
+/* sections */
+.sec{position:relative}
+.pad{padding:20vh 0}
+
+/* film */
+.film .shead{display:grid;grid-template-columns:1fr minmax(0,440px);gap:40px;align-items:end;margin-bottom:9vh}
+.film .shead p{color:#a6a6a2;font-size:17px;line-height:1.6}
+.frame{position:relative;width:min(1080px,100%);margin:0 auto;aspect-ratio:16/9;background:#050505}
+.frame video{width:100%;height:100%;object-fit:cover;background:#000}
+.frame .cn{position:absolute;width:22px;height:22px;border-color:var(--gold);border-style:solid;border-width:0;z-index:3;pointer-events:none}
+.cn.tl{left:-10px;top:-10px;border-left-width:1px;border-top-width:1px}.cn.tr{right:-10px;top:-10px;border-right-width:1px;border-top-width:1px}
+.cn.bl{left:-10px;bottom:-10px;border-left-width:1px;border-bottom-width:1px}.cn.br{right:-10px;bottom:-10px;border-right-width:1px;border-bottom-width:1px}
+.flab{position:absolute;left:0;right:0;display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase}
+.flab.top{top:-36px}.flab.bot{bottom:-36px}
+.flab .rec{color:var(--gold)}
+.flab .rec::before{content:"● ";animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.2}}
+.play{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:radial-gradient(closest-side,rgba(0,0,0,.25),rgba(0,0,0,.55));transition:opacity .6s var(--ease),visibility .6s}
+.frame.playing .play{opacity:0;visibility:hidden}
+.play .ring{position:absolute;width:190px;height:190px;animation:spin 18s linear infinite}
+.play .ring text{fill:#fff;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:3px}
+.play .disc{position:relative;width:96px;height:96px;border-radius:50%;background:var(--fg);color:#000;display:grid;place-items:center;transition:transform .6s var(--ease),background .3s}
+.play .disc svg{width:22px;height:22px;margin-left:4px}
+.play:hover .disc{transform:scale(1.1);background:var(--gold)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.film .after{height:6vh}
+
+/* crew */
+.track{position:relative}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.stage .shead{position:absolute;left:var(--pad);top:max(13vh,96px);width:min(560px,40vw)}
+.stage .shead p{color:#a6a6a2;font-size:16.5px;line-height:1.6;margin-top:22px;max-width:440px}
+.clabs{position:absolute;inset:0;pointer-events:none;transition:opacity .4s}
+.clab{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;display:grid;justify-items:center;gap:2px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);transition:color .4s;padding:8px}
+.clab b{font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:9.5px;color:var(--dim);letter-spacing:.16em;transition:color .4s}
+.clab:hover,.clab.on{color:var(--fg)}
+.clab.on b{color:var(--gold)}
+.crewcard{position:absolute;left:var(--pad);bottom:8vh;width:min(440px,36vw);padding:12px 12px 20px;border-radius:4px}
+.crewcard .cbody{padding:0 10px}
+.crewcard .cimg{position:relative;aspect-ratio:16/8;overflow:hidden;border-radius:2px;margin-bottom:18px}
+.crewcard .cimg img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(.82);transform:scale(1.04);transition:transform 6s linear}
+.crewcard .cimg::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(0,0,0,.6));}
+.crewcard .ctop{display:flex;justify-content:space-between;gap:12px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+.crewcard .ctop span:first-child{color:var(--gold)}
+.crewcard h3{font-weight:200;font-size:clamp(36px,3.6vw,56px);letter-spacing:-.04em;line-height:1;margin:12px 0 10px}
+.crewcard p{color:#a6a6a2;font-size:15px;line-height:1.55;min-height:4.65em}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.chips span{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;padding:5px 9px;border:1px solid var(--line2);border-radius:30px;color:#cfcfcb}
+.ctabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:20px}
+.ctabs i{display:block;height:2px;background:rgba(255,255,255,.14);overflow:hidden}
+.ctabs i b{display:block;height:100%;background:var(--gold);width:0}
+.cfade{transition:opacity .22s,transform .3s var(--ease)}
+.crewcard.sw .cfade{opacity:0;transform:translateY(8px)}
+@media (min-width:761px){.crewcard{display:grid;grid-template-columns:minmax(0,40%) 1fr;gap:22px;width:min(660px,46vw);padding:12px}.crewcard .cimg{aspect-ratio:auto;height:100%;min-height:240px;margin:0}.crewcard .cbody{padding:12px 10px 6px 0;display:flex;flex-direction:column}.crewcard h3{font-size:clamp(32px,3vw,48px)}.crewcard p{font-size:14.5px;min-height:6.2em}.crewcard .ctabs{margin-top:auto;padding-top:18px}}
+.aux{padding:16vh var(--pad) 18vh}
+.aux .ah{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:5vh;flex-wrap:wrap}
+.aux h3{font-weight:200;font-size:clamp(30px,3.4vw,52px);letter-spacing:-.04em;line-height:1}
+.aux .ah p{color:var(--mute);max-width:420px;font-size:15px}
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.acard{padding:30px 28px 34px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);position:relative;transition:background .4s}
+.acard:hover{background:rgba(20,18,14,.7)}
+.acard .an{font-size:10.5px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase;display:flex;justify-content:space-between}
+.acard h4{font-weight:400;font-size:22px;letter-spacing:-.02em;margin:18px 0 8px}
+.acard p{color:#a6a6a2;font-size:15px;line-height:1.55}
+.acard .ho{color:var(--gold)}
+
+/* pipeline */
+.phead{position:absolute;left:var(--pad);top:max(13vh,96px);width:min(740px,48vw)}
+.phead p{color:#a6a6a2;font-size:16px;line-height:1.6;margin-top:20px;max-width:430px}
+.readout{position:absolute;right:calc(var(--pad) + 34px);top:max(13vh,96px);width:min(520px,38vw);display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:start}
+.rnum{font-size:clamp(64px,8vw,132px);font-weight:200;line-height:.78;letter-spacing:-.06em;color:var(--fg);font-variant-numeric:tabular-nums}
+.rnum.gd{color:var(--gold)}
+.rmeta .rkind{font-size:10.5px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase}
+.rmeta h3{font-weight:300;font-size:30px;letter-spacing:-.025em;margin:8px 0 8px;line-height:1.1}
+.rmeta p{color:#a6a6a2;font-size:15px;line-height:1.55}
+.rmeta code{display:inline-block;margin-top:14px;font-size:11px;color:var(--gold);letter-spacing:.06em;border:1px solid rgba(255,207,122,.3);padding:4px 9px;border-radius:2px}
+.rswap{transition:opacity .2s,transform .3s var(--ease)}
+.readout.sw .rswap{opacity:0;transform:translateY(6px)}
+.gates{position:absolute;left:6%;right:6%;top:calc(61% - 15vh);height:30vh;pointer-events:none}
+.g{position:absolute;top:0;bottom:0;width:0}
+.g::before{content:"";position:absolute;left:-.5px;top:0;bottom:0;width:1px;background:linear-gradient(transparent,rgba(255,255,255,.32),transparent);transition:background .5s,box-shadow .5s}
+.g.gold::before{background:linear-gradient(transparent,rgba(255,207,122,.75),transparent)}
+.g.done::before{background:linear-gradient(transparent,rgba(255,255,255,.16),transparent)}
+.g.on::before{left:-1px;width:2px;background:linear-gradient(transparent,var(--gold) 28%,#fff 50%,var(--gold) 72%,transparent);box-shadow:0 0 22px rgba(255,207,122,.7)}
+.g span{position:absolute;top:calc(100% + 16px);left:0;transform:translateX(-50%);text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;color:var(--dim);white-space:nowrap;transition:color .4s}
+.g span b{display:block;color:var(--mute);font-weight:500;margin-bottom:4px;transition:color .4s}
+.g.gold span b{color:rgba(255,207,122,.75)}
+.g.on span,.g.on span b{color:var(--gold)}
+.g.done span b{color:var(--fg)}
+.repair{position:absolute;transform:translate(-50%,-100%);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);white-space:nowrap;opacity:0;transition:opacity .5s,left .6s var(--ease)}
+.repair.on{opacity:1}
+.pbar{position:absolute;left:var(--pad);right:calc(var(--pad) + 34px);bottom:6vh;display:flex;align-items:center;gap:18px;font-size:10.5px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase}
+.pbar i{flex:1;height:1px;background:rgba(255,255,255,.14);position:relative}
+.pbar i b{position:absolute;left:0;top:0;bottom:0;background:var(--gold);width:0}
+
+/* routing */
+.rgrid{display:grid;grid-template-columns:5fr 6fr;gap:7vw;align-items:start}
+.rl ul{list-style:none;margin-top:34px;border-top:1px solid var(--line)}
+.rl li{display:grid;grid-template-columns:28px 1fr;gap:10px;padding:16px 0;border-bottom:1px solid var(--line);color:#bdbdb9;font-size:15.5px;line-height:1.55}
+.rl li::before{content:"—";color:var(--gold)}
+.resv{margin-top:34px}
+.resv .mono{font-size:10.5px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase}
+.resv div{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.resv span{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:7px 12px;border:1px solid rgba(255,207,122,.45);border-radius:30px;color:var(--gold)}
+.rr{position:relative}
+.rbadge{display:flex;justify-content:space-between;font-size:10.5px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase;margin-bottom:16px}
+.rbadge b{color:var(--gold);font-weight:500}
+#seatList{border-top:1px solid var(--line)}
+.seat{display:grid;grid-template-columns:140px 1fr auto;align-items:center;height:128px;border-bottom:1px solid var(--line);transition:background .5s}
+.seat .slot{height:100%;display:grid;place-items:center;font-size:13px;font-weight:500;letter-spacing:.14em;color:var(--fg);text-shadow:0 0 10px #000,0 0 3px #000,0 0 2px #000;transition:color .4s}
+.seat h4{font-weight:400;font-size:21px;letter-spacing:-.015em}
+.seat p{color:var(--mute);font-size:14px;margin-top:2px}
+.seat .sst{display:grid;justify-items:end;gap:8px;padding-right:6px}
+.seat .tier{font-size:10px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;border:1px solid var(--line);padding:3px 8px;border-radius:2px}
+.seat .stat{font-size:11.5px;letter-spacing:.1em;color:var(--mute);text-transform:uppercase;transition:color .3s}
+.seat.on{background:linear-gradient(90deg,rgba(255,207,122,.07),transparent 70%)}
+.seat.on .slot,.seat.on .stat{color:var(--gold)}
+.seat.on .stat::before{content:"● "}
+.seat.bad .stat{color:#fff;text-decoration:line-through;text-decoration-color:rgba(255,255,255,.5)}
+.seat.bad .stat::before{content:"× "}
+.seat.skip{opacity:.38}
+.rlog{margin-top:18px;font-size:11.5px;line-height:2;color:var(--mute);min-height:8em}
+.rlog div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:logIn .5s var(--ease)}
+.rlog div:first-child{color:var(--fg)}
+.rlog span{color:var(--dim);margin-right:10px}
+@keyframes logIn{from{opacity:0;transform:translateY(-6px)}}
+
+/* lane */
+.lhead{display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:end;margin-bottom:9vh}
+.lhead .mono{font-size:11px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.lhead p{color:#a6a6a2;font-size:17px;line-height:1.6;margin-top:16px;max-width:520px}
+.flow{display:grid;grid-template-columns:.9fr 1fr 1fr 1fr;gap:3.2vw;align-items:stretch}
+.flabel{font-size:10.5px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;align-self:center;line-height:2}
+.flabel b{color:var(--mute);font-weight:500}
+.box{position:relative;padding:26px 24px 28px;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:3px}
+.box .mono{font-size:10.5px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase}
+.box h4{font-weight:300;font-size:26px;letter-spacing:-.025em;margin:14px 0 10px}
+.box p{color:#a6a6a2;font-size:14.5px;line-height:1.55}
+.box code{font-family:'IBM Plex Mono',monospace;font-size:.92em;color:var(--fg)}
+#box1{border-color:rgba(255,207,122,.45);box-shadow:0 0 50px rgba(255,207,122,.08)}
+#box1 .mono{color:var(--gold)}
+.wire{position:absolute;right:100%;top:50%;width:3.2vw;height:1px;background:rgba(255,255,255,.2);overflow:hidden}
+.wire::after{content:"";position:absolute;top:0;left:-30%;width:30%;height:1px;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:pk 1.6s linear infinite}
+.box:nth-child(4) .wire::after{animation-delay:.8s}
+@keyframes pk{to{left:100%}}
+.lrow{display:grid;grid-template-columns:7fr 5fr;gap:3.2vw;margin-top:3.2vw}
+pre.code{margin:0;padding:28px 28px 32px;background:rgba(0,0,0,.65);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.9;color:var(--fg);white-space:pre-wrap;word-break:break-word;min-height:15.5em;position:relative}
+pre.code .bar{display:flex;gap:6px;margin-bottom:18px}
+pre.code .bar i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18)}
+pre.code .cm{color:#8a8a86}pre.code .ky{color:var(--gold)}pre.code .st{color:#fff}pre.code .pu{color:#9a9a96}
+.caret{display:inline-block;width:8px;height:1.05em;vertical-align:-2px;background:var(--gold);margin-left:2px;animation:blink 1s steps(2) infinite}
+.lcards{display:grid;gap:12px}
+.lc{padding:20px 22px;border:1px solid var(--line);background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:3px;display:grid;grid-template-columns:28px 1fr;gap:6px 14px}
+.lc .mono{font-size:10.5px;color:var(--gold);letter-spacing:.14em;padding-top:4px}
+.lc h4{font-weight:400;font-size:18px;letter-spacing:-.01em}
+.lc p{grid-column:2;color:#a6a6a2;font-size:14px;line-height:1.5}
+.lc code{font-family:'IBM Plex Mono',monospace;font-size:.92em;color:var(--fg)}
+
+/* rules */
+.rgrid2{display:grid;grid-template-columns:5fr 7fr;gap:6vw;align-items:start}
+.rhead{position:sticky;top:16vh}
+.rhead p{color:#a6a6a2;font-size:16.5px;line-height:1.6;margin-top:24px;max-width:440px}
+.rlist{list-style:none;border-top:1px solid var(--line)}
+.rlist li{display:grid;grid-template-columns:64px 1fr;padding:28px 0 30px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.35)}
+.rlist .rn{font-size:12px;letter-spacing:.14em;color:var(--dim);padding-top:7px}
+.rlist h4{font-weight:300;font-size:clamp(22px,2vw,30px);letter-spacing:-.025em;line-height:1.15}
+.rlist p{color:#a6a6a2;font-size:15px;line-height:1.55;margin-top:6px;max-width:560px}
+.rlist li.inf .rn{color:var(--gold);font-size:20px;padding-top:0}
+.rlist li.inf h4{color:var(--gold)}
+.rlist li:hover .rn{color:var(--fg)}
+
+/* start */
+.steps{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line);margin-top:8vh}
+.step{padding:34px 32px 36px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.step .sn{font-size:11px;letter-spacing:.18em;color:var(--gold)}
+.step h4{font-weight:300;font-size:28px;letter-spacing:-.025em;margin:14px 0 8px}
+.step p{color:#a6a6a2;font-size:15px;line-height:1.55}
+.step p code{font-family:'IBM Plex Mono',monospace;color:var(--fg);font-size:.92em}
+.cmds{display:grid;gap:8px;margin-top:20px}
+.cmd{display:flex;align-items:center;gap:10px;padding:11px 12px 11px 14px;border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:13px;min-width:0}
+.cmd::before{content:">";color:var(--gold)}
+.cmd code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.cmd code::-webkit-scrollbar{display:none}
+.cp{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding:4px 8px;border:1px solid var(--line);border-radius:2px;transition:color .3s,border-color .3s}
+.cp:hover{color:var(--fg);border-color:var(--line2)}
+.cp.ok{color:var(--gold);border-color:rgba(255,207,122,.5)}
+.docs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:5vh}
+.doc{padding:20px 22px;border:1px solid var(--line);border-radius:3px;background:rgba(0,0,0,.45);display:flex;justify-content:space-between;gap:16px;align-items:baseline;transition:border-color .3s}
+.doc:hover{border-color:var(--line2)}
+.doc b{font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:12.5px;letter-spacing:.04em}
+.doc span{color:var(--mute);font-size:13.5px;text-align:right}
+.doc.ai b{color:var(--gold)}
+.closing{position:relative;height:100vh;height:100svh;min-height:560px;padding-top:20vh;text-align:center}
+.closing h2{font-size:clamp(56px,11vw,200px);letter-spacing:-.065em;line-height:.86}
+.closing h2 b{color:var(--gold);font-weight:500}
+.closing .btn{margin-top:6vh}
+.foot{position:absolute;left:var(--pad);right:var(--pad);bottom:24px;display:flex;justify-content:space-between;gap:20px;font-size:10.5px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;border-top:1px solid var(--line);padding-top:18px;flex-wrap:wrap}
+
+/* responsive */
+@media (max-width:1100px){.rgrid{grid-template-columns:1fr;gap:8vh}.film .shead{grid-template-columns:1fr}.rgrid2{grid-template-columns:1fr;gap:6vh}.rhead{position:relative;top:0}}
+@media (max-width:900px){.agrid{grid-template-columns:1fr 1fr}.docs{grid-template-columns:1fr 1fr}.lrow{grid-template-columns:1fr}}
+@media (max-width:860px){
+ #nav ul{display:none}
+ .lhead{grid-template-columns:1fr;gap:0}
+ .flow{grid-template-columns:1fr;gap:44px;max-width:520px;margin:0 auto}
+ .flabel{text-align:center}
+ .wire{right:auto;left:50%;top:auto;bottom:100%;width:1px;height:44px}
+ .wire::after{left:0;top:-30%;width:1px;height:30%;animation-name:pkv}
+ @keyframes pkv{to{top:100%}}
 }
+@media (max-height:820px) and (min-width:761px){.crewcard .cimg{display:none}.crewcard{grid-template-columns:1fr;width:min(440px,36vw);bottom:4vh}.crewcard p{min-height:0;font-size:14px}.crewcard h3{font-size:clamp(28px,2.8vw,40px);margin:8px 0 6px}.crewcard .chips{margin-top:10px}.crewcard .ctabs{padding-top:12px}}
+@media (max-width:760px){
+ #rail,#hud{display:none}
+ #nav{padding:18px var(--pad)}
+ .logo{font-size:11px;letter-spacing:.26em}
+ .pill{padding:8px 14px;font-size:10px}
+ .pad{padding:15vh 0}
+ .hero{height:auto;min-height:100vh;min-height:100svh}
+ .hero-in{position:relative;padding:52vh var(--pad) 40px;padding-top:52svh;display:flex;flex-direction:column;gap:26px}
+ .coords,.cue,.node span{display:none}
+ .node{font-size:10px;letter-spacing:.14em}
+ .hero h1{position:relative;left:-.04em;bottom:auto;font-size:clamp(84px,27vw,132px)}
+ .side{position:relative;right:auto;bottom:auto;width:auto;font-size:15.5px}
+ .side::before{display:none}
+ .side .lead{font-size:21px}
+ .stats{position:relative;left:auto;right:auto;bottom:auto;grid-template-columns:1fr 1fr;row-gap:4px}
+ .stats b{font-size:22px}
+ .stage .shead{top:76px;width:auto;right:var(--pad)}
+ .stage .shead h2{font-size:32px}
+ .stage .shead p{display:none}
+ .stage .shead .k{margin-bottom:12px}
+ .clab{font-size:9.5px;letter-spacing:.14em;padding:4px}
+ .clab b{display:none}
+ .crewcard{left:16px;right:16px;bottom:16px;width:auto;padding:16px 6px 16px}
+ .crewcard .cimg{display:none}
+ .crewcard h3{font-size:34px;margin:8px 0 6px}
+ .crewcard p{font-size:14px;min-height:0}
+ .chips{margin-top:12px}
+ .ctabs{margin-top:14px}
+ .agrid{grid-template-columns:1fr}
+ .phead{top:76px;width:auto;right:var(--pad)}
+ .phead h2{font-size:32px}
+ .phead p{display:none}
+ .phead .k{margin-bottom:12px}
+ .readout{left:var(--pad);right:var(--pad);top:184px;width:auto;gap:16px}
+ .rnum{font-size:60px}
+ .rmeta h3{font-size:22px;margin:4px 0}
+ .rmeta p{font-size:13.5px}
+ .rmeta code{margin-top:8px}
+ .gates{top:calc(62.5% - 13vh);height:26vh}
+ .g span{font-size:9.5px;letter-spacing:.08em}
+ .g span i{display:none}
+ .pbar{bottom:28px;right:var(--pad)}
+ .pbar span{display:none}
+ .seat{grid-template-columns:72px 1fr auto;height:92px}
+ .seat h4{font-size:16px}
+ .seat p{font-size:12.5px;line-height:1.35}
+ .seat .tier{display:none}
+ .seat .stat{font-size:10px;letter-spacing:.06em}
+ .rlog{font-size:10.5px}
+ .lrow{gap:16px;margin-top:44px}
+ pre.code{font-size:12px;padding:20px;min-height:0}
+ .rlist li{grid-template-columns:44px 1fr;padding:22px 0}
+ .steps{grid-template-columns:1fr}
+ .step{padding:26px 20px 28px}
+ .docs{grid-template-columns:1fr}
+ .closing h2{font-size:clamp(52px,16vw,84px)}
+ .foot{flex-direction:column;gap:6px;letter-spacing:.12em}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}}
 </style>
+</head>
+<body>
+<div id="boot" aria-hidden="true"><div class="bt"><span>NEURAL POSTHOUSE</span><i><b></b></i><em class="mono">initialising field</em></div></div>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="nogl-bg" aria-hidden="true"></div>
+<div id="cur" aria-hidden="true"><i></i></div>
 
-<nav class="nav" id="nav">
-  <div class="wrap">
-    <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>Neural Posthouse</a>
-    <ul>
-      <li><a href="#film">Film</a></li>
-      <li><a href="#crew">Crew</a></li>
-      <li><a href="#pipeline">Pipeline</a></li>
-      <li><a href="#lane">AE lane</a></li>
-      <li><a href="#start">Get started</a></li>
-    </ul>
-    <span class="tag mono"><i></i>Neural 2.0</span>
-  </div>
+<nav id="nav" aria-label="Primary">
+ <a class="logo" href="#hero" aria-label="Neural Posthouse, back to top"><i></i>NEURAL POSTHOUSE</a>
+ <ul><li><a href="#film" data-s="1">Film</a></li><li><a href="#crew" data-s="2">Crew</a></li><li><a href="#pipeline" data-s="3">Pipeline</a></li><li><a href="#lane" data-s="5">AE lane</a></li></ul>
+ <a class="pill mag mono" href="#start">Get started <span aria-hidden="true">→</span></a>
 </nav>
+<aside id="rail" aria-label="Sections"></aside>
+<div id="hud" class="mono" aria-hidden="true"><span id="hform">FORM 01 · SPHERE</span><span><b id="hpts">160,000</b> pts</span><span><b id="hfps">60</b> fps</span></div>
 
-<header class="hero" id="top">
-  <div class="hero-poster" aria-hidden="true"></div>
-  <canvas id="gl" aria-hidden="true"></canvas>
-  <div class="wrap">
-    <div class="eyebrow mono">AI post-production studio · v2.0</div>
-    <h1>Your idea.<em>A whole creative crew.</em></h1>
-    <p class="lede">Neural plans, cuts, reviews and delivers your edit inside After Effects. A director, a crew of specialist stations and one guarded hand on the timeline. You keep the final word.</p>
-    <div class="cta">
-      <a class="btn btn-gold" href="#film"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.8v10.4c0 .6.7 1 1.2.6l8-5.2c.5-.3.5-1 0-1.3l-8-5.2C4.7 1.8 4 2.2 4 2.8z"/></svg>Watch the film</a>
-      <a class="btn btn-ghost" href="#start">Set up Neural 2.0</a>
-    </div>
-    <div class="hero-meta mono"><span><b>9</b> stations</span><span><b>10</b> phases per revision</span><span><b>1</b> guarded AE writer</span><span><b>0</b> paid fallbacks</span></div>
+<main>
+<section class="sec hero" id="hero" data-name="Index">
+ <div id="heroAnchor" aria-hidden="true">
+  <div class="node gold" style="--pd:0s"><i></i><em>Director</em><span>· opus</span></div>
+  <div class="node" style="--pd:.6s"><i></i><em>Edit</em><span>· AE</span></div>
+  <div class="node" style="--pd:1.2s"><i></i><em>Plan</em><span>· scout</span></div>
+  <div class="node" style="--pd:1.8s"><i></i><em>Review</em><span>· harsh</span></div>
+  <div class="node" style="--pd:2.4s"><i></i><em>Deliver</em><span>· render</span></div>
+ </div>
+ <div class="hero-in">
+  <div class="coords mono hx" style="--d:.5s"><b>SIGNAL</b> <span id="pc">160,000</span> particles<br>FIELD · curl noise · t=<span id="tclk">00:00</span><br>5 CREW · 9 STATIONS · 1 WRITER</div>
+  <h1><span class="ln"><span>Neural<b>.</b></span></span></h1>
+  <div class="side hx" style="--d:.55s">
+   <span class="kick mono">AI post-production studio · v2.0</span>
+   <p class="lead">Your idea. A whole creative crew.</p>
+   <p>Neural plans, cuts, reviews and delivers your edit inside After Effects. A director, a crew of specialist stations and one guarded hand on the timeline. You keep the final word.</p>
+   <div class="btns"><a class="btn pri mag" href="#film"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg>Watch the film</a><a class="btn ghost mag" href="#start">Set up Neural 2.0</a></div>
   </div>
-  <div class="hero-hint mono" aria-hidden="true"><i></i>Real-time scene</div>
-</header>
-
-<section class="sec film" id="film">
-  <div class="wrap">
-    <div class="sh mono rv"><span class="idx">01</span><span>The film</span></div>
-    <div class="intro">
-      <h2 class="display rv">Thirty seconds inside <em>the posthouse.</em></h2>
-      <p class="rv">Delegate. Create. Refine. Every robot in the film is a station in Neural, and every golden cube is a shot moving through the pipeline toward your review.</p>
-    </div>
-    <div class="viewer rv" id="viewer">
-      <video id="video" preload="metadata" playsinline poster="media/poster.jpg" src="media/neural-posthouse-ad.mp4"></video>
-      <div class="chrome">
-        <div class="ticks" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-        <button class="play" id="play" aria-label="Play the Neural Posthouse film"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.6v14.8c0 .8.9 1.3 1.6.9l11.6-7.4c.6-.4.6-1.3 0-1.7L8.6 3.8C7.9 3.3 7 3.8 7 4.6z"/></svg></button>
-        <div class="vlabel"><span class="t">Neural Posthouse</span><span class="mono">Concept film · 00:30 · Sound on</span></div>
-      </div>
-    </div>
-    <div class="vcap mono rv"><span>Neural Posthouse — concept film</span><span>1280 × 720 · H.264 · AAC</span></div>
+  <div class="stats hx" style="--d:.75s" id="stats">
+   <div><b data-count="9">9</b><span>stations</span></div>
+   <div><b data-count="10">10</b><span>phases per revision</span></div>
+   <div><b data-count="1">1</b><span>guarded AE writer</span></div>
+   <div><b data-count="0">0</b><span>paid fallbacks</span></div>
   </div>
+  <div class="cue mono hx" style="--d:1.1s">Scroll<i></i></div>
+ </div>
 </section>
 
-<section class="sec" id="crew">
-  <div class="wrap">
-    <div class="sh mono rv"><span class="idx">02</span><span>The crew</span></div>
-    <div class="intro">
-      <h2 class="display rv">Five stations. <em>One director.</em></h2>
-      <p class="rv">Each station is a seat you fill with the model you trust: Claude, Codex, OpenCode or Gemini. The director owns the edit; the crew does the work and argues with it.</p>
-    </div>
-    <div class="crew-grid">
-      <article class="card c-dir rv">
-        <img src="media/director.jpg" alt="A lilac sphere robot with a glowing teal eye directs a golden shot card" loading="lazy" width="1100" height="619">
-        <div class="body">
-          <div class="no mono">Station 01</div>
-          <h3>Director</h3>
-          <p>Owns the edit: the brief, the creative plan and every final call. Supervises each review gate and decides when a cut goes back for repair. Seat it with your strongest model.</p>
-          <div class="chips"><span class="chip lead">plan</span><span class="chip">plan_review</span><span class="chip">prototype_review</span><span class="chip">harsh_review</span><span class="chip">goldfish_review</span></div>
-        </div>
-      </article>
-      <article class="card c-plan rv">
-        <img src="media/plan.jpg" alt="A pink robot at a mixing desk studies an audio waveform" loading="lazy" width="1100" height="619">
-        <div class="body">
-          <div class="no mono">Station 02</div>
-          <h3>Plan</h3>
-          <p>Scouts the footage and music, then pressure-tests the director's plan.</p>
-          <div class="chips"><span class="chip lead">scout</span><span class="chip lead">plan_review</span></div>
-        </div>
-      </article>
-      <article class="card c-edit rv">
-        <img src="media/edit.jpg" alt="A boxy cream robot edits a timeline at a console" loading="lazy" width="1100" height="474">
-        <div class="body">
-          <div class="no mono">Station 03</div>
-          <h3>Edit</h3>
-          <p>Builds the prototype and the full composition in After Effects through TonyFX, and applies repairs.</p>
-          <div class="chips"><span class="chip lead">prototype</span><span class="chip lead">build</span><span class="chip lead">repair</span></div>
-        </div>
-      </article>
-      <article class="card c-rev rv">
-        <img src="media/review.jpg" alt="A robot sends a golden cube through a glowing portal" loading="lazy" width="1100" height="619">
-        <div class="body">
-          <div class="no mono">Station 04</div>
-          <h3>Review</h3>
-          <p>Harsh frame-by-frame review against the brief, then a fresh-eyes Goldfish pass.</p>
-          <div class="chips"><span class="chip lead">prototype_review</span><span class="chip lead">harsh_review</span><span class="chip lead">goldfish_review</span></div>
-        </div>
-      </article>
-      <article class="card c-del rv">
-        <img src="media/deliver.jpg" alt="A projector-headed robot screens the finished cut" loading="lazy" width="1100" height="619">
-        <div class="body">
-          <div class="no mono">Station 05</div>
-          <h3>Deliver</h3>
-          <p>Renders and exports each revision, ready for your screening.</p>
-          <div class="chips"><span class="chip lead">render</span></div>
-        </div>
-      </article>
-    </div>
-    <div class="support rv">
-      <div><h4>Relay</h4><p>A local assistant (Qwen on your CPU) for quick questions and voice.</p></div>
-      <div><h4>Screening</h4><p>Watch renders and leave timestamped notes.</p></div>
-      <div><h4>Debug</h4><p>Service, provider and lock health in one place.</p></div>
-      <div><h4>Manual Edit <span class="human">HUMAN ONLY</span></h4><p>Your hands on the project. AIs never act here.</p></div>
-      <div><h4>Executive Director</h4><p>An optional supervising seat, off by default.</p></div>
-      <div><h4>Director notebook</h4><p>The director's running log of decisions.</p></div>
-    </div>
+<section class="sec film pad" id="film" data-name="Film">
+ <div class="wrap">
+  <div class="shead">
+   <div><div class="k mono rv"><b>01</b> / The film</div><h2 class="split"><span class="ln"><span>Thirty seconds</span></span><span class="ln"><span><b>inside the posthouse.</b></span></span></h2></div>
+   <p class="rv" style="--d:.15s">Delegate. Create. Refine. Every robot in the film is a station in Neural, and every golden cube is a shot moving through the pipeline toward your review.</p>
   </div>
+  <div class="frame rv" id="filmFrame">
+   <i class="cn tl"></i><i class="cn tr"></i><i class="cn bl"></i><i class="cn br"></i>
+   <div class="flab top mono"><span>Concept film · 00:30 · Sound on</span><span id="vtc">00:00:00</span></div>
+   <video id="video" preload="metadata" playsinline poster="media/poster.jpg" src="media/neural-posthouse-ad.mp4"></video>
+   <button class="play" id="play" aria-label="Play the 30 second concept film">
+    <svg class="ring" viewBox="0 0 190 190" aria-hidden="true"><defs><path id="rp" d="M95,95 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs><text><textPath href="#rp" textLength="500" lengthAdjust="spacing">PLAY THE FILM · 00:30 · NEURAL POSTHOUSE · DIRECT · CUT · </textPath></text></svg>
+    <span class="disc"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg></span>
+   </button>
+   <div class="flab bot mono"><span>1280 × 720 · H.264 · AAC</span><span class="rec">Field linked</span></div>
+  </div>
+ </div>
+ <div class="after"></div>
 </section>
 
-<section class="sec pipe" id="pipeline">
-  <div class="wrap">
-    <div class="sh mono rv"><span class="idx">03</span><span>The pipeline</span></div>
-    <div class="intro">
-      <h2 class="display rv">One revision, <em>cut in ten passes.</em></h2>
-      <p class="rv">Every revision runs the same timeline. Any review can send the work back to Edit for repair. It ends with you: watch it, accept it, or write the notes for revision two.</p>
+<section class="sec crew" id="crew" data-name="Crew">
+ <div class="track" id="crewTrack" style="height:340vh">
+  <div class="stage" id="crewStage">
+   <div class="shead">
+    <div class="k mono rv"><b>02</b> / The crew</div>
+    <h2 class="split"><span class="ln"><span>Five stations.</span></span><span class="ln"><span><b>One director.</b></span></span></h2>
+    <p class="rv" style="--d:.15s">Each station is a seat you fill with the model you trust: Claude, Codex, OpenCode or Gemini. The director owns the edit; the crew does the work and argues with it.</p>
+   </div>
+   <div class="clabs" id="clabs"></div>
+   <article class="crewcard glass rv" id="ccard" style="--d:.2s">
+    <div class="cimg cfade"><img id="cimg" src="media/director.jpg" alt="" width="640" height="320"></div>
+    <div class="cbody">
+     <div class="ctop mono cfade"><span id="cnum">01 / 05</span><span id="ctag">The chair · strongest model</span></div>
+     <h3 id="cname" class="cfade">Director</h3>
+     <p id="cdesc" class="cfade">Owns the edit: the brief, the creative plan and every final call. Supervises each review gate and decides when a cut goes back for repair. Seat it with your strongest model.</p>
+     <div class="chips cfade" id="cchips"></div>
+     <div class="ctabs" id="ctabs"></div>
     </div>
-    <div class="nle rv">
-      <div class="nle-top"><div class="dots"><i></i><i></i><i></i></div><span class="mono">Revision 01 · Sequence</span><span class="tc" id="tc">00:00:00:00</span></div>
-      <div class="nle-scroll">
-        <div class="nle-inner" id="nle">
-          <div class="ruler" id="ruler"></div>
-          <div class="track" id="trackV"><span class="lbl">V1 · phase</span></div>
-          <div class="track fx"><span class="lbl">FX · loop</span>
-            <div class="fxm"></div><div class="fxm"></div><div class="fxm"></div><div class="fxm"></div>
-            <div class="fxm"><b>↺ repair → Edit</b></div><div class="fxm"></div><div class="fxm"></div>
-            <div class="fxm"><b>↺ repair</b></div><div class="fxm"><b>↺ repair</b></div><div class="fxm"></div>
-          </div>
-          <div class="playhead" id="ph"></div>
-        </div>
-      </div>
-      <div class="readout" aria-live="polite">
-        <div class="ph" id="rName">scout</div>
-        <p id="rDesc">Scouts the footage and music; logs the moments, beats and usable shots.</p>
-        <div class="st mono" id="rSt">Plan station</div>
-      </div>
-    </div>
-    <div class="legend mono rv">
-      <span><i class="k-plan"></i>Plan</span><span><i class="k-dir"></i>Director</span><span><i class="k-edit"></i>Edit</span><span><i class="k-rev"></i>Review</span><span><i class="k-del"></i>Deliver</span><span><i class="k-you"></i>You</span>
-    </div>
+   </article>
   </div>
+ </div>
+ <div class="aux wrap">
+  <div class="ah"><h3 class="rv">Plus the rest of the floor.</h3><p class="rv" style="--d:.1s">Support stations that keep the posthouse running, and one room that belongs to you alone.</p></div>
+  <div class="agrid">
+   <div class="acard rv"><div class="an mono"><span>06</span><span>Assistant</span></div><h4>Relay</h4><p>A local assistant (Qwen on your CPU) for quick questions and voice.</p></div>
+   <div class="acard rv" style="--d:.06s"><div class="an mono"><span>07</span><span>Review room</span></div><h4>Screening</h4><p>Watch renders and leave timestamped notes.</p></div>
+   <div class="acard rv" style="--d:.12s"><div class="an mono"><span>08</span><span>Health</span></div><h4>Debug</h4><p>Service, provider and lock health in one place.</p></div>
+   <div class="acard rv"><div class="an mono"><span>09</span><span class="ho">Human only</span></div><h4>Manual Edit</h4><p>Your hands on the project. AIs never act here.</p></div>
+   <div class="acard rv" style="--d:.06s"><div class="an mono"><span>+</span><span>Optional</span></div><h4>Executive Director</h4><p>An optional supervising seat, off by default.</p></div>
+   <div class="acard rv" style="--d:.12s"><div class="an mono"><span>+</span><span>Log</span></div><h4>Director notebook</h4><p>The director's running log of decisions.</p></div>
+  </div>
+ </div>
 </section>
 
-<div class="band">
-  <img src="media/flow.jpg" alt="Golden shot cubes travel along glowing teal trails across the studio floor" loading="lazy" id="bandImg">
-  <div class="wrap"><blockquote class="rv">Every shot travels <em>one guarded lane.</em></blockquote></div>
-</div>
-
-<section class="sec" id="routing">
-  <div class="wrap split">
-    <div class="copy">
-      <div class="sh mono rv"><span class="idx">04</span><span>Routing</span></div>
-      <h2 class="display rv">Seats, <em>not subscriptions.</em></h2>
-      <p class="rv">Every seat is a provider, a model and an effort level from <code class="ic">model_catalog.json</code>. For each station you pick an ordered list. When a seat is unavailable, out of quota or failing, the gateway moves to the next one.</p>
-      <div class="notes rv">
-        <div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10.5l4 4 8-9"/></svg>Hand-offs happen only at safe boundaries, never in the middle of an After Effects command.</div>
-        <div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10.5l4 4 8-9"/></svg>No paid fallback. Neural never switches you to a paid API or changes billing.</div>
-        <div><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 10.5l4 4 8-9"/></svg><span>Workers wait on real completion events with <code class="ic">station_cli.py&nbsp;wait</code>, so nothing burns tokens polling.</span></div>
-      </div>
-    </div>
-    <div class="stack rv">
-      <header class="mono"><span>Worker seat order</span><span>Fallback ↓</span></header>
-      <div class="seat first"><span class="n">1</span><div><h5>OpenCode · free models</h5><p>First in line for bounded worker tasks</p></div><span class="badge">Free</span></div>
-      <div class="seat"><span class="n">2</span><div><h5>Claude Sonnet</h5><p>Capable worker for suitable bounded work</p></div><span class="badge">Worker</span></div>
-      <div class="seat"><span class="n">3</span><div><h5>Claude Haiku</h5><p>Fast, light worker passes</p></div><span class="badge">Worker</span></div>
-      <div class="seat"><span class="n">4</span><div><h5>Codex</h5><p>Last in the worker chain</p></div><span class="badge">Last</span></div>
-      <div class="reserved"><span class="mono">Reserved for the director's chair</span>
-        <div><span class="chip">opus</span><span class="chip">gpt-6.1-sol</span><span class="chip">gpt-6-sol</span><span class="chip">astra</span></div>
-      </div>
-    </div>
+<section class="sec pipe" id="pipeline" data-name="Pipeline">
+ <div class="track" id="pipeTrack" style="height:400vh">
+  <div class="stage" id="pipeStage">
+   <div class="phead">
+    <div class="k mono rv"><b>03</b> / The pipeline</div>
+    <h2 class="split"><span class="ln"><span>One revision,</span></span><span class="ln"><span><b>cut in ten passes.</b></span></span></h2>
+    <p class="rv" style="--d:.15s">Every revision runs the same timeline. Any review can send the work back to Edit for repair. It ends with you: watch it, accept it, or write the notes for revision two.</p>
+   </div>
+   <div class="readout rv" id="pread" style="--d:.2s" aria-live="polite">
+    <div class="rnum rswap" id="rnum">01</div>
+    <div class="rmeta rswap"><span class="rkind mono" id="rkind">Plan station</span><h3 id="rname">Scout</h3><p id="rdesc">Scouts the footage and music; logs the moments, beats and usable shots.</p><code id="rcode">phase · scout</code></div>
+   </div>
+   <div class="gates" id="gates"></div>
+   <div class="repair mono" id="repair">↺ back to Edit</div>
+   <div class="pbar mono"><span>Revision 01</span><i><b id="pbar"></b></i><span id="ptxt">01 / 10</span></div>
   </div>
+ </div>
 </section>
 
-<section class="sec lane" id="lane">
-  <div class="wrap">
-    <div class="sh mono rv"><span class="idx">05</span><span>The native AE lane</span></div>
-    <div class="intro">
-      <h2 class="display rv">One hand <em>on the timeline.</em></h2>
-      <p class="rv">Exactly one station holds the After Effects lease at a time. Commands travel through the TonyFX panel, and the build stays editable so you can take over at any layer.</p>
-    </div>
-    <div class="lanefig rv">
-      <div class="node"><span class="mono">Neural service</span><h4>Lease holder</h4><p><code>native_lane.py</code> writes one guarded command to <code>ae_command.json</code>.</p></div>
-      <div class="wire" aria-hidden="true"><i></i><i></i></div>
-      <div class="node ae"><span class="mono">After Effects</span><h4>TonyFX CEP panel</h4><p>Executes the command inside AE: precomps, labelled layers, keyframes.</p></div>
-      <div class="wire" aria-hidden="true"><i></i><i></i></div>
-      <div class="node"><span class="mono">Result</span><h4>Verified answer</h4><p>Writes <code>ae_mcp_result.json</code>, stamped <code>"_servicedBy": "TonyFX"</code>.</p></div>
-    </div>
-    <div class="lane-grid">
-      <pre class="json rv"><span class="c">// Documents/ae-mcp-bridge/ae_mcp_result.json</span>
-{
-  <span class="k">"_servicedBy"</span>: <span class="s">"TonyFX"</span>,
-  <span class="k">"status"</span>: <span class="s">"…"</span>
-}
-<span class="c">// Missing or ambiguous? The lane stops and inspects AE.</span>
-<span class="c">// It never re-sends: an UNKNOWN is never replayed.</span></pre>
-      <div class="lane-rules rv">
-        <div><h5>One writer</h5><p>The <code class="ic">tfx_skill_client.lock</code> lease admits one station at a time.</p></div>
-        <div><h5>No replays</h5><p>An unclear result is inspected, never re-sent, so edits never double-apply.</p></div>
-        <div><h5>Editable</h5><p>No baked renders. Every layer stays labelled and yours to take over.</p></div>
-      </div>
-    </div>
+<section class="sec route pad" id="routing" data-name="Routing">
+ <div class="wrap rgrid">
+  <div class="rl">
+   <div class="k mono rv"><b>04</b> / Routing</div>
+   <h2 class="split"><span class="ln"><span>Seats, not</span></span><span class="ln"><span><b>subscriptions.</b></span></span></h2>
+   <p class="lede rv">Every seat is a provider, a model and an effort level from <span class="mono" style="color:var(--fg);font-size:.88em">model_catalog.json</span>. For each station you pick an ordered list. When a seat is unavailable, out of quota or failing, the gateway moves to the next one.</p>
+   <ul>
+    <li class="rv">Hand-offs happen only at safe boundaries, never in the middle of an After Effects command.</li>
+    <li class="rv" style="--d:.06s">No paid fallback. Neural never switches you to a paid API or changes billing.</li>
+    <li class="rv" style="--d:.12s">Workers wait on real completion events with station_cli.py wait, so nothing burns tokens polling.</li>
+   </ul>
+   <div class="resv rv"><span class="mono">Reserved for the director's chair</span><div><span>opus</span><span>gpt-6.1-sol</span><span>gpt-6-sol</span><span>astra</span></div></div>
   </div>
+  <div class="rr rv" style="--d:.1s">
+   <div class="rbadge mono"><span>Worker chain · plan_review</span><b>SIMULATION · illustrative</b></div>
+   <div id="seatList"></div>
+   <div class="rlog mono" id="rlog" aria-live="off"></div>
+  </div>
+ </div>
 </section>
 
-<section class="sec" id="rules">
-  <div class="wrap">
-    <div class="sh mono rv"><span class="idx">06</span><span>House rules</span></div>
-    <div class="intro">
-      <h2 class="display rv">The rules <em>that keep it honest.</em></h2>
-      <p class="rv">Distilled from the source studio's operating policy. Your own brief and corrections always override the creative defaults, but these seven are never broken.</p>
-    </div>
-    <div class="rules">
-      <div class="rule rv"><span class="n">1</span><div><h5>One native AE writer</h5><p>Only the lease holder sends TonyFX commands. Never two AE instances, never a second bridge.</p></div></div>
-      <div class="rule rv"><span class="n">2</span><div><h5>Never replay an UNKNOWN</h5><p>If it is unclear whether a command ran, inspect AE first.</p></div></div>
-      <div class="rule rv"><span class="n">3</span><div><h5>Never delete locks by hand</h5><p>Not while a run is live. Use Debug → maintenance.</p></div></div>
-      <div class="rule rv"><span class="n">4</span><div><h5>Manual Edit is human-only</h5><p>The AIs never act in your station.</p></div></div>
-      <div class="rule rv"><span class="n">5</span><div><h5>No billing or provider changes</h5><p>No paid fallback. OpenCode seats stay on free models unless you say otherwise.</p></div></div>
-      <div class="rule rv"><span class="n">6</span><div><h5>Never print or commit secrets</h5><p>Service tokens, cookies and CLI credentials stay on your machine.</p></div></div>
-      <div class="rule rv"><span class="n">7</span><div><h5>Report AE crashes at once</h5><p>A crash or hang goes straight to the human.</p></div></div>
-      <div class="rule rv"><span class="n">∞</span><div><h5>Only the human accepts</h5><p>Tests, sampled pixels, full-speed playback and listening are separate gates. Acceptance is yours.</p></div></div>
-    </div>
+<section class="sec lane pad" id="lane" data-name="AE lane">
+ <div class="wrap">
+  <div class="lhead">
+   <div><div class="k mono rv"><b>05</b> / The AE lane</div><h2 class="split"><span class="ln"><span>One hand</span></span><span class="ln"><span><b>on the timeline.</b></span></span></h2></div>
+   <div><span class="mono rv">Every shot travels one guarded lane.</span><p class="rv" style="--d:.1s">Exactly one station holds the After Effects lease at a time. Commands travel through the TonyFX panel, and the build stays editable so you can take over at any layer.</p></div>
   </div>
+  <div class="flow" id="laneFlow">
+   <div class="flabel mono rv"><b>Command path</b><br>one writer · one lease<br>→</div>
+   <div class="box rv" id="box1"><span class="mono">01 · Neural service</span><h4>Lease holder</h4><p><code>native_lane.py</code> writes one guarded command to <code>ae_command.json</code>.</p></div>
+   <div class="box rv" style="--d:.08s"><i class="wire"></i><span class="mono">02 · After Effects</span><h4>TonyFX CEP panel</h4><p>Executes the command inside AE: precomps, labelled layers, keyframes.</p></div>
+   <div class="box rv" style="--d:.16s"><i class="wire"></i><span class="mono">03 · Result</span><h4>Verified answer</h4><p>Writes <code>ae_mcp_result.json</code>, stamped <code>"_servicedBy": "TonyFX"</code>.</p></div>
+  </div>
+  <div class="lrow">
+   <pre class="code rv" id="code" aria-label="Example result file"><span class="bar" aria-hidden="true"><i></i><i></i><i></i></span><span id="codeTxt"></span><span class="caret" aria-hidden="true"></span></pre>
+   <div class="lcards">
+    <div class="lc rv"><span class="mono">01</span><h4>One writer</h4><p>The <code>tfx_skill_client.lock</code> lease admits one station at a time.</p></div>
+    <div class="lc rv" style="--d:.06s"><span class="mono">02</span><h4>No replays</h4><p>An unclear result is inspected, never re-sent, so edits never double-apply.</p></div>
+    <div class="lc rv" style="--d:.12s"><span class="mono">03</span><h4>Editable</h4><p>No baked renders. Every layer stays labelled and yours to take over.</p></div>
+   </div>
+  </div>
+ </div>
 </section>
 
-<section class="sec start" id="start">
-  <div class="wrap">
-    <div class="sh mono rv"><span class="idx">07</span><span>Get started</span></div>
-    <div class="intro">
-      <h2 class="display rv">Open the doors <em>on your machine.</em></h2>
-      <p class="rv">Windows, After Effects with the TonyFX panel, and your own AI accounts. If an AI is helping you set up, point it at <code class="ic">AI_START_HERE.md</code> first.</p>
-    </div>
-    <div class="steps">
-      <div class="step rv"><span class="mono">Step 1</span><h4>Check the requirements</h4><p>Install each tool listed in REQUIREMENTS.md, then dry-run the setup.</p>
-        <div class="cmd"><code>Setup-Neural2.cmd -CheckOnly</code><button>Copy</button></div></div>
-      <div class="step rv"><span class="mono">Step 2</span><h4>Sign in to your CLIs</h4><p>Each provider signs in with its own account. Neural never handles your passwords.</p>
-        <div class="cmd"><code>claude</code><button>Copy</button></div>
-        <div class="cmd"><code>codex login</code><button>Copy</button></div>
-        <div class="cmd"><code>opencode auth login</code><button>Copy</button></div>
-        <div class="cmd"><code>agy</code><button>Copy</button></div></div>
-      <div class="step rv"><span class="mono">Step 3</span><h4>Run the setup</h4><p>Add <code class="ic">-Voice</code> for local voice and dictation.</p>
-        <div class="cmd"><code>Setup-Neural2.cmd</code><button>Copy</button></div></div>
-      <div class="step rv"><span class="mono">Step 4</span><h4>Health check, then launch</h4><p>Open Services in the app and confirm each provider reports ready.</p>
-        <div class="cmd"><code>python NEURAL_STUDIO_2\check_services.py</code><button>Copy</button></div>
-        <div class="cmd"><code>python NEURAL_STUDIO_2\check_events.py</code><button>Copy</button></div></div>
-    </div>
-    <div class="docs rv">
-      <div><b>README</b><span>What Neural is and the quick start</span></div>
-      <div><b>REQUIREMENTS</b><span>Every tool to install</span></div>
-      <div><b>SETUP</b><span>The setup script, step by step</span></div>
-      <div><b>ARCHITECTURE</b><span>Stations, phases, routing, AE lane</span></div>
-      <div><b>WORKFLOW_RULES</b><span>Safety and efficiency rules</span></div>
-      <div><b>AI_START_HERE</b><span>The briefing for your AI</span></div>
-    </div>
+<section class="sec rules pad" id="rules" data-name="Rules">
+ <div class="wrap rgrid2">
+  <div class="rhead" id="rulesHead">
+   <div class="k mono rv"><b>06</b> / Rules</div>
+   <h2 class="split"><span class="ln"><span>The rules that</span></span><span class="ln"><span><b>keep it honest.</b></span></span></h2>
+   <p class="rv" style="--d:.15s">Distilled from the source studio's operating policy. Your own brief and corrections always override the creative defaults, but these seven are never broken.</p>
   </div>
+  <ol class="rlist">
+   <li class="rv"><span class="rn mono">01</span><div><h4>One native AE writer</h4><p>Only the lease holder sends TonyFX commands. Never two AE instances, never a second bridge.</p></div></li>
+   <li class="rv"><span class="rn mono">02</span><div><h4>Never replay an UNKNOWN</h4><p>If it is unclear whether a command ran, inspect AE first.</p></div></li>
+   <li class="rv"><span class="rn mono">03</span><div><h4>Never delete locks by hand</h4><p>Not while a run is live. Use Debug → maintenance.</p></div></li>
+   <li class="rv"><span class="rn mono">04</span><div><h4>Manual Edit is human-only</h4><p>The AIs never act in your station.</p></div></li>
+   <li class="rv"><span class="rn mono">05</span><div><h4>No billing or provider changes</h4><p>No paid fallback. OpenCode seats stay on free models unless you say otherwise.</p></div></li>
+   <li class="rv"><span class="rn mono">06</span><div><h4>Never print or commit secrets</h4><p>Service tokens, cookies and CLI credentials stay on your machine.</p></div></li>
+   <li class="rv"><span class="rn mono">07</span><div><h4>Report AE crashes at once</h4><p>A crash or hang goes straight to the human.</p></div></li>
+   <li class="rv inf"><span class="rn mono">∞</span><div><h4>Only the human accepts</h4><p>Tests, sampled pixels, full-speed playback and listening are separate gates. Acceptance is yours.</p></div></li>
+  </ol>
+ </div>
 </section>
 
-<footer>
-  <div class="wrap">
-    <div class="fbig rv">Neural <em>Posthouse</em></div>
-    <div class="frow mono"><span>Neural 2.0 · private build · shared by invitation</span><span>You stay the director.</span></div>
+<section class="sec start" id="start" data-name="Start">
+ <div class="wrap" style="padding-top:12vh">
+  <div class="k mono rv"><b>07</b> / Start</div>
+  <h2 class="split"><span class="ln"><span>Open the doors</span></span><span class="ln"><span><b>on your machine.</b></span></span></h2>
+  <p class="lede rv">Windows, After Effects with the TonyFX panel, and your own AI accounts. If an AI is helping you set up, point it at <span class="mono" style="color:var(--gold);font-size:.88em">AI_START_HERE.md</span> first.</p>
+  <div class="steps">
+   <div class="step rv"><span class="sn mono">STEP 01</span><h4>Check the requirements</h4><p>Install each tool listed in REQUIREMENTS.md, then dry-run the setup.</p><div class="cmds"><div class="cmd"><code>Setup-Neural2.cmd -CheckOnly</code><button class="cp" type="button">copy</button></div></div></div>
+   <div class="step rv" style="--d:.06s"><span class="sn mono">STEP 02</span><h4>Sign in to your CLIs</h4><p>Each provider signs in with its own account. Neural never handles your passwords.</p><div class="cmds"><div class="cmd"><code>claude</code><button class="cp" type="button">copy</button></div><div class="cmd"><code>codex login</code><button class="cp" type="button">copy</button></div><div class="cmd"><code>opencode auth login</code><button class="cp" type="button">copy</button></div><div class="cmd"><code>agy</code><button class="cp" type="button">copy</button></div></div></div>
+   <div class="step rv"><span class="sn mono">STEP 03</span><h4>Run the setup</h4><p>Add <code>-Voice</code> for local voice and dictation.</p><div class="cmds"><div class="cmd"><code>Setup-Neural2.cmd</code><button class="cp" type="button">copy</button></div></div></div>
+   <div class="step rv" style="--d:.06s"><span class="sn mono">STEP 04</span><h4>Health check, then launch</h4><p>Open Services in the app and confirm each provider reports ready.</p><div class="cmds"><div class="cmd"><code>python NEURAL_STUDIO_2\check_services.py</code><button class="cp" type="button">copy</button></div><div class="cmd"><code>python NEURAL_STUDIO_2\check_events.py</code><button class="cp" type="button">copy</button></div></div></div>
   </div>
-</footer>
+  <div class="docs">
+   <div class="doc rv"><b>README.md</b><span>What Neural is and the quick start</span></div>
+   <div class="doc rv" style="--d:.05s"><b>REQUIREMENTS.md</b><span>Every tool to install</span></div>
+   <div class="doc rv" style="--d:.1s"><b>SETUP.md</b><span>The setup script, step by step</span></div>
+   <div class="doc rv"><b>ARCHITECTURE.md</b><span>Stations, phases, routing, AE lane</span></div>
+   <div class="doc rv" style="--d:.05s"><b>WORKFLOW_RULES.md</b><span>Safety and efficiency rules</span></div>
+   <div class="doc ai rv" style="--d:.1s"><b>AI_START_HERE.md</b><span>The briefing for your AI</span></div>
+  </div>
+ </div>
+ <div class="closing" id="closing">
+  <h2 class="split"><span class="ln"><span>You stay</span></span><span class="ln"><span><b>the director.</b></span></span></h2>
+  <a class="btn ghost mag rv" href="#hero" style="--d:.25s">Back to the top ↑</a>
+  <footer class="foot mono"><span>Neural Posthouse · Neural 2.0 · private build · shared by invitation</span><span>You stay the director.</span></footer>
+ </div>
+</section>
+</main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/objects/Reflector.js"></script>
 <script>
-document.documentElement.classList.add('js');
-const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* ---------- page UI ---------- */
 (function(){
-  const nav=document.getElementById('nav');
-  const onScroll=()=>nav.classList.toggle('solid',scrollY>40);
-  addEventListener('scroll',onScroll,{passive:true});onScroll();
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const html=document.documentElement;
+const Q=new URLSearchParams(location.search);const DBG=Q.has('y');const DY=parseFloat(Q.get('y')||'0')||0;
+const RM=!DBG&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(DBG)html.classList.add('dbg');
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+const sstep=(a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t)};
+const pad2=n=>String(n).padStart(2,'0');
 
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px',threshold:.08});
-  document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)*70+'ms';io.observe(el)});
+/* ---------- data ---------- */
+const FORMS=['SPHERE','HALO','CONSTELLATION','RIVER','CASCADE','FUNNEL','SPIRAL','HORIZON'];
+const CREW=[
+ {n:'Director',img:'director',tag:'The chair · strongest model',d:'Owns the edit: the brief, the creative plan and every final call. Supervises each review gate and decides when a cut goes back for repair. Seat it with your strongest model.',ph:['plan','plan_review','prototype_review','harsh_review','goldfish_review']},
+ {n:'Plan',img:'plan',tag:'Scout + critic',d:'Scouts the footage and music, then pressure-tests the director’s plan.',ph:['scout','plan_review']},
+ {n:'Edit',img:'edit',tag:'Builds in After Effects',d:'Builds the prototype and the full composition in After Effects through TonyFX, and applies repairs.',ph:['prototype','build','repair']},
+ {n:'Review',img:'review',tag:'Harsh + goldfish eyes',d:'Harsh frame-by-frame review against the brief, then a fresh-eyes Goldfish pass.',ph:['prototype_review','harsh_review','goldfish_review']},
+ {n:'Deliver',img:'deliver',tag:'Render queue',d:'Renders and exports each revision, ready for your screening.',ph:['render']}];
+const PH=[
+ ['scout','plan','Plan station','Scouts the footage and music; logs the moments, beats and usable shots.'],
+ ['plan','dir','Director station','Writes the creative plan: story, structure, beats and look.'],
+ ['plan_review','plan','Plan station','Pressure-tests the director’s plan before anything is built.'],
+ ['prototype','edit','Edit station','Builds a fast proof in After Effects through TonyFX.'],
+ ['prototype_review','rev','Review station · director supervises','Checks the proof. Repair goes back to Edit; a pass moves to the full build.'],
+ ['build','edit','Edit station','Assembles the full editable composition: precomps, labelled layers, keyframes.'],
+ ['render','del','Deliver station','Renders the revision for review.'],
+ ['harsh_review','rev','Review station · director supervises','Frame by frame against the brief: beats, captions, transitions, colour, black frames, audio.'],
+ ['goldfish_review','rev','Review station · director supervises','One fresh reviewer with no context watches it like a first-time viewer.'],
+ ['HUMAN_REVIEW','you','You','You watch it. Accept, or write notes for revision two.']];
+const SHORT=['SCOUT','PLAN','PLAN REV','PROTO','PROTO REV','BUILD','RENDER','HARSH','GOLDFISH','YOU'];
+const DISP=['Scout','Plan','Plan review','Prototype','Prototype review','Build','Render','Harsh review','Goldfish review','Human review'];
+const REPAIR={4:3,7:5,8:5};
+const SEATS=[['OpenCode · free models','First in line for bounded worker tasks','Free'],['Claude Sonnet','Capable worker for suitable bounded work','Worker'],['Claude Haiku','Fast, light worker passes','Worker'],['Codex','Last in the worker chain','Last']];
+const SB=['','standby'];
+const STEPS=[
+ {s:[['on','serving'],SB,SB,SB],t:0,l:'task plan_review · seat 01 OpenCode serving'},
+ {s:[['bad','out of quota'],['on','taking over'],SB,SB],t:1,l:'seat 01 out of quota · hand-off at a safe boundary'},
+ {s:[['skip','skipped'],['on','serving'],SB,SB],t:1,l:'seat 02 Claude Sonnet serving'},
+ {s:[['skip','skipped'],['bad','failing'],['on','taking over'],SB],t:2,l:'seat 02 failing · seat 03 taking over'},
+ {s:[['skip','skipped'],['skip','skipped'],['bad','unavailable'],['on','serving']],t:3,l:'seat 03 unavailable · seat 04 Codex serving'},
+ {s:[SB,SB,SB,SB],t:0,l:'new task · routing starts again at seat 01'}];
+const CODE=[['cm','// Documents/ae-mcp-bridge/ae_mcp_result.json\n'],['pu','{'],['ky','"_servicedBy"'],['pu',': '],['st','"TonyFX"'],['pu',', '],['ky','"status"'],['pu',': '],['st','"…"'],['pu','}\n'],['cm','// Missing or ambiguous? The lane stops and inspects AE.\n'],['cm','// It never re-sends: an UNKNOWN is never replayed.']];
+const CODELEN=CODE.reduce((a,t)=>a+t[1].length,0);
 
-  // film
-  const viewer=document.getElementById('viewer'),video=document.getElementById('video'),play=document.getElementById('play');
-  play.addEventListener('click',()=>{video.controls=true;viewer.classList.add('playing');const p=video.play();if(p&&p.catch)p.catch(()=>{});});
-  video.addEventListener('ended',()=>{viewer.classList.remove('playing');video.controls=false;});
+/* ---------- build dynamic DOM ---------- */
+const sections=$$('main > section');
+const rail=$('#rail');
+sections.forEach((s,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Go to '+s.dataset.name);b.innerHTML=`<span>${pad2(i)} ${s.dataset.name}</span><i></i>`;b.addEventListener('click',()=>goTo(s));rail.appendChild(b)});
+const railB=$$('button',rail);
+const gatesEl=$('#gates');
+PH.forEach((p,j)=>{const g=document.createElement('div');g.className='g'+(j===1||j===9?' gold':'');g.style.left=(j/9*100)+'%';g.innerHTML=`<span><b>${pad2(j+1)}</b><i style="font-style:normal">${SHORT[j]}</i></span>`;gatesEl.appendChild(g)});
+const gates=$$('.g',gatesEl);
+const clabsEl=$('#clabs');
+CREW.forEach((c,k)=>{const b=document.createElement('button');b.type='button';b.className='clab';b.innerHTML=`${c.n}<b>${pad2(k+1)}</b>`;b.setAttribute('aria-label','Show the '+c.n+' station');b.addEventListener('click',()=>{const t=$('#crewTrack');const top=t.getBoundingClientRect().top+scrollY;scrollTo({top:top+(k+.5)/5*(t.offsetHeight-vh),behavior:RM?'auto':'smooth'})});clabsEl.appendChild(b)});
+const clabs=$$('.clab',clabsEl);
+const ctabs=$('#ctabs');for(let k=0;k<5;k++){ctabs.insertAdjacentHTML('beforeend','<i><b></b></i>')}
+const ctabB=$$('b',ctabs);
+const seatList=$('#seatList');
+SEATS.forEach((s,i)=>seatList.insertAdjacentHTML('beforeend',`<div class="seat"><div class="slot mono">${pad2(i+1)}</div><div class="smeta"><h4>${s[0]}</h4><p>${s[1]}</p></div><div class="sst"><span class="tier mono">${s[2]}</span><span class="stat mono">standby</span></div></div>`));
+const seats=$$('.seat',seatList);
 
-  // copy buttons
-  document.querySelectorAll('.cmd button').forEach(b=>b.addEventListener('click',async()=>{
-    const t=b.previousElementSibling.textContent;
-    try{await navigator.clipboard.writeText(t);b.textContent='Copied';b.classList.add('ok');}catch(e){b.textContent='Select';}
-    setTimeout(()=>{b.textContent='Copy';b.classList.remove('ok')},1600);
-  }));
+/* ---------- interactions ---------- */
+function goTo(el){const top=el.getBoundingClientRect().top+scrollY;scrollTo({top:Math.max(0,top),behavior:RM?'auto':'smooth'})}
+document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const t=document.getElementById(a.getAttribute('href').slice(1));if(!t)return;e.preventDefault();goTo(t)});
+$$('.cp').forEach(b=>b.addEventListener('click',()=>{const txt=b.previousElementSibling.textContent;const ok=()=>{b.textContent='copied';b.classList.add('ok');setTimeout(()=>{b.textContent='copy';b.classList.remove('ok')},1400)};
+ const fb=()=>{try{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();ok()}catch(_){}};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok,fb);else fb()}));
+const video=$('#video'),frameEl=$('#filmFrame'),vtc=$('#vtc');
+$('#play').addEventListener('click',()=>{video.controls=true;frameEl.classList.add('playing');const p=video.play();if(p&&p.catch)p.catch(()=>{})});
+video.addEventListener('ended',()=>{video.controls=false;frameEl.classList.remove('playing')});
+video.addEventListener('timeupdate',()=>{const t=video.currentTime;vtc.textContent=`${pad2(Math.floor(t/60))}:${pad2(Math.floor(t%60))}:${pad2(Math.floor((t%1)*24))}`});
 
-  // band parallax
-  const band=document.getElementById('bandImg');
-  if(!REDUCE){addEventListener('scroll',()=>{const r=band.parentElement.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;const k=(r.top+r.height/2-innerHeight/2)/innerHeight;band.style.transform='translate3d(0,'+(k*-6)+'%,0)';},{passive:true});}
+/* cursor + magnetic */
+const FINE=matchMedia('(hover:hover) and (pointer:fine)').matches;
+let mx=-1e4,my=-1e4,mIn=false;
+const cur=$('#cur');let cx=-100,cy=-100;
+if(FINE&&!RM&&!DBG){html.classList.add('cur');
+ document.addEventListener('mouseover',e=>{const h=e.target.closest('a,button,.clab');cur.classList.toggle('hov',!!h);cur.classList.toggle('hide',!!e.target.closest('video'))});
+ $$('.mag').forEach(m=>{m.addEventListener('mousemove',e=>{const r=m.getBoundingClientRect();m.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.35}px)`});m.addEventListener('mouseleave',()=>{m.style.transform=''})});
+}
+addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;mx=e.clientX;my=e.clientY;mIn=true},{passive:true});
+document.addEventListener('mouseleave',()=>{mIn=false});
 
-  // NLE timeline
-  const phases=[
-    ['scout','plan','Plan station','Scouts the footage and music; logs the moments, beats and usable shots.'],
-    ['plan','dir','Director station','Writes the creative plan: story, structure, beats and look.'],
-    ['plan_review','plan','Plan station','Pressure-tests the director’s plan before anything is built.'],
-    ['prototype','edit','Edit station','Builds a fast proof in After Effects through TonyFX.'],
-    ['prototype_review','rev','Review station · director supervises','Checks the proof. Repair goes back to Edit; a pass moves to the full build.'],
-    ['build','edit','Edit station','Assembles the full editable composition: precomps, labelled layers, keyframes.'],
-    ['render','del','Deliver station','Renders the revision for review.'],
-    ['harsh_review','rev','Review station · director supervises','Frame by frame against the brief: beats, captions, transitions, colour, black frames, audio.'],
-    ['goldfish_review','rev','Review station · director supervises','One fresh reviewer with no context watches it like a first-time viewer.'],
-    ['HUMAN_REVIEW','you','You','You watch it. Accept, or write notes for revision two.']
-  ];
-  const tv=document.getElementById('trackV'),ruler=document.getElementById('ruler');
-  for(let i=0;i<10;i++){const s=document.createElement('span');s.style.left=(i*10)+'%';s.textContent='00:00:'+String(i*3).padStart(2,'0');ruler.appendChild(s);}
-  const clips=phases.map((p,i)=>{const c=document.createElement('div');c.className='clip k-'+p[1];c.innerHTML='<small>'+String(i+1).padStart(2,'0')+'</small>'+p[0].split('_').join('_<wbr>');tv.appendChild(c);return c;});
-  const nle=document.getElementById('nle'),ph=document.getElementById('ph'),tc=document.getElementById('tc');
-  const rN=document.getElementById('rName'),rD=document.getElementById('rDesc'),rS=document.getElementById('rSt');
-  let cur=-1,hold=-1;const t0=performance.now(),D=20000;
-  function show(i){if(i===cur)return;cur=i;clips.forEach((c,j)=>c.classList.toggle('on',j===i));rN.textContent=phases[i][0];rD.textContent=phases[i][3];rS.textContent=phases[i][2];}
-  function place(f){const W=nle.clientWidth-112;ph.style.transform='translateX('+(f*W)+'px)';const secs=f*30,fr=Math.floor((secs%1)*25);tc.textContent='00:00:'+String(Math.floor(secs)).padStart(2,'0')+':'+String(fr).padStart(2,'0');}
-  clips.forEach((c,i)=>{c.addEventListener('mouseenter',()=>{hold=i;show(i);place((i+.5)/10)});c.addEventListener('mouseleave',()=>{hold=-1});c.addEventListener('click',()=>{hold=hold===i?-1:i;show(i);place((i+.5)/10)})});
-  let nleVis=false;new IntersectionObserver(e=>{nleVis=e[0].isIntersecting},{threshold:0}).observe(nle);
-  function loop(now){requestAnimationFrame(loop);if(!nleVis||hold>=0)return;const f=((now-t0)%D)/D;place(f);show(Math.min(9,Math.floor(f*10)));}
-  if(REDUCE){place(.05);show(0);}else requestAnimationFrame(loop);
-})();
+/* reveals */
+const revealEls=$$('.rv,.split');
+if(DBG){revealEls.forEach(e=>e.classList.add('in'))}
+else if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{rootMargin:'0px 0px -8% 0px',threshold:.12});revealEls.forEach(e=>io.observe(e))}
+else revealEls.forEach(e=>e.classList.add('in'));
 
-/* ---------- hero 3D scene ---------- */
-(function(){
-  const canvas=document.getElementById('gl'),hero=document.getElementById('top');
-  if(!window.THREE||!THREE.EffectComposer||!THREE.UnrealBloomPass)return;
-  const small=matchMedia('(max-width: 760px)').matches||(navigator.hardwareConcurrency||8)<=4;
-  let renderer;
-  try{renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'high-performance',alpha:false});}catch(e){return;}
-  try{
-  const DPR=Math.min(window.devicePixelRatio||1,small?1.5:1.75);
-  renderer.setPixelRatio(DPR);
-  renderer.shadowMap.enabled=!small;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  const C=h=>new THREE.Color(h).convertSRGBToLinear();
-  const scene=new THREE.Scene();
-  const BG=C(0x0b0907);scene.background=BG;scene.fog=new THREE.FogExp2(BG.getHex(),0.03);
-  const camera=new THREE.PerspectiveCamera(32,1,0.1,120);
+/* counters */
+function countUp(){$$('#stats b[data-count]').forEach((b,i)=>{const n=+b.dataset.count;if(DBG||RM||n===0){b.textContent=n;return}const t0=performance.now()+i*120;b.textContent='0';(function st(now){const p=clamp((now-t0)/1300,0,1);b.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(st)})(performance.now())})}
 
-  /* environment: a warm studio of softboxes */
-  const pm=new THREE.PMREMGenerator(renderer);
-  const es=new THREE.Scene();
-  const room=new THREE.Mesh(new THREE.BoxGeometry(34,16,34),new THREE.MeshBasicMaterial({color:C(0x1c140e),side:THREE.BackSide}));room.position.y=6;es.add(room);
-  const panel=(w,h,col,k,p,r)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:C(col).multiplyScalar(k),side:THREE.DoubleSide}));m.position.set(...p);m.rotation.set(...r);es.add(m);};
-  panel(14,7,0xffe0b4,5.5,[0,13.5,0],[Math.PI/2,0,0]);
-  panel(2.2,9,0x6ff3e4,3.2,[-15,5,1],[0,Math.PI/2,0]);
-  panel(2.2,9,0xffae55,3.4,[15,4,-4],[0,-Math.PI/2,0]);
-  panel(18,1.4,0xfff0d8,2.4,[0,7,-16],[0,0,0]);
-  panel(10,1,0xffc27a,1.6,[0,1,16],[0,Math.PI,0]);
-  scene.environment=pm.fromScene(es,0.035).texture;
+/* clocks */
+const tclk=$('#tclk');const T0=Date.now();
+setInterval(()=>{const s=Math.floor((Date.now()-T0)/1000);tclk.textContent=`${pad2(Math.floor(s/60)%60)}:${pad2(s%60)}`},1000);
 
-  /* geometry helpers */
-  function rbox(w,h,d,r,s){s=s||5;const n=2*s+1,g=new THREE.BoxGeometry(1,1,1,n,n,n),P=g.attributes.position,N=g.attributes.normal,v=new THREE.Vector3(),hx=w/2-r,hy=h/2-r,hz=d/2-r;
-    for(let i=0;i<P.count;i++){v.fromBufferAttribute(P,i);const sx=Math.sign(v.x),sy=Math.sign(v.y),sz=Math.sign(v.z);v.normalize();N.setXYZ(i,v.x,v.y,v.z);P.setXYZ(i,v.x*r+sx*hx,v.y*r+sy*hy,v.z*r+sz*hz);}
-    return g;}
-  const ceramic=(c,rough)=>new THREE.MeshPhysicalMaterial({color:C(c),roughness:rough||.36,metalness:0,clearcoat:1,clearcoatRoughness:.1});
-  const graphite=new THREE.MeshPhysicalMaterial({color:C(0x24201c),roughness:.45,metalness:.6,clearcoat:.4});
-  const glass=new THREE.MeshPhysicalMaterial({color:C(0x050708),roughness:.06,metalness:.3,clearcoat:1,clearcoatRoughness:.02});
-  const glow=(c,k)=>new THREE.MeshBasicMaterial({color:C(c).multiplyScalar(k)});
-  const gold=new THREE.MeshPhysicalMaterial({color:C(0xeab45c),metalness:1,roughness:.2,clearcoat:.6,clearcoatRoughness:.08});
-  const shotMat=new THREE.MeshPhysicalMaterial({color:C(0xf3b552),metalness:.85,roughness:.18,clearcoat:1,clearcoatRoughness:.05,emissive:C(0xff8a1a),emissiveIntensity:.9});
-  const cast=o=>{o.traverse(m=>{if(m.isMesh){m.castShadow=true;m.receiveShadow=true}});return o;};
+/* routing sim */
+const rlog=$('#rlog');let step=-1,simAcc=0,routeVis=false,laneVis=false,typed=DBG?CODELEN:0,typeAcc=0;
+function stamp(){const d=new Date();return `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}`}
+function setStep(i){step=i;const S=STEPS[i];seats.forEach((el,k)=>{el.className='seat'+(S.s[k][0]?' '+S.s[k][0]:'');$('.stat',el).textContent=S.s[k][1]});
+ rlog.insertAdjacentHTML('afterbegin',`<div><span>${stamp()}</span>${S.l}</div>`);while(rlog.children.length>4)rlog.lastElementChild.remove()}
+setStep(0);
+if('IntersectionObserver' in window){new IntersectionObserver(es=>es.forEach(en=>{if(en.target.id==='seatList')routeVis=en.isIntersecting;else laneVis=en.isIntersecting||laneVis}),{threshold:.25}).observe(seatList);
+ new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting)laneVis=true}),{threshold:.3}).observe($('#code'))}else{routeVis=laneVis=true}
+const codeTxt=$('#codeTxt');let lastTyped=-1;
+function renderCode(n){if(n===lastTyped)return;lastTyped=n;let out='',left=n;for(const [c,t] of CODE){if(left<=0)break;const s=t.slice(0,left);left-=s.length;out+=`<span class="${c}">${s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`}codeTxt.innerHTML=out}
+renderCode(typed);
 
-  /* lights */
-  const key=new THREE.SpotLight(C(0xffdcae),3.2,40,.55,.85,1.2);key.position.set(3.5,10,6.5);key.target.position.set(0,.8,0);
-  if(!small){key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.bias=-.0004;key.shadow.radius=6;}
-  scene.add(key,key.target);
-  const rim=new THREE.DirectionalLight(C(0x6ff3e4),1.1);rim.position.set(-6,4,-6);scene.add(rim);
-  const warm=new THREE.DirectionalLight(C(0xffa24a),.8);warm.position.set(7,3,-3);scene.add(warm);
-  scene.add(new THREE.HemisphereLight(C(0x2a2018),C(0x050403),.6));
+/* crew + pipeline */
+const ccard=$('#ccard'),cimg=$('#cimg'),cnum=$('#cnum'),ctag=$('#ctag'),cname=$('#cname'),cdesc=$('#cdesc'),cchips=$('#cchips');
+let crewI=-1,pipeI=-1;
+function setCrew(i){crewI=i;clabs.forEach((c,k)=>c.classList.toggle('on',k===i));const d=CREW[i];
+ const apply=()=>{cnum.textContent=`${pad2(i+1)} / 05`;ctag.textContent=d.tag;cname.textContent=d.n;cdesc.textContent=d.d;cchips.innerHTML=d.ph.map(p=>`<span>${p}</span>`).join('');cimg.src=`media/${d.img}.jpg`;ccard.classList.remove('sw')};
+ if(DBG||RM){apply();return}ccard.classList.add('sw');clearTimeout(ccard._t);ccard._t=setTimeout(apply,230)}
+const pread=$('#pread'),rnum=$('#rnum'),rkind=$('#rkind'),rname=$('#rname'),rdesc=$('#rdesc'),rcode=$('#rcode'),repair=$('#repair'),pbar=$('#pbar'),ptxt=$('#ptxt');
+function setPipe(i){pipeI=i;gates.forEach((g,j)=>{g.classList.toggle('on',j===i);g.classList.toggle('done',j<i)});ptxt.textContent=`${pad2(i+1)} / 10`;
+ const rp=REPAIR[i];if(rp!=null){repair.textContent=`↺ repair → Edit · ${DISP[rp].toLowerCase()}`;placeRepair(i,rp)}repair.classList.toggle('on',rp!=null);
+ const p=PH[i];const apply=()=>{rnum.textContent=pad2(i+1);rnum.classList.toggle('gd',p[1]==='dir'||p[1]==='you');rkind.textContent=p[2];rname.textContent=DISP[i];rdesc.textContent=p[3];rcode.textContent=`phase · ${p[0]}`;pread.classList.remove('sw')};
+ if(DBG||RM){apply();return}pread.classList.add('sw');clearTimeout(pread._t);pread._t=setTimeout(apply,200)}
 
-  /* floor: low-res mirror under a satin overlay */
-  if(!small&&THREE.Reflector){
-    const refl=new THREE.Reflector(new THREE.CircleGeometry(40,96),{clipBias:.003,textureWidth:Math.floor(innerWidth*DPR*.45),textureHeight:Math.floor(innerHeight*DPR*.45),color:new THREE.Color(0x7a7a7a)});
-    refl.rotation.x=-Math.PI/2;scene.add(refl);
-  }
-  const floor=new THREE.Mesh(new THREE.CircleGeometry(40,96),new THREE.MeshPhysicalMaterial({color:C(0x15110d),roughness:.4,metalness:0,clearcoat:.7,clearcoatRoughness:.22,transparent:!small,opacity:small?1:.8}));
-  floor.rotation.x=-Math.PI/2;floor.position.y=.003;floor.receiveShadow=true;scene.add(floor);
-  const ring=(r,w,col,k,y,seg)=>{const m=new THREE.Mesh(new THREE.RingGeometry(r,r+w,seg||256),glow(col,k));m.rotation.x=-Math.PI/2;m.position.y=y||.008;scene.add(m);return m;};
-  ring(1.55,.016,0x63f2e2,2.2);ring(2.35,.008,0x63f2e2,1.1);ring(3.6,.01,0x63f2e2,1.4);ring(5.6,.008,0xf0b552,1.2);ring(8.2,.008,0x63f2e2,.6);
-  for(let i=0;i<72;i++){const a=i/72*Math.PI*2,t=new THREE.Mesh(new THREE.PlaneGeometry(.012,i%6?.08:.2),glow(0x63f2e2,i%6?1:2));t.rotation.x=-Math.PI/2;t.rotation.z=-a;t.position.set(Math.sin(a)*1.8,.009,Math.cos(a)*1.8);scene.add(t);}
+/* ---------- layout ---------- */
+let vw=html.clientWidth,vh=innerHeight,HT=Math.tan(20*Math.PI/180)*10,WT=HT*vw/vh,K=2*HT/vh,MOBL=vw<=760,laneV=vw<=860;
+const BASE=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+const hudEl=$('#hud');
+const ANCH=[$('#heroAnchor'),$('#filmFrame'),$('#crewStage'),$('#pipeStage'),null,$('#box1'),$('#rulesHead'),$('#closing')];
+const nodes=$$('.node'),heroAnchor=$('#heroAnchor');
+let SEC=[];let nodeRel=[[0,0],[0,0],[0,0],[0,0],[0,0]];
+function placeRepair(i,rp){const x=6+88*((i+rp)/2)/9;const riverY=vh*(.5-BASE[3][1]/(2*HT));const arcPx=BASE[3][3]*1.8/K;repair.style.left=x+'%';repair.style.top=(riverY-arcPx-12)+'px'}
+function layout(){
+ vw=html.clientWidth;vh=innerHeight;MOBL=vw<=760;laneV=vw<=860;WT=HT*vw/vh;K=2*HT/vh;const H=HT,W=WT;
+ BASE[0]=MOBL?[0,.44*H,Math.min(.8*W,.34*H),0]:[.16*W,.12*H,.62*H,0];
+ const fr=ANCH[1].getBoundingClientRect();BASE[1]=[0,0,fr.width/2*K*1.06+.09*H,fr.height/2*K*1.18+.09*H];
+ BASE[2]=MOBL?[0,.2*H,Math.min(.22*H,.55*W),.07*H]:[.44*W,0,.5*H,.11*H];
+ BASE[3]=MOBL?[0,-.25*H,.88,.13*H]:[0,-.22*H,.88,.2*H];
+ const sl=$$('.slot');ANCH[4]=sl[0];const a=sl[0].getBoundingClientRect(),b=sl[1].getBoundingClientRect();
+ BASE[4]=[0,0,Math.min(a.width,a.height)*.42*K,(b.top-a.top)*K];
+ BASE[5]=[0,0,laneV?Math.min(.5*H,1.1*W):.42*H,.62];
+ BASE[6]=MOBL?[0,.58*H,.78*W,0]:[0,-.64*H,.42*H,0];
+ BASE[7]=[0,-.08*H-1.1*W,1.1*W,0];
+ const NP=MOBL?[[78,14,1],[88,33,1],[12,17],[10,40],[60,41]]:[[68,26],[79,47],[32,30],[37,61],[55,77]];
+ nodes.forEach((n,i)=>{n.style.left=NP[i][0]+'%';n.style.top=NP[i][1]+'%';n.classList.toggle('flip',!!NP[i][2])});
+ const ha=heroAnchor.getBoundingClientRect();
+ nodes.forEach((n,i)=>{const d=$('i',n).getBoundingClientRect();nodeRel[i]=[(d.left+d.width/2-(ha.left+ha.width/2))*K,-(d.top+d.height/2-(ha.top+ha.height/2))*K]});
+ if(U)nodeRel.forEach((r,i)=>U.uNodes.value[i].set(r[0]-BASE[0][0],r[1]-BASE[0][1],0));
+ const st=ANCH[2].getBoundingClientRect();
+ clabs.forEach((c,k)=>{const th=Math.PI/2-k*2*Math.PI/5;const ccx=BASE[2][0]+Math.cos(th)*BASE[2][2],ccy=BASE[2][1]+Math.sin(th)*BASE[2][2];const out=BASE[2][3]*1.75/K+(MOBL?18:28);
+  c.style.left=(st.width/2+ccx/K+Math.cos(th)*out)+'px';c.style.top=(st.height/2-ccy/K-Math.sin(th)*out)+'px'});
+ SEC=sections.map(s=>{const r=s.getBoundingClientRect();return{top:r.top+scrollY,h:Math.max(1,r.height)}});
+ if(pipeI>=0&&REPAIR[pipeI]!=null)placeRepair(pipeI,REPAIR[pipeI]);
+ resizeGL();
+}
 
-  /* back wall with cove lights and monitors */
-  const th0=Math.PI-1.25,thL=2.5;
-  const wall=new THREE.Mesh(new THREE.CylinderGeometry(14,14,8,160,1,true,th0,thL),new THREE.MeshStandardMaterial({color:C(0x1d1712),roughness:.85,side:THREE.BackSide}));wall.position.y=4;scene.add(wall);
-  [[.15,2.4,0xffc27a],[6.4,2.8,0xffc27a],[3.05,.9,0x63f2e2]].forEach(([y,k,c])=>{const s=new THREE.Mesh(new THREE.CylinderGeometry(13.9,13.9,.035,160,1,true,th0,thL),glow(c,k));s.material.side=THREE.DoubleSide;s.position.y=y;scene.add(s);});
-  function screenTex(kind,seed){const cv=document.createElement('canvas');cv.width=512;cv.height=288;const g=cv.getContext('2d');let r=seed;const rnd=()=>(r=(r*9301+49297)%233280)/233280;
-    g.fillStyle='#071112';g.fillRect(0,0,512,288);g.strokeStyle='rgba(99,242,226,.08)';g.lineWidth=1;for(let x=0;x<512;x+=32){g.beginPath();g.moveTo(x,0);g.lineTo(x,288);g.stroke();}for(let y=0;y<288;y+=32){g.beginPath();g.moveTo(0,y);g.lineTo(512,y);g.stroke();}
-    if(kind==='wave'){g.fillStyle='#63f2e2';for(let x=16;x<496;x+=4){const a=(Math.sin(x*.05+seed)*.5+.5)*(.3+.7*rnd())*90;g.fillRect(x,144-a,2.4,a*2);}}
-    else if(kind==='tl'){const cols=['#63f2e2','#f0b552','#e48ea6','#b7a7ee'];for(let row=0;row<5;row++){let x=12;while(x<500){const w=30+rnd()*90;g.fillStyle=cols[(row+Math.floor(rnd()*3))%4];g.globalAlpha=.85;g.fillRect(x,30+row*48,Math.min(w,500-x),30);x+=w+6;}}g.globalAlpha=1;g.fillStyle='#ffd48a';g.fillRect(200+seed*30,10,3,270);}
-    else{for(let i=0;i<4;i++)for(let j=0;j<3;j++){const gr=g.createLinearGradient(0,0,110,80);const h=Math.floor(rnd()*60)+15;gr.addColorStop(0,'hsl('+h+',55%,'+(30+rnd()*25)+'%)');gr.addColorStop(1,'hsl('+(h+180*rnd())+',45%,18%)');g.save();g.translate(14+i*124,14+j*90);g.fillStyle=gr;g.fillRect(0,0,112,78);g.restore();}}
-    const t=new THREE.CanvasTexture(cv);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t;}
-  ['grid','wave','tl','grid','tl','wave','grid'].forEach((k,i)=>{const a=Math.PI+(i-3)*.27,y=i%2?4.35:2.75,w=i%2?2.6:2.2,m=new THREE.Mesh(new THREE.PlaneGeometry(w,w*.5625),new THREE.MeshBasicMaterial({map:screenTex(k,i+3),color:new THREE.Color(1.15,1.15,1.15)}));
-    m.position.set(Math.sin(a)*13.4,y,Math.cos(a)*13.4);m.lookAt(0,y,0);scene.add(m);
-    const b=new THREE.Mesh(rbox(w+.14,w*.5625+.14,.08,.04,2),graphite);b.position.copy(m.position).multiplyScalar(1.003);b.lookAt(0,y,0);scene.add(b);});
+/* ---------- WebGL ---------- */
+const MOB=innerWidth<=760||(matchMedia('(pointer:coarse)').matches&&innerWidth<1100);
+const N=MOB?70000:160000;
+$('#pc').textContent=N.toLocaleString('en-US');$('#hpts').textContent=N.toLocaleString('en-US');
+let R=null,U=null,cam,ps,qs,qc,quad,fadeM,blurM,compM,pts,rtA,rtB,bq1,bq2,RTT,PR=1,glOK=false,gw=0,gh=0;
 
-  /* director core */
-  const coreP=new THREE.Vector3(0,1.45,0);
-  const core=new THREE.Group();core.position.copy(coreP);scene.add(core);
-  const body=new THREE.Group();core.add(body);
-  body.add(new THREE.Mesh(new THREE.SphereGeometry(1,160,120),ceramic(0xbfb0ea,.32)));
-  const lens=new THREE.Mesh(new THREE.SphereGeometry(1.014,128,64,0,Math.PI*2,0,.52),glass);lens.rotation.x=Math.PI/2;body.add(lens);
-  const bezel=new THREE.Mesh(new THREE.TorusGeometry(Math.sin(.52)*1.014,.03,24,160),graphite);bezel.position.z=Math.cos(.52)*1.014;body.add(bezel);
-  const iris=new THREE.Mesh(new THREE.TorusGeometry(.3,.028,24,160),glow(0x63f2e2,4));iris.position.z=Math.sqrt(1.014*1.014-.09)+.008;body.add(iris);
-  const iris2=new THREE.Mesh(new THREE.TorusGeometry(.19,.01,16,120),glow(0x63f2e2,2.2));iris2.position.z=Math.sqrt(1.014*1.014-.036)+.01;body.add(iris2);
-  const pupil=new THREE.Mesh(new THREE.CircleGeometry(.09,64),glow(0xd8fff9,6));pupil.position.z=1.02;body.add(pupil);
-  const seam=new THREE.Mesh(new THREE.TorusGeometry(1.002,.018,16,240),graphite);seam.rotation.x=Math.PI/2;body.add(seam);
-  const thr=new THREE.Mesh(new THREE.CylinderGeometry(.22,.3,.16,64),graphite);thr.position.y=-1.02;body.add(thr);
-  const thrG=new THREE.Mesh(new THREE.CircleGeometry(.2,48),glow(0x63f2e2,3.5));thrG.rotation.x=Math.PI/2;thrG.position.y=-1.105;body.add(thrG);
-  const coreLight=new THREE.PointLight(C(0x63f2e2),1.6,4.5,2);coreLight.position.set(0,-1.3,0);core.add(coreLight);
-  const orbits=[];
-  [[1.62,.016,.42,.2],[1.82,.01,-.3,1.4]].forEach(([R,tb,tx,tz])=>{const piv=new THREE.Group();piv.rotation.set(Math.PI/2+tx,0,tz);piv.add(new THREE.Mesh(new THREE.TorusGeometry(R,tb,20,320),gold));
-    const bead=new THREE.Mesh(new THREE.SphereGeometry(.055,32,24),glow(0xffc46a,4));bead.position.x=R;piv.add(bead);core.add(piv);orbits.push(piv);});
-  cast(body);orbits.forEach(cast);
+const SNOISE=`vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}vec4 mod289(vec4 x){return x-floor(x*(1./289.))*289.;}
+vec4 permute(vec4 x){return mod289(((x*34.)+1.)*x);}vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-.85373472095314*r;}
+float snoise(vec3 v){const vec2 C=vec2(1./6.,1./3.);const vec4 D=vec4(0.,.5,1.,2.);
+vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.-g;vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);
+vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;i=mod289(i);
+vec4 p=permute(permute(permute(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+float n_=.142857142857;vec3 ns=n_*D.wyz-D.xzx;vec4 j=p-49.*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.*x_);
+vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.-abs(x)-abs(y);vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);
+vec4 s0=floor(b0)*2.+1.;vec4 s1=floor(b1)*2.+1.;vec4 sh=-step(h,vec4(0.));vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);
+vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
+vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);m=m*m;
+return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));}`;
 
-  /* station pods */
-  const pods=[];
-  [[-68,0xe28fa7],[-26,0xe8dece],[26,0xd6c29c],[68,0x98a46c]].forEach(([deg,col],i)=>{
-    const a=deg*Math.PI/180,R=4.5,g=new THREE.Group();g.position.set(Math.sin(a)*R,0,-Math.cos(a)*R*.62+.6);
-    const shell=ceramic(col,.4);
-    const base=new THREE.Mesh(new THREE.CylinderGeometry(.44,.52,.12,96),graphite);base.position.y=.06;g.add(base);
-    const bl=new THREE.Mesh(new THREE.TorusGeometry(.5,.012,12,160),glow(0x63f2e2,2.4));bl.rotation.x=Math.PI/2;bl.position.y=.02;g.add(bl);
-    const bod=new THREE.Mesh(rbox(.82,.86,.62,.22,6),shell);bod.position.y=.62;g.add(bod);
-    const chest=new THREE.Mesh(rbox(.3,.12,.04,.03,2),glow(0x63f2e2,1.6));chest.position.set(0,.74,.31);g.add(chest);
-    const neck=new THREE.Mesh(new THREE.CylinderGeometry(.09,.11,.16,32),graphite);neck.position.y=1.1;g.add(neck);
-    const head=new THREE.Group();head.position.y=1.42;g.add(head);
-    head.add(new THREE.Mesh(rbox(.8,.56,.6,.19,6),shell));
-    const visor=new THREE.Mesh(rbox(.62,.32,.1,.07,4),glass);visor.position.z=.27;head.add(visor);
-    [-.13,.13].forEach(x=>{const e=new THREE.Mesh(rbox(.085,.12,.03,.035,3),glow(0x63f2e2,4.5));e.position.set(x,.01,.33);head.add(e);});
-    [-.42,.42].forEach(x=>{const ear=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.06,48),i===0?gold:graphite);ear.rotation.z=Math.PI/2;ear.position.x=x;head.add(ear);});
-    g.lookAt(coreP.x,0,coreP.z);cast(g);scene.add(g);
-    const pr=ring(.62,.01,0x63f2e2,1.2);pr.position.x=g.position.x;pr.position.z=g.position.z;
-    pods.push({g,head,phase:i*1.7});
-  });
+const VS=`attribute float aW;
+uniform float uTime,uMix,uIntro,uPR,uSize,uBright,uScrollV,uScrollW,uMouseS;
+uniform int uA,uB;uniform vec2 uView,uMouse;uniform vec4 uL[8];uniform vec3 uNodes[5];uniform vec4 uAct,uAct2;
+varying vec3 vC;varying float vA;
+const float PI=3.14159265;
+${SNOISE}
+vec2 rot(vec2 v,float a){float c=cos(a),s=sin(a);return vec2(c*v.x-s*v.y,s*v.x+c*v.y);}
+float h11(float n){return fract(sin(n*12.9898)*43758.5453);}
+vec3 jit(vec4 r){return vec3(fract(r.x*91.7+r.w*3.1),fract(r.y*53.3+r.x*7.7),fract(r.z*71.1+r.y*5.3))-.5;}
+vec3 nodeAt(float k){if(k<.5)return uNodes[0];if(k<1.5)return uNodes[1];if(k<2.5)return uNodes[2];if(k<3.5)return uNodes[3];return uNodes[4];}
+vec3 f0(vec4 r,out float b,out float g){vec4 L=uL[0];vec3 c=vec3(L.xy,0.);float R=L.z;float t=uTime;g=0.;
+ if(r.w<.045){float k=floor(fract(r.x*7.31)*5.);vec3 e=nodeAt(k);float u=fract(t*(.12+.1*r.y)+r.z);
+  vec3 a=jit(r)*.3*R;vec3 m=(a+e)*.5+vec3(-e.y,e.x,0.)*(fract(r.y*13.1)-.5)*.5;
+  vec3 p=mix(mix(a,m,u),mix(m,e,u),u)+jit(r.wzyx)*.025*R;b=.85*sin(PI*u)+.1;g=step(k,.5);return c+p;}
+ if(r.w<.155){float a=r.x*6.2832+t*.02*(1.-r.y);float d=R*(1.08+pow(r.y,1.8)*1.5);b=.3*(1.-r.y*.6);
+  return c+vec3(cos(a)*d*1.2,sin(a)*d*.85,(r.z-.5)*R*.6);}
+ float ln=floor(r.x*72.);float h1=h11(ln+1.),h2=h11(ln+17.3),h3=h11(ln+41.9);
+ float rad=R*(.5+.5*sqrt(h3));float sp=(h2<.5?-1.:1.)*(.05+.07*h1);float a=r.y*6.2832+t*sp*2.;
+ vec3 p=vec3(cos(a)*rad,sin(a)*rad,0.)+jit(r)*.06*R;
+ p.yz=rot(p.yz,h2*3.1416+t*.03);p.xz=rot(p.xz,h3*6.2832+t*.05);p*=1.+.025*sin(t*.8+h1*6.2832);
+ b=.26+.4*(p.z/R*.5+.5);g=step(fract(h1*7.3),.08);return c+p;}
+vec3 f1(vec4 r,out float b,out float g){vec4 L=uL[1];float t=uTime;g=0.;
+ if(r.w<.7){float a=r.x*6.2832+t*.06*(r.y<.5?1.:-1.)*(.6+r.z);float ca=cos(a),sa=sin(a);
+  vec2 q=vec2(sign(ca)*pow(abs(ca),.25),sign(sa)*pow(abs(sa),.25));float o=1.+(r.z-.5)*.05+(fract(r.y*31.)-.5)*.03;
+  b=.45+.3*sin(a*3.+t*.7);g=step(fract(r.y*7.7),.1);return vec3(L.xy+q*L.zw*o,(r.y-.5)*.3);}
+ float a=r.x*6.2832+t*.01;float d=1.15+r.y*1.3;b=.15*(1.-r.y*.7);
+ return vec3(L.xy+vec2(cos(a)*L.z,sin(a)*L.w*1.1)*d,(r.z-.5)*2.);}
+vec3 f2(vec4 r,out float b,out float g){vec4 L=uL[2];float t=uTime;
+ float k=floor(r.x*5.);float th=PI*.5-k*1.2566371;vec2 cen=vec2(cos(th),sin(th))*L.z;
+ float act=1.-smoothstep(0.,.6,abs(k-uAct.x));
+ if(fract(r.x*17.3)<.2){float k2=mod(k+1.,5.);float th2=PI*.5-k2*1.2566371;vec2 e=vec2(cos(th2),sin(th2))*L.z;
+  vec2 m=(cen+e)*.5*.65;float u=fract(t*.15*(.6+r.y)+r.z);vec2 p=mix(mix(cen,m,u),mix(m,e,u),u)+jit(r).xy*.04*L.z;
+  b=(.5*sin(PI*u)+.08)*(1.+act);g=step(.5,act);return vec3(L.xy+p,(r.w-.5)*.2);}
+ float rad=L.w*(1.+.55*act);float ph=r.y*6.2832+t*(.25+.2*r.z),ct=r.z*2.-1.,st=sqrt(max(0.,1.-ct*ct));
+ vec3 dir=vec3(cos(ph)*st,sin(ph)*st,ct);float sh=step(fract(r.y*11.),.3);
+ float d=mix(pow(fract(r.w*17.3),.6),1.12+.12*fract(r.w*31.),sh);vec3 p=dir*rad*d;p.yz=rot(p.yz,.5+k);
+ b=(.28+.5*act)*(1.-.3*sh);g=step(.5,act);return vec3(L.xy+cen,0.)+p;}
+vec3 f3(vec4 r,out float b,out float g){vec4 L=uL[3];float t=uTime;float W=uView.x;
+ float span=L.z*W,st9=2.*span/9.;float x=mix(-1.15,1.15,fract(r.x+t*.03*(.7+.6*r.y)))*W;
+ float jn=clamp(floor((x+span)/st9+.5),0.,9.);float gx=-span+jn*st9;float dx=x-gx;
+ float q=clamp(abs(dx)/(.075*W),0.,1.);float sm=.5-.5*cos(q*PI);float off=r.y-.5;float spread=L.w*(.1+.9*sm);
+ float y=off*2.*spread+sin(x/W*5.+off*6.+t*.6)*L.w*.14*sm;vec3 p=vec3(x,y,(r.z-.5)*.6*sm);
+ float ja=uAct.y;float isA=step(abs(jn-ja),.1)*(1.-q);b=.34+.9*isA;g=step(.5,isA);
+ if(x>-span+ja*st9+st9*.5)b*=.55;b*=1.-smoothstep(.9,1.15,abs(x)/W);
+ if(r.w<.035&&uAct.w>.01){float u=fract(t*.35+r.z+r.y*.3);float x0=-span+uAct2.y*st9,x1=-span+uAct2.z*st9;
+  vec3 ap=vec3(mix(x0,x1,u),sin(PI*u)*L.w*1.8,0.)+jit(r)*L.w*.08;p=mix(p,ap,uAct.w);b=mix(b,.9*sin(PI*u)+.15,uAct.w);g=mix(g,1.,uAct.w);}
+ return vec3(L.xy,0.)+p;}
+vec3 f4(vec4 r,out float b,out float g){vec4 L=uL[4];float t=uTime;float seat=uAct2.x;float R=L.z;float H=uView.y;
+ if(r.w>.6){float x=(r.x-.5)*R*9.;float yy=mod(r.y*3.*H-t*.12*(.5+r.z),3.*H)-1.5*H;b=.07+.05*r.z;g=0.;
+  return vec3(L.x+x,yy-L.w*1.5+L.y*0.,(r.z-.5)*2.5);}
+ float k=floor(r.x*4.);
+ if(fract(r.y*19.)<.28){float kk=min(k,2.);float u=fract(t*.25*(.7+.6*r.z)+r.w*3.);float a=r.y*6.2832+t*.6;
+  float rr=R*(.35+.65*abs(1.-2.*u));vec3 p=vec3(cos(a)*rr,-(kk+u)*L.w+sin(a)*rr*.22,sin(a)*rr*.5);
+  float on=step(kk+.5,seat);b=mix(.05,.55,on)*sin(PI*u);g=on;return vec3(L.xy,0.)+p;}
+ float a=r.y*6.2832+t*(.35+.15*k)*(mod(k,2.)<.5?1.:-1.);vec3 p=vec3(cos(a)*R,-k*L.w+sin(a)*R*.22,sin(a)*R*.5)+jit(r)*R*.06;
+ float isA=1.-smoothstep(0.,.6,abs(k-seat));b=.12+.28*isA;if(k<seat-.5)b*=.25;g=step(.5,isA);return vec3(L.xy,0.)+p;}
+vec3 f5(vec4 r,out float b,out float g){vec4 L=uL[5];float t=uTime;float W=uView.x,H=uView.y;float v=uAct2.w;
+ float BL=mix(L.x+1.2*W,1.3*H-L.y,v),FL=mix(1.2*W-L.x,L.y+1.3*H,v);float u=fract(r.x+t*.05*(.8+.4*r.y));
+ float al,ac,z;g=0.;
+ if(r.w<.58){float s=1.-u;al=-s*BL;float rr=L.z*(.05+.95*pow(s,L.w));float a=r.y*6.2832+al*2.2/max(L.z,.01)+t*1.1;
+  ac=cos(a)*rr;z=sin(a)*rr*.6;b=.2+.25*(1.-s);}
+ else{al=u*FL;float rr=L.z*.04*(1.+2.*fract(r.z*7.));float a=r.y*6.2832+t*3.;ac=cos(a)*rr;z=sin(a)*rr;
+  float pk=pow(.5+.5*sin(al*5.-t*7.),10.);b=.1+.9*pk;g=step(.45,pk);}
+ vec2 hp=vec2(L.x+al,L.y+ac),vp=vec2(L.x+ac,L.y-al);return vec3(mix(hp,vp,v),z);}
+vec3 f6(vec4 r,out float b,out float g){vec4 L=uL[6];float t=uTime;float R=L.z;g=0.;vec3 p;
+ if(fract(r.x*29.)<.12){float ph=r.y*6.2832,ct=r.z*2.-1.,st=sqrt(max(0.,1.-ct*ct));
+  p=vec3(cos(ph)*st,sin(ph)*st,ct)*R*.16*pow(fract(r.w*13.),.5);b=.5;g=step(fract(r.w*7.),.07);}
+ else{float arm=floor(r.y*3.);float d=pow(fract(r.x*3.),.55);float a=arm*2.0944+d*4.2+t*.1*(1.15-d);
+  p=vec3(cos(a),sin(a),0.)*d*R+jit(r)*R*(.04+.1*d);p.z*=.5;b=.12+.36*(1.-d);g=step(fract(r.z*13.),.05)*step(d,.6);}
+ p.yz=rot(p.yz,1.05);p.xy=rot(p.xy,.35);return vec3(L.xy,0.)+p;}
+vec3 f7(vec4 r,out float b,out float g){vec4 L=uL[7];float t=uTime;float R=L.z;
+ float th=r.x*6.2832+t*.025;float y=1.-pow(r.z,1.7)*.55;float s=sqrt(max(0.,1.-y*y));
+ vec3 q=vec3(cos(th)*s,y,sin(th)*s);float limb=pow(1.-abs(q.z),8.);b=.08+.7*limb;g=step(.55,limb)*step(fract(r.y*13.),.3);
+ vec3 p=q*R;p.z*=.35;p+=jit(r)*R*.004;return vec3(L.xy,0.)+p;}
+vec3 shape(int f,vec4 r,out float b,out float g){
+ if(f==0)return f0(r,b,g);if(f==1)return f1(r,b,g);if(f==2)return f2(r,b,g);if(f==3)return f3(r,b,g);
+ if(f==4)return f4(r,b,g);if(f==5)return f5(r,b,g);if(f==6)return f6(r,b,g);return f7(r,b,g);}
+void main(){vec4 r=vec4(position,aW);float t=uTime;float W=uView.x,H=uView.y;
+ vec3 p;float b=0.,g=0.,m=0.;bool dust=fract(r.x*53.7+r.w*7.13)<.08;
+ if(dust){float yy=mod(r.y*2.6*H+uScrollW*(.35+r.z*.5)+t*.012,2.6*H)-1.3*H;p=vec3((r.x-.5)*2.5*W,yy,(r.z-.5)*5.);b=.17;}
+ else{float bA,gA;p=shape(uA,r,bA,gA);b=bA;g=gA;
+  if(uMix>.0005){float bB,gB;vec3 pB=shape(uB,r,bB,gB);m=smoothstep(0.,1.,clamp(uMix*1.7-r.w*.7,0.,1.));p=mix(p,pB,m);b=mix(bA,bB,m);g=mix(gA,gB,m);}}
+ float tb=(.035+.5*sin(m*PI)+uScrollV)*H*.12;vec3 q=p*.33+vec3(0.,0.,t*.07);
+ p+=vec3(snoise(q),snoise(q+vec3(31.4,7.1,0.)),snoise(q+vec3(0.,47.2,13.3)))*tb;
+ float ii=1.-pow(1.-clamp(uIntro*1.4-r.x*.4,0.,1.),4.);vec3 c0=vec3(uL[0].xy,0.);p=mix(c0+(r.yzx-.5)*.15,p,ii);
+ float ib=mix(2.5,1.,ii)*smoothstep(0.,.08,uIntro);
+ vec2 dm=p.xy-uMouse;float dd=dot(dm,dm);float f=exp(-dd/(.09*H*H))*uMouseS;vec2 dn=dm/sqrt(dd+1e-4);
+ p.xy+=(dn*.11+vec2(-dn.y,dn.x)*.09)*H*f;
+ float acc=dust?0.:step(fract(r.x*97.13+r.y*13.7),.06);float gt=clamp(max(g,acc),0.,1.);
+ float teal=(1.-gt)*step(fract(r.y*71.3+r.z*3.1),.022);
+ vec3 col=mix(vec3(.93,.94,.95),vec3(1.,.77,.4),gt);col=mix(col,vec3(.45,.95,.9),teal);
+ vec4 mv=modelViewMatrix*vec4(p,1.);float dz=10./max(-mv.z,.5);
+ gl_PointSize=uSize*uPR*(.65+.8*fract(r.y*41.3))*dz*(1.+gt*.3);
+ float tw=.75+.25*sin(t*(1.+r.z*3.)+r.w*40.);
+ vA=b*tw*uBright*ib*(1.+gt*.5)*clamp(dz,.4,1.6);vC=col;gl_Position=projectionMatrix*mv;}`;
+const FS=`varying vec3 vC;varying float vA;void main(){vec2 d=gl_PointCoord-.5;float d2=dot(d,d);if(d2>.25)discard;gl_FragColor=vec4(vC*vA*exp(-d2*28.),1.);}`;
+const QV=`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`;
+const FADE=`uniform sampler2D t;uniform float uDecay;uniform vec2 uOff;varying vec2 vUv;
+void main(){vec2 uv=vUv-uOff;float inr=step(0.,uv.y)*step(uv.y,1.);vec3 c=texture2D(t,uv).rgb*inr;gl_FragColor=vec4(max(c*uDecay-.0035,0.),1.);}`;
+const BLUR=`uniform sampler2D t;uniform vec2 uDir;uniform float uTh;varying vec2 vUv;
+void main(){vec3 c=texture2D(t,vUv).rgb*.2270270270;vec2 o1=uDir*1.3846153846,o2=uDir*3.2307692308;
+c+=(texture2D(t,vUv+o1).rgb+texture2D(t,vUv-o1).rgb)*.3162162162;c+=(texture2D(t,vUv+o2).rgb+texture2D(t,vUv-o2).rgb)*.0702702703;
+gl_FragColor=vec4(max(c-uTh,0.),1.);}`;
+const COMP=`uniform sampler2D tB,tBl;uniform float uTime;uniform vec2 uRes;varying vec2 vUv;
+void main(){vec2 o=(vUv-.5)*.0018;vec3 c=vec3(texture2D(tB,vUv+o).r,texture2D(tB,vUv).g,texture2D(tB,vUv-o).b);
+c+=texture2D(tBl,vUv).rgb*1.1;c=1.-exp(-c*1.35);float l=length(vUv-.5)*1.414;c*=.6+.4*(1.-smoothstep(.3,1.1,l));
+float n=fract(sin(dot(vUv*uRes+fract(uTime)*61.,vec2(12.9898,78.233)))*43758.5453);c+=(n-.5)*.028;gl_FragColor=vec4(max(c,0.),1.);}`;
 
-  /* shot paths, trails and golden cubes */
-  const trailV='varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}';
-  const trailF='uniform float uHead,uK,uBase;uniform vec3 uCol;varying vec2 vUv;void main(){float d=uHead-vUv.x;float s=d>0.?exp(-d*5.5):0.;float hd=d>0.?exp(-d*60.):0.;gl_FragColor=vec4(uCol*(uBase+s*uK+hd*uK*1.5),1.);}';
-  const flows=[];
-  pods.forEach((p,i)=>{
-    const pp=p.g.position,dir=new THREE.Vector3(coreP.x-pp.x,0,coreP.z-pp.z).normalize(),side=new THREE.Vector3(-dir.z,0,dir.x);
-    const start=pp.clone().add(dir.clone().multiplyScalar(.5)).setY(.75);
-    const mid=pp.clone().lerp(coreP,.5).add(side.clone().multiplyScalar((i%2?1:-1)*.7)).setY(2.5+(i%2)*.4);
-    const near=coreP.clone().sub(dir.clone().multiplyScalar(1.75)).setY(1.95);
-    const end=coreP.clone().sub(dir.clone().multiplyScalar(1.04));
-    let pts=[start,mid,near,end];const out=i===3;if(out)pts=pts.reverse();
-    const curve=new THREE.CatmullRomCurve3(pts,false,'centripetal');
-    const col=out?C(0xffb547):C(0x63f2e2);
-    const mk=(rad,k,base)=>{const m=new THREE.ShaderMaterial({uniforms:{uHead:{value:0},uK:{value:k},uBase:{value:base},uCol:{value:col}},vertexShader:trailV,fragmentShader:trailF,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false});scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve,320,rad,10,false),m));return m;};
-    const mats=[mk(.011,2.6,.12),mk(.05,.35,.015)];
-    const cube=new THREE.Mesh(rbox(.34,.34,.34,.07,4),shotMat);cube.castShadow=true;scene.add(cube);
-    flows.push({curve,mats,cube,speed:.16+i*.015,off:i*.31,spin:i});
-  });
+function mkRT(w,h){return new THREE.WebGLRenderTarget(w,h,{type:RTT,format:THREE.RGBAFormat,minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,depthBuffer:false,stencilBuffer:false})}
+function resizeGL(){if(!glOK)return;const w=Math.max(2,Math.floor(vw*PR)),h=Math.max(2,Math.floor(vh*PR));
+ R.setPixelRatio(PR);R.setSize(vw,vh,false);cam.aspect=vw/vh;cam.updateProjectionMatrix();U.uView.value.set(WT,HT);U.uPR.value=PR;
+ if(w===gw&&h===gh)return;gw=w;gh=h;[rtA,rtB,bq1,bq2].forEach(t=>t&&t.dispose());rtA=mkRT(w,h);rtB=mkRT(w,h);bq1=mkRT(w>>2||1,h>>2||1);bq2=mkRT(w>>2||1,h>>2||1);
+ R.setRenderTarget(rtA);R.setClearColor(0x000000,1);R.clear();R.setRenderTarget(rtB);R.clear();R.setRenderTarget(null);compM.uniforms.uRes.value.set(w,h)}
+function initGL(){
+ if(!window.THREE)throw new Error('no three');
+ const cv=$('#field');R=new THREE.WebGLRenderer({canvas:cv,antialias:false,alpha:false,depth:false,stencil:false,powerPreference:'high-performance',preserveDrawingBuffer:DBG});
+ R.autoClear=false;const gl=R.getContext();RTT=THREE.UnsignedByteType;
+ if(R.capabilities.isWebGL2){if(gl.getExtension('EXT_color_buffer_float'))RTT=THREE.HalfFloatType}
+ else if(gl.getExtension('OES_texture_half_float')&&gl.getExtension('OES_texture_half_float_linear')&&gl.getExtension('EXT_color_buffer_half_float'))RTT=THREE.HalfFloatType;
+ PR=Math.min(devicePixelRatio||1,MOB?1.5:1.6);
+ cam=new THREE.PerspectiveCamera(40,vw/vh,.1,100);cam.position.z=10;
+ U={uTime:{value:0},uMix:{value:0},uIntro:{value:0},uPR:{value:PR},uSize:{value:MOB?3.8:4.2},uBright:{value:.055*Math.sqrt(160000/N)},uScrollV:{value:0},uScrollW:{value:0},uMouseS:{value:0},
+  uA:{value:0},uB:{value:1},uView:{value:new THREE.Vector2(WT,HT)},uMouse:{value:new THREE.Vector2(99,99)},
+  uL:{value:Array.from({length:8},()=>new THREE.Vector4())},uNodes:{value:Array.from({length:5},()=>new THREE.Vector3())},uAct:{value:new THREE.Vector4()},uAct2:{value:new THREE.Vector4()}};
+ let s=7;const rnd=()=>(s=(s*16807)%2147483647)/2147483647;
+ const pos=new Float32Array(N*3),aw=new Float32Array(N);for(let i=0;i<N;i++){pos[i*3]=rnd();pos[i*3+1]=rnd();pos[i*3+2]=rnd();aw[i]=rnd()}
+ const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('aW',new THREE.BufferAttribute(aw,1));
+ const pm=new THREE.ShaderMaterial({uniforms:U,vertexShader:VS,fragmentShader:FS,transparent:true,depthTest:false,depthWrite:false,blending:THREE.CustomBlending,blendEquation:THREE.AddEquation,blendSrc:THREE.OneFactor,blendDst:THREE.OneFactor});
+ pts=new THREE.Points(geo,pm);pts.frustumCulled=false;ps=new THREE.Scene();ps.add(pts);
+ const qm=o=>new THREE.ShaderMaterial(Object.assign({vertexShader:QV,depthTest:false,depthWrite:false},o));
+ fadeM=qm({fragmentShader:FADE,uniforms:{t:{value:null},uDecay:{value:.9},uOff:{value:new THREE.Vector2()}}});
+ blurM=qm({fragmentShader:BLUR,uniforms:{t:{value:null},uDir:{value:new THREE.Vector2()},uTh:{value:0}}});
+ compM=qm({fragmentShader:COMP,uniforms:{tB:{value:null},tBl:{value:null},uTime:{value:0},uRes:{value:new THREE.Vector2(1,1)}}});
+ qs=new THREE.Scene();qc=new THREE.OrthographicCamera(-1,1,1,-1,0,1);quad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),fadeM);quad.frustumCulled=false;qs.add(quad);
+ glOK=true;
+}
+try{initGL()}catch(e){glOK=false;html.classList.add('nogl');console.warn('Neural field: WebGL unavailable',e)}
 
-  /* light shaft over the core */
-  const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.9,2.6,9,64,1,true),new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,
-    uniforms:{uCol:{value:C(0xffd6a0)}},vertexShader:'varying vec2 vUv;varying vec3 vN;varying vec3 vV;void main(){vUv=uv;vec4 mv=modelViewMatrix*vec4(position,1.);vN=normalize(normalMatrix*normal);vV=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}',
-    fragmentShader:'uniform vec3 uCol;varying vec2 vUv;varying vec3 vN;varying vec3 vV;void main(){float f=pow(abs(dot(vN,vV)),2.2);float h=smoothstep(0.,.35,vUv.y)*smoothstep(1.,.6,vUv.y);gl_FragColor=vec4(uCol*f*h*.07,1.);}'}));
-  shaft.position.set(0,5.4,0);scene.add(shaft);
+function pass(mat,target){quad.material=mat;R.setRenderTarget(target);R.render(qs,qc)}
+function degrade(){if(!glOK)return;pts.geometry.setDrawRange(0,Math.floor(N*.55));PR=1;gw=gh=0;U.uBright.value*=1.35;resizeGL()}
 
-  /* bokeh */
-  const NB=small?90:180,bp=new Float32Array(NB*3),bs=new Float32Array(NB),bd=new Float32Array(NB),bc=new Float32Array(NB*3);
-  const pal=[C(0xffc77a),C(0xffe3b8),C(0xf0a24a),C(0x63f2e2)];
-  for(let i=0;i<NB;i++){const fg=i<NB*.12;bp[i*3]=(Math.random()-.5)*(fg?10:30);bp[i*3+1]=fg?Math.random()*4+.5:Math.random()*8+.4;bp[i*3+2]=fg?4+Math.random()*3:-4-Math.random()*12;
-    bs[i]=fg?28+Math.random()*40:6+Math.random()*20;bd[i]=Math.random();const c=pal[Math.random()<.18?3:Math.floor(Math.random()*3)];bc[i*3]=c.r;bc[i*3+1]=c.g;bc[i*3+2]=c.b;}
-  const bg=new THREE.BufferGeometry();bg.setAttribute('position',new THREE.BufferAttribute(bp,3));bg.setAttribute('aSize',new THREE.BufferAttribute(bs,1));bg.setAttribute('aSeed',new THREE.BufferAttribute(bd,1));bg.setAttribute('aCol',new THREE.BufferAttribute(bc,3));
-  const bokehMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{uTime:{value:0},uPR:{value:DPR}},
-    vertexShader:'attribute float aSize;attribute float aSeed;attribute vec3 aCol;uniform float uTime;uniform float uPR;varying float vA;varying vec3 vC;void main(){vec3 p=position;p.y+=sin(uTime*.18+aSeed*6.28)*.25;p.x+=cos(uTime*.12+aSeed*9.)*.2;vec4 mv=modelViewMatrix*vec4(p,1.);gl_PointSize=aSize*uPR*(9./-mv.z);gl_Position=projectionMatrix*mv;vA=(.25+.75*fract(aSeed*7.31))*(.6+.4*sin(uTime*.5+aSeed*20.));vC=aCol;}',
-    fragmentShader:'varying float vA;varying vec3 vC;void main(){vec2 c=gl_PointCoord-.5;float r=length(c);float disc=smoothstep(.5,.45,r);float rim=smoothstep(.5,.47,r)-smoothstep(.47,.4,r);float a=(disc*.12+rim*.12)*vA;gl_FragColor=vec4(vC*a,1.);}'});
-  scene.add(new THREE.Points(bg,bokehMat));
+/* ---------- boot ---------- */
+let booted=false,intro=0;
+function ready(){if(booted)return;booted=true;html.classList.add('ready');$('#boot').classList.add('out');setTimeout(()=>{const b=$('#boot');b&&b.remove()},1300);countUp()}
+if(DBG||RM){const b=$('#boot');b&&b.remove();booted=true;html.classList.add('ready');intro=1;countUp()}
+else{const t0=performance.now();Promise.race([document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve(),new Promise(r=>setTimeout(r,2500))]).then(()=>{setTimeout(ready,Math.max(0,1100-(performance.now()-t0)))})}
 
-  /* post: HDR target → bloom → filmic grade */
-  const isGL2=renderer.capabilities.isWebGL2;
-  const rtOpts={type:THREE.HalfFloatType,format:THREE.RGBAFormat,minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter};
-  let rt;if(isGL2&&!small&&THREE.WebGLMultisampleRenderTarget){rt=new THREE.WebGLMultisampleRenderTarget(4,4,rtOpts);rt.samples=4;}else rt=new THREE.WebGLRenderTarget(4,4,rtOpts);
-  const composer=new THREE.EffectComposer(renderer,rt);composer.setPixelRatio(DPR);
-  composer.addPass(new THREE.RenderPass(scene,camera));
-  const bloom=new THREE.UnrealBloomPass(new THREE.Vector2(256,256),.85,.62,.92);composer.addPass(bloom);
-  const grade=new THREE.ShaderPass({uniforms:{tDiffuse:{value:null},uTime:{value:0},uExp:{value:1.05}},
-    vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-    fragmentShader:'uniform sampler2D tDiffuse;uniform float uTime,uExp;varying vec2 vUv;vec3 aces(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}float hs(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}void main(){vec2 d=vUv-.5;vec2 o=d*dot(d,d)*.018;vec3 c=vec3(texture2D(tDiffuse,vUv+o).r,texture2D(tDiffuse,vUv).g,texture2D(tDiffuse,vUv-o).b);c=aces(c*uExp);c=pow(c,vec3(1./2.2));c*=vec3(1.03,1.,.95);float v=smoothstep(.95,.25,length(d*vec2(1.15,1.)));c*=mix(.42,1.,v);c+=(hs(vUv*vec2(1733.,977.)+fract(uTime*7.))-.5)*.03;gl_FragColor=vec4(c,1.);}'});
-  composer.addPass(grade);
+/* ---------- loop ---------- */
+const nav=$('#nav'),navA=$$('#nav ul a'),hform=$('#hform'),hfps=$('#hfps');
+let last=performance.now(),T=0,S=-1,sv=0,lastY=scrollY,actX=0,seatX=0,repW=0,repFrom=4,repTo=3,mouseS=0,hudF=-1,fpsAcc=0,fpsN=0,qAcc=0,qN=0,qDone=DBG||RM||!glOK,scrW=0;
+const v4=(i,el)=>{const r=el.getBoundingClientRect();const B=BASE[i];let cyp=r.top+r.height/2;let ox=(r.left+r.width/2-vw/2)*K,oy;
+ if(i===7){ox=0;oy=(vh-Math.min(r.bottom,1.42*vh))*K}else{if(i===6)cyp=clamp(cyp,.25*vh,.75*vh);oy=-(cyp-vh/2)*K}
+ U.uL.value[i].set(B[0]+ox,B[1]+oy,B[2],B[3])};
+function scramble(el,txt){if(DBG||RM){el.textContent=txt;return}const ch='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789·';let f=0;clearInterval(el._t);el._t=setInterval(()=>{f++;el.textContent=txt.split('').map((c,i)=>c===' '||i<f*1.6?c:ch[Math.floor(Math.random()*ch.length)]).join('');if(f*1.6>=txt.length){clearInterval(el._t);el.textContent=txt}},28)}
+function tick(now){
+ requestAnimationFrame(tick);
+ const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;if(!RM)T+=dt;
+ const y=scrollY,dy=y-lastY;lastY=y;sv+=(Math.min(1,Math.abs(dy)/(vh*.05))-sv)*(1-Math.exp(-dt*6));
+ if(booted&&intro<1)intro=Math.min(1,intro+dt/2.6);
+ const c=y+vh/2;let si=0;for(let k=0;k<SEC.length;k++)if(c>=SEC[k].top)si=k;
+ const sc=SEC[si]||{top:0,h:1};const f=(c-sc.top)/sc.h;const tgt=si>=7?7:si+sstep(1-Math.min(.5,.5*vh/sc.h),1,f);
+ if(S<0||RM||DBG)S=tgt;else{const d=tgt-S;S+=d*(1-Math.exp(-dt*(Math.abs(d)>1.2?7:4.5)))}
+ const fA=Math.min(7,Math.floor(S+1e-4)),fB=Math.min(7,fA+1),mix=fA===7?0:clamp(S-fA,0,1);
+ const wOf=k=>(fA===k?1-mix:0)+(fB===k&&fB!==fA?mix:0);
+ nav.classList.toggle('solid',y>vh*.6);
+ const ri=Math.round(S);railB.forEach((b,k)=>b.classList.toggle('on',k===ri));navA.forEach(a=>a.classList.toggle('on',+a.dataset.s===ri));
+ if(ri!==hudF){hudF=ri;scramble(hform,`FORM ${pad2(ri+1)} · ${FORMS[ri]}`)}
+ heroAnchor.style.opacity=clamp(wOf(0)*1.25,0,1).toFixed(3);hudEl.style.opacity=clamp(wOf(1)+(vh>860?wOf(2):0),0,1).toFixed(3);{const co=clamp(wOf(2)*1.3,0,1);clabsEl.style.opacity=co.toFixed(3);clabsEl.style.visibility=co<.05?'hidden':''}
+ // crew track
+ const ct=$('#crewTrack').getBoundingClientRect();const cp=clamp(-ct.top/Math.max(1,ct.height-vh),0,1);const ci=Math.min(4,Math.floor(cp*5));
+ if(ci!==crewI)setCrew(ci);ctabB.forEach((b,k)=>{b.style.width=(k<ci?100:k===ci?clamp(cp*5-ci,0,1)*100:0)+'%'});
+ actX+=(ci-actX)*(1-Math.exp(-dt*5));if(DBG)actX=ci;
+ const pt=$('#pipeTrack').getBoundingClientRect();const pp=clamp(-pt.top/Math.max(1,pt.height-vh),0,1);const pi=Math.min(9,Math.floor(pp*10));
+ if(pi!==pipeI)setPipe(pi);pbar.style.width=(pp*100)+'%';
+ if(REPAIR[pi]!=null){repFrom=pi;repTo=REPAIR[pi]}repW+=((REPAIR[pi]!=null?1:0)-repW)*(1-Math.exp(-dt*3));if(DBG)repW=REPAIR[pi]!=null?1:0;
+ // routing sim
+ if(routeVis&&!DBG&&!RM){simAcc+=dt;if(simAcc>2.6){simAcc=0;setStep((step+1)%STEPS.length)}}
+ seatX+=(STEPS[step].t-seatX)*(1-Math.exp(-dt*4));if(DBG||RM)seatX=STEPS[step].t;
+ // code typing
+ if(laneVis&&typed<CODELEN){typeAcc+=dt;const n=Math.floor(typeAcc/.022);if(n>0){typed=Math.min(CODELEN,typed+n);typeAcc-=n*.022}if(RM)typed=CODELEN}
+ renderCode(typed);
+ // cursor
+ if(html.classList.contains('cur')){cx+=(mx-cx)*(1-Math.exp(-dt*18));cy+=(my-cy)*(1-Math.exp(-dt*18));cur.style.transform=`translate(${cx}px,${cy}px)`}
+ // fps
+ fpsAcc+=dt;fpsN++;if(fpsAcc>.5){{const fv=Math.round(fpsN/fpsAcc);hfps.textContent=fv;hfps.parentElement.style.display=fv>=50?'':'none'}fpsAcc=0;fpsN=0}
+ if(!glOK)return;
+ if(!qDone&&intro>=1){qAcc+=dt;qN++;if(qN>=120){if(qAcc/qN>.022)degrade();qDone=true}}
+ // uniforms
+ v4(0,ANCH[0]);if(fA!==0)v4(fA,ANCH[fA]);if(fB!==fA&&fB!==0)v4(fB,ANCH[fB]);
+ U.uTime.value=T;U.uA.value=fA;U.uB.value=fB;U.uMix.value=mix;U.uIntro.value=intro;U.uScrollV.value=Math.min(.3,sv*.3);
+ scrW+=(y*K*.15-scrW)*(1-Math.exp(-dt*8));if(DBG)scrW=y*K*.15;U.uScrollW.value=scrW;
+ mouseS+=(((mIn&&!RM&&!DBG&&FINE)?1:0)-mouseS)*(1-Math.exp(-dt*3));U.uMouseS.value=mouseS;
+ if(mIn)U.uMouse.value.set((mx-vw/2)*K,-(my-vh/2)*K);
+ U.uAct.value.set(actX,pi,0,repW);U.uAct2.value.set(seatX,repFrom,repTo,laneV?1:0);
+ // passes
+ const dec=RM?0:Math.pow(.925+(.82-.925)*sv,dt*60);
+ fadeM.uniforms.t.value=rtA.texture;fadeM.uniforms.uDecay.value=dec;fadeM.uniforms.uOff.value.set(0,dy/vh);pass(fadeM,rtB);
+ R.setRenderTarget(rtB);R.render(ps,cam);
+ const qw=gw>>2||1,qh=gh>>2||1;
+ blurM.uniforms.t.value=rtB.texture;blurM.uniforms.uDir.value.set(1.5/qw,0);blurM.uniforms.uTh.value=.04;pass(blurM,bq1);
+ blurM.uniforms.t.value=bq1.texture;blurM.uniforms.uDir.value.set(0,1.5/qh);blurM.uniforms.uTh.value=0;pass(blurM,bq2);
+ blurM.uniforms.t.value=bq2.texture;blurM.uniforms.uDir.value.set(3/qw,0);pass(blurM,bq1);
+ blurM.uniforms.t.value=bq1.texture;blurM.uniforms.uDir.value.set(0,3/qh);pass(blurM,bq2);
+ compM.uniforms.tB.value=rtB.texture;compM.uniforms.tBl.value=bq2.texture;compM.uniforms.uTime.value=T;pass(compM,null);
+ const tmp=rtA;rtA=rtB;rtB=tmp;
+}
 
-  /* camera rig */
-  let W=0,H=0,sp=0,mx=0,my=0,tx=0,ty=0;
-  const A={p:new THREE.Vector3(0,2.15,10.6),l:new THREE.Vector3(0,1.3,0)},B={p:new THREE.Vector3(1.1,1.7,6.4),l:new THREE.Vector3(0,1.45,0)};
-  const tmpP=new THREE.Vector3(),tmpL=new THREE.Vector3();
-  function size(){W=hero.clientWidth;H=hero.clientHeight;renderer.setSize(W,H,false);composer.setSize(W,H);bloom.resolution.set(W*DPR/2,H*DPR/2);camera.aspect=W/H;
-    camera.fov=W/H<.9?46:32;camera.updateProjectionMatrix();}
-  addEventListener('resize',()=>{size();if(REDUCE)draw(6);});
-  addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-.5)*2;ty=(e.clientY/innerHeight-.5)*2;},{passive:true});
-  addEventListener('scroll',()=>{sp=Math.min(1,Math.max(0,scrollY/(hero.offsetHeight||1)));},{passive:true});
-
-  const ss=x=>{x=Math.min(1,Math.max(0,x));return x*x*(3-2*x);};
-  function draw(t){
-    mx+=(tx-mx)*.05;my+=(ty-my)*.05;
-    const k=ss(sp),wide=W/H>1.15;
-    tmpP.lerpVectors(A.p,B.p,k);tmpL.lerpVectors(A.l,B.l,k);
-    const shiftX=wide?-1.9*(1-k*.6):0;
-    tmpP.x+=shiftX*.35+mx*.55+Math.sin(t*.07)*.35;tmpP.y+=-my*.25+Math.sin(t*.11)*.08;tmpL.x+=shiftX;
-    if(!wide){tmpP.z+=3.2;tmpP.y+=.6;tmpL.y+=.35;}
-    camera.position.copy(tmpP);camera.lookAt(tmpL);
-    core.position.y=coreP.y+Math.sin(t*.9)*.06;
-    body.lookAt(camera.position);body.rotateY(Math.sin(t*.37)*.25);body.rotateX(Math.sin(t*.29)*.06);
-    orbits[0].rotation.z=t*.35;orbits[1].rotation.z=-t*.22+1;orbits[0].rotation.x=Math.PI/2+.42+Math.sin(t*.3)*.05;
-    pupil.scale.setScalar(1+Math.sin(t*2.1)*.08);
-    pods.forEach(p=>{p.g.position.y=Math.sin(t*1.1+p.phase)*.025;p.head.rotation.y=Math.sin(t*.45+p.phase)*.22;p.head.rotation.x=Math.sin(t*.6+p.phase)*.05;});
-    flows.forEach(f=>{const h=(t*f.speed+f.off)%1.3;f.mats.forEach(m=>m.uniforms.uHead.value=h);
-      if(h<=1){f.cube.visible=true;f.cube.position.copy(f.curve.getPointAt(h));const s=Math.min(1,h*8)*Math.min(1,(1-h)*7);f.cube.scale.setScalar(Math.max(.001,s));f.cube.rotation.set(t*.8+f.spin,t*1.1+f.spin,t*.4);}else f.cube.visible=false;});
-    bokehMat.uniforms.uTime.value=t;grade.uniforms.uTime.value=t;
-    composer.render();
-  }
-
-  size();
-  let running=false,vis=true,last=performance.now(),T=2.5,shown=false;
-  function first(){if(!shown){shown=true;canvas.classList.add('ready');}}
-  function frame(now){if(!running)return;requestAnimationFrame(frame);const dt=Math.min(.05,(now-last)/1000);last=now;T+=dt;draw(T);first();}
-  function sync(){const want=vis&&!document.hidden&&!REDUCE;if(want&&!running){running=true;last=performance.now();requestAnimationFrame(frame);}else if(!want)running=false;}
-  new IntersectionObserver(e=>{vis=e[0].isIntersecting;sync();},{threshold:0}).observe(hero);
-  document.addEventListener('visibilitychange',sync);
-  if(REDUCE){draw(6);first();}else sync();
-  }catch(err){console.warn('Neural hero scene unavailable:',err);canvas.style.display='none';}
+/* ---------- start ---------- */
+let lt=0;const relayout=()=>{cancelAnimationFrame(lt);lt=requestAnimationFrame(layout)};
+layout();
+if(window.ResizeObserver)new ResizeObserver(relayout).observe(document.body);
+addEventListener('resize',relayout);
+addEventListener('load',()=>{layout();if(DBG){scrollTo({top:DY*vh,behavior:'instant'});lastY=scrollY;S=-1}});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(relayout);
+requestAnimationFrame(tick);
 })();
 </script>
+</body>
+</html>
