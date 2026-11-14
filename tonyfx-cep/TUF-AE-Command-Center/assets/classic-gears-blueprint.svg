@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#b08c50" stroke-width="1" opacity=".16"/>
+      <path d="M20 0V40M0 20H40" fill="none" stroke="#b08c50" stroke-width=".5" opacity=".08"/>
+    </pattern>
+    <g id="gear" fill="none" stroke="#c09a58">
+      <circle r="96" stroke-width="3" stroke-dasharray="9 7"/>
+      <circle r="82" stroke-width="2"/>
+      <circle r="60" stroke-width="1.5"/>
+      <circle r="29" stroke-width="2"/>
+      <circle r="9" stroke-width="2"/>
+      <g stroke-width="12" stroke-linecap="square">
+        <path d="M0-103V-88M0 103V88M-103 0H-88M103 0H88"/>
+        <path d="M-73-73L-62-62M73 73L62 62M73-73L62-62M-73 73L-62 62"/>
+      </g>
+      <g stroke-width="1.5">
+        <path d="M0-60V-29M0 60V29M-60 0H-29M60 0H29"/>
+        <path d="M-42-42L-20-20M42 42L20 20M42-42L20-20M-42 42L-20 20"/>
+      </g>
+    </g>
+    <g id="compass" fill="none" stroke="#c9a35e">
+      <circle r="108" stroke-width="2"/>
+      <circle r="84" stroke-width="1" stroke-dasharray="2 8"/>
+      <circle r="22" stroke-width="1.5"/>
+      <path d="M0-104L18-22 0-5-18-22ZM104 0L22 18 5 0 22-18ZM0 104L-18 22 0 5 18 22ZM-104 0L-22-18-5 0-22 18Z" stroke-width="2"/>
+      <path d="M0-84V84M-84 0H84M-59-59L59 59M59-59L-59 59" stroke-width="1" opacity=".7"/>
+    </g>
+  </defs>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <g opacity=".68">
+    <use href="#gear" transform="translate(185 205) scale(1.28) rotate(9)"/>
+    <use href="#gear" transform="translate(425 410) scale(.78) rotate(-14)"/>
+    <use href="#gear" transform="translate(1235 250) scale(1.52) rotate(6)"/>
+    <use href="#gear" transform="translate(1450 492) scale(.7) rotate(18)"/>
+    <use href="#gear" transform="translate(930 675) scale(.95) rotate(-8)"/>
+    <use href="#gear" transform="translate(245 735) scale(.62) rotate(12)"/>
+    <use href="#gear" transform="translate(1110 460) scale(.5) rotate(21)"/>
+    <use href="#compass" transform="translate(760 330) scale(1.05)"/>
+    <use href="#compass" transform="translate(525 720) scale(.62) rotate(-12)"/>
+  </g>
+  <g fill="none" stroke="#b99253" opacity=".52">
+    <path d="M598 86h294l-147 254z" stroke-width="2"/>
+    <circle cx="745" cy="171" r="85"/>
+    <path d="M745 86v254M598 86l294 0M745 171l147-85M745 171L598 86"/>
+    <path d="M1110 630h315v170h-315zM1110 630l315 170M1425 630l-315 170" stroke-width="2"/>
+    <circle cx="1268" cy="715" r="74"/>
+    <path d="M58 520c100-118 218-118 318 0-100 118-218 118-318 0z"/>
+    <path d="M58 520c80-80 160-80 240 0-80 80-160 80-240 0z"/>
+    <path d="M1015 72c126 0 228 102 228 228M1015 112c104 0 188 84 188 188M1015 152c82 0 148 66 148 148"/>
+    <path d="M1490 74v248M1366 198h248M1402 110l176 176M1578 110l-176 176"/>
+  </g>
+  <g fill="#c2a064" font-family="Georgia, serif" font-size="19" font-style="italic" opacity=".64">
+    <text x="42" y="64">F = ma</text>
+    <text x="310" y="95">E = mc²</text>
+    <text x="945" y="62">f(x) = a₀ + a₁x + a₂x²</text>
+    <text x="1270" y="88">r = a(1 + cos θ)</text>
+    <text x="535" y="465">P = Δs / Δt</text>
+    <text x="670" y="840">φ = (1 + √5) / 2</text>
+    <text x="1180" y="868">∫ f(x) dx = F(x) + C</text>
+    <text x="55" y="865">a² + b² = c²</text>
+  </g>
+  <g fill="#c2a064" font-family="Georgia, serif" font-size="18" opacity=".58">
+    <text x="750" y="199">N</text><text x="750" y="475">S</text><text x="610" y="341">W</text><text x="872" y="341">E</text>
+  </g>
+</svg>

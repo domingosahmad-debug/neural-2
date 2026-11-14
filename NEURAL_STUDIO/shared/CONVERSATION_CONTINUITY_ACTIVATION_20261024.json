@@ -1,0 +1,11 @@
+{
+  "verified_at": "2026-10-24T11:58:54.301795+00:00",
+  "policy_version": "2026-10-24.1",
+  "codex_thread_id": "01a16dbd-82ec-7840-8d69-d2197ee8cc19",
+  "claude_session_id": "08d743a0-6ab0-4d99-b662-ee5c1567d9d2",
+  "director_status": "idle",
+  "same_codex_thread_as_before_reopen": true,
+  "same_claude_session_as_before_reopen": true,
+  "model_turns_started_by_verification": 0,
+  "limits": "Restart retention verified. No live provider switch or worker inference started; those resume paths remain covered by mocked regression tests."
+}

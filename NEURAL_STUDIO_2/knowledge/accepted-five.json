@@ -1,0 +1,61 @@
+{
+  "at": "2026-11-04T02:34:33.853525+00:00",
+  "human_verdict": "the five edits are perfect",
+  "scope": "Film/TV non-anime TikTok default; anime unchanged",
+  "requested_change": "Stylized visible censorship of profanity and serial, killer, killers / serial killers. Preserve all other accepted editing.",
+  "references": {
+    "e1": "f3cef5119c284be1aca5cea53d9f1571",
+    "e2": "e58a67741b5345cdba366e55ca0eab21",
+    "e3": "c910407b386e42d9882992f776d39d95",
+    "e4": "bf4adfddd6b6492981d70d0a9656d538",
+    "e5": "c32c3ee82c5c45ef84d0678fef102003"
+  },
+  "artifacts": [
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\masters\\DEXTER_D04_E1_CHEMICAL_F03_MASTER_-14LUFS.mov",
+      "bytes": 364902401,
+      "sha256": "6b90e5418578c8c15f22c57a821b816a66f2f08a2881712cd94237b102df24f7"
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\masters\\DEXTER_D04_E5_OFFLINE_F04_MASTER_-14LUFS.mov",
+      "bytes": 333687329,
+      "sha256": "c8494cf0d14f8a9a1ce92147a788e32b8bdd99442899ade6fbb87f5509f2407b"
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\masters\\DEXTER_D05_E2_TAXIDERMY_F01_MASTER_-14LUFS.mov",
+      "bytes": 347575605,
+      "sha256": "b6aa1ebea6da936b7cbae7f5fdb7f6b883e65c453558196261a339a63db165e2"
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\masters\\DEXTER_D05_E3_SWEET_DAYDREAM_F01_MASTER_-14LUFS.mov",
+      "bytes": 317365933,
+      "sha256": "ae4ad2f2e33202427a35ec6da24b73abf4fdddefac251dd540fbd0a934490b6e"
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\masters\\DEXTER_D05_E4_PITIFUL_F01_MASTER_-14LUFS.mov",
+      "bytes": 321369421,
+      "sha256": "3797f1d99352c5c63890cd691fa3e3817030db2dd41132bd0bcbb8cf5d680d89"
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\DEXTER_D04_TWO_EDITS_F01_AE24.aep",
+      "bytes": 13270872,
+      "sha256": "a9a7e28e0011d814c9593e642d851e8f8aa2ff18911e280529fd511d521f3332"
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\DEXTER_D04_TWO_EDITS_F03_AE24.aep",
+      "bytes": 14776358,
+      "sha256": "fbf5ecc1c49905924411c393e3c5b13aefc601fabfb7ee1dcf670d69c5f8bd76"
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\DEXTER_D04_TWO_EDITS_F04_AE24.aep",
+      "bytes": 15447383,
+      "sha256": "68b4cf60bb05160a1cab12acfc3fc97b0312ba566be601b6511deda18221ff3d"
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\DEXTER_D05_THREE_F01_AE24.aep",
+      "bytes": 48088325,
+      "sha256": "c86aa9d36312a4a94793c67ec835934136b581e62156a68baf99584e99d4845a"
+    }
+  ],
+  "limits": "Human acceptance of current five edits; requested censored variants still require build and render verification."
+}

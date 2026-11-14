@@ -1,0 +1,4 @@
+interface:
+  display_name: "AE Reference Replica"
+  short_description: "Analyze references and map exact edit timing"
+  default_prompt: "Analyze the reference media and produce a frame-accurate AE edit map without changing After Effects yet."

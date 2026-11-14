@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TonyFX</title>
+  <link rel="stylesheet" href="css/panel.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">T</div>
+      <div class="brand-copy"><strong>TonyFX</strong><span>After Effects command system</span></div>
+      <div class="theme-switch" role="group" aria-label="Interface design">
+        <button class="theme-option" data-theme-option="classic" title="Classic design" aria-pressed="true"><span>Classic</span></button>
+        <button class="theme-option" data-theme-option="titan" title="Titan design" aria-pressed="false"><span>Titan</span></button>
+        <button class="theme-option" data-theme-option="volt" title="Volt design" aria-pressed="false"><span>Volt</span></button>
+        <button class="theme-option" data-theme-option="gears" title="Classic Gears design" aria-pressed="false"><span>Gears</span></button>
+        <button class="theme-option" data-theme-option="prism" title="Prism design" aria-pressed="false"><span>Prism</span></button>
+        <button class="theme-option" data-theme-option="ember" title="Ember design" aria-pressed="false"><span>Ember</span></button>
+        <button class="theme-option" data-theme-option="studio" title="Studio design" aria-pressed="false"><span>Studio</span></button>
+        <button class="theme-option" data-theme-option="blueprint" title="Blueprint design" aria-pressed="false"><span>Blueprint</span></button>
+        <button class="theme-option" data-theme-option="mono" title="Mono design" aria-pressed="false"><span>Mono</span></button>
+      </div>
+      <div class="layout-switch" role="group" aria-label="Workspace mode">
+        <button data-layout-option="pro" class="active" aria-pressed="true">Pro</button>
+        <button data-layout-option="guided" aria-pressed="false">Guided</button>
+      </div>
+      <div class="edition-mark">PRIVATE EDITION</div>
+      <button id="settingsButton" class="icon-button" title="Panel settings" aria-label="Panel settings"><span data-lucide="settings"></span></button>
+    </header>
+
+    <section class="status-strip" aria-live="polite">
+      <span id="aeStatus" class="status-chip"><i></i>AE checking</span>
+      <span id="codexStatus" class="status-chip"><i></i>Codex ready</span>
+      <button id="usageMode" class="usage-meter" title="Refresh Codex plan usage" aria-label="Refresh Codex plan usage">
+        <span class="usage-track"><i id="usageFill"></i></span><strong id="usagePercent">--%</strong><span class="usage-suffix">left</span><span class="usage-refresh" data-lucide="refresh-cw"></span>
+      </button>
+    </section>
+
+    <nav class="tabs" aria-label="Panel views">
+      <button class="tab guided-tab" data-tab="home"><span data-lucide="house"></span>Home</button>
+      <button class="tab active" data-tab="chat"><span data-lucide="message-square"></span>Chat</button>
+      <button class="tab" data-tab="library"><span data-lucide="library-big"></span>Library</button>
+      <button class="tab" data-tab="actions"><span data-lucide="wand-sparkles"></span>Actions</button>
+      <button class="tab" data-tab="graphs"><span data-lucide="chart-spline"></span>Graphs</button>
+      <button class="tab" data-tab="color"><span data-lucide="palette"></span>Color</button>
+      <button class="tab" data-tab="create"><span data-lucide="shapes"></span>Create</button>
+      <button class="tab" data-tab="captions"><span data-lucide="captions"></span>Captions</button>
+      <button class="tab" data-tab="analyze"><span data-lucide="scan-search"></span>Analyze</button>
+      <button class="tab" data-tab="enhance"><span data-lucide="scan-line"></span>Enhance</button>
+      <button class="tab" data-tab="audioLab"><span data-lucide="audio-lines"></span>Audio</button>
+      <button class="tab" data-tab="generate"><span data-lucide="sparkles"></span>Generate</button>
+      <button class="tab" data-tab="project"><span data-lucide="layers-3"></span>Project</button>
+    </nav>
+
+    <main>
+      <section id="homeTab" class="tab-panel guided-home">
+        <div class="guided-hero"><span>GUIDED WORKSPACE</span><strong>Finish an edit in clear steps</strong><small>Every local tool works without Codex usage. Your current AE selection stays in control.</small></div>
+        <div class="guided-steps">
+          <button data-guided-tab="project"><b>01</b><span><strong>Inspect</strong><small>Check the active comp and selection</small></span><i data-lucide="scan-search"></i></button>
+          <button data-guided-tab="library"><b>02</b><span><strong>Build the look</strong><small>Apply transitions and scene tools</small></span><i data-lucide="wand-sparkles"></i></button>
+          <button data-guided-tab="graphs"><b>03</b><span><strong>Animate</strong><small>Motion, text, and graph presets</small></span><i data-lucide="chart-spline"></i></button>
+          <button data-guided-tab="color"><b>04</b><span><strong>Grade</strong><small>Adjust Lumetri live on footage</small></span><i data-lucide="palette"></i></button>
+          <button data-guided-tab="captions"><b>05</b><span><strong>Caption</strong><small>Offline English or Arabic speech recognition</small></span><i data-lucide="captions"></i></button>
+          <button data-guided-tab="actions"><b>06</b><span><strong>Finish</strong><small>Pre-compose, protect, and audit</small></span><i data-lucide="check-check"></i></button>
+        </div>
+        <div class="guided-note"><span data-lucide="shield-check"></span><p><strong>Non-destructive by default.</strong> Effects create adjustment layers, protected layers are skipped, and all changes are one AE undo group.</p></div>
+      </section>
+
+      <section id="chatTab" class="tab-panel active">
+        <div class="classical-stage">
+          <div class="stage-rule"><span></span><b>TONYFX</b><span></span></div>
+          <div class="gears-blueprint" aria-hidden="true"></div>
+          <div id="messages" class="messages" aria-live="polite">
+            <article class="message assistant"><div class="avatar">T</div><div class="bubble">Ready. Use Chat for full Codex editing, or Library for instant local presets without plan usage.</div></article>
+          </div>
+        </div>
+        <div class="prompt-row" aria-label="Prompt shortcuts">
+          <button data-template="audit">Audit graphs</button><button data-template="reference">Match reference</button><button data-template="intro">Polish intro</button><button data-template="captions">Sync captions</button>
+        </div>
+        <div class="composer">
+          <textarea id="promptInput" rows="3" placeholder="Tell Codex what to change in the active AE project..."></textarea>
+          <div class="composer-tools">
+            <button id="inspectBeforeSend" class="toggle-button active" title="Attach active-composition snapshot"><span data-lucide="scan-search"></span>Inspect first</button>
+            <div class="composer-actions"><button id="stopButton" class="icon-button danger hidden" title="Stop task" aria-label="Stop task"><span data-lucide="square"></span></button><button id="sendButton" class="send-button" title="Send" aria-label="Send"><span data-lucide="arrow-up"></span></button></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="libraryTab" class="tab-panel">
+        <div class="library-toolbar">
+          <label class="search-box"><span data-lucide="search"></span><input id="presetSearch" type="search" placeholder="Search tools and presets"></label>
+          <button id="favoritesOnly" class="icon-button" title="Show favorites" aria-label="Show favorites"><span data-lucide="star"></span></button>
+        </div>
+        <div id="categoryChips" class="category-chips"></div>
+        <section id="effectPreviewPanel" class="effect-preview-panel hidden" aria-label="Effect preview">
+          <div class="effect-preview-copy"><span>EFFECT MONITOR</span><strong id="effectPreviewName">Select an effect</strong><small id="effectPreviewHint">Two scenes cut at the center marker</small></div>
+          <div id="effectPreviewStage" class="effect-preview-stage preview-effect-clean">
+            <video id="effectPreviewVideo" src="assets/effect-preview-a.mp4" muted playsinline preload="auto"></video>
+            <i class="effect-cut-marker"></i><b id="effectPreviewBadge">PREVIEW</b>
+          </div>
+          <div class="effect-preview-actions"><button id="replayEffectPreview" type="button" title="Replay preview"><span data-lucide="rotate-ccw"></span></button><span>Click an effect below to preview it</span><button id="applyEffectPreview" class="primary" type="button" disabled><span data-lucide="check"></span>Apply Effect</button></div>
+        </section>
+        <div class="parameter-deck">
+          <label><span>Duration</span><div><input id="durationFrames" type="number" min="2" max="180" value="12"><em>fr</em></div></label>
+          <label><span>Amount</span><div><input id="motionAmount" type="number" min="1" max="2000" value="120"><em>px</em></div></label>
+          <label><span>Stagger</span><div><input id="staggerFrames" type="number" min="0" max="90" value="2"><em>fr</em></div></label>
+        </div>
+        <div class="library-meta"><span id="presetCount">0 tools</span><span id="recentTools"></span></div>
+        <div id="presetGrid" class="preset-grid"></div>
+      </section>
+
+      <section id="actionsTab" class="tab-panel">
+        <div class="section-heading"><div><span>Quick actions</span><small>Instant tools, no Codex usage</small></div><span class="local-badge">LOCAL</span></div>
+        <div class="action-grid">
+          <button class="action-card" data-action="inspect"><span class="action-icon" data-lucide="scan-search"></span><strong>Inspect Comp</strong><small>Read active composition</small></button>
+          <button class="action-card" data-action="protect"><span class="action-icon" data-lucide="shield-check"></span><strong>Protect Layers</strong><small>Preserve selection</small></button>
+          <button class="action-card" data-action="tile"><span class="action-icon" data-lucide="grid-2x2-check"></span><strong>Motion Tile</strong><small>200 reflect under Lumetri</small></button>
+          <button class="action-card" data-action="opacity"><span class="action-icon" data-lucide="blend"></span><strong>45 / 100 / 45</strong><small>Approved opacity arch</small></button>
+          <button class="action-card" data-action="audit"><span class="action-icon" data-lucide="list-checks"></span><strong>Quick Audit</strong><small>Order and protection</small></button>
+          <button class="action-card" data-action="snapshot"><span class="action-icon" data-lucide="camera"></span><strong>Snapshot</strong><small>Save comp structure</small></button>
+          <button class="action-card" data-action="precompSeparate"><span class="action-icon" data-lucide="copy"></span><strong>Pre-comp Separate</strong><small>One trimmed comp per layer</small></button>
+          <button class="action-card" data-action="precompTogether"><span class="action-icon" data-lucide="combine"></span><strong>Pre-comp Together</strong><small>Selected layers in one comp</small></button>
+          <button class="action-card" data-action="twixtorSelected"><span class="action-icon" data-lucide="gauge"></span><strong>Twixtor 150 / 35 / 150</strong><small>Pre-comp + U-ramp selected scenes</small></button>
+          <button class="action-card" data-action="adjustment"><span class="action-icon" data-lucide="layers"></span><strong>Adjustment Layer</strong><small>Span selected scenes</small></button>
+          <button class="action-card" data-action="null"><span class="action-icon" data-lucide="box-select"></span><strong>Null</strong><small>Span selected scenes</small></button>
+        </div>
+        <div class="section-heading compact"><div><span>Codex workflows</span><small>Creative analysis using your plan</small></div></div>
+        <div class="workflow-list">
+          <button data-template="build"><span data-lucide="clapperboard"></span><div><strong>Build edit</strong><small>Beat-sync selected footage</small></div><span data-lucide="chevron-right"></span></button>
+          <button data-template="repair"><span data-lucide="wrench"></span><div><strong>Repair active comp</strong><small>Preserve manual adjustments</small></div><span data-lucide="chevron-right"></span></button>
+          <button data-template="export"><span data-lucide="sparkles"></span><div><strong>Export quality</strong><small>Topaz and Media Encoder</small></div><span data-lucide="chevron-right"></span></button>
+        </div>
+      </section>
+
+      <section id="graphsTab" class="tab-panel graph-lab">
+        <div class="graph-hero"><div><span>GRAPH LAB</span><strong>Curves and animation previews</strong><small>Preview locally, then apply to the selected AE target</small></div><span class="local-badge">LOCAL</span></div>
+        <div class="graph-mode-switch" role="tablist" aria-label="Graph Lab modes">
+          <button class="active" data-graph-mode="easing"><span data-lucide="chart-spline"></span>Easing</button>
+          <button data-graph-mode="text"><span data-lucide="type"></span>Text</button>
+          <button data-graph-mode="motion"><span data-lucide="move"></span>Motion</button>
+        </div>
+        <div id="easingGraphMode" class="graph-mode active">
+          <div class="graph-instruction"><span>Select a curve</span><small>The drawn line represents its temporal character</small></div>
+          <div id="graphPresetGrid" class="graph-preset-grid"></div>
+          <section class="custom-graph-editor" aria-label="Custom cubic Bezier editor">
+            <div class="custom-graph-stage"><svg id="customGraphSvg" viewBox="0 0 100 100" role="img" aria-label="Editable cubic Bezier curve"><path class="graph-grid" d="M10 10V90H90 M10 70H90 M10 50H90 M10 30H90 M30 10V90 M50 10V90 M70 10V90"/><path id="customGraphHandles" class="custom-handle-lines" d=""/><path id="customGraphPath" class="custom-curve-line" d=""/><circle cx="10" cy="90" r="2.4"/><circle cx="90" cy="10" r="2.4"/><circle id="customGraphPoint1" class="custom-control-point" r="4" tabindex="0"/><circle id="customGraphPoint2" class="custom-control-point" r="4" tabindex="0"/></svg></div>
+            <div class="custom-graph-controls"><div class="custom-graph-values"><label><span>X1</span><input id="graphX1" type="number" min="0" max="1" step="0.01" value="0.09"></label><label><span>Y1</span><input id="graphY1" type="number" min="-2" max="3" step="0.01" value="0.72"></label><label><span>X2</span><input id="graphX2" type="number" min="0" max="1" step="0.01" value="0.94"></label><label><span>Y2</span><input id="graphY2" type="number" min="-2" max="3" step="0.01" value="0.27"></label></div><label class="custom-graph-name"><span>Preset name</span><input id="customGraphName" type="text" maxlength="40" placeholder="My graph"></label><div class="custom-graph-actions"><button id="saveCustomGraph" type="button"><span data-lucide="save"></span>Save</button><button id="deleteCustomGraph" type="button"><span data-lucide="trash-2"></span>Delete</button></div></div>
+          </section>
+          <div class="graph-apply-bar"><span id="selectedGraphName">TUF Speed Ramp selected</span><button id="applyGraphPreset"><span data-lucide="check"></span>Apply Graph</button></div>
+        </div>
+        <div id="textGraphMode" class="graph-mode">
+          <label class="preview-input"><span>Preview text</span><input id="textPreviewInput" type="text" maxlength="80" value="TONYFX MOTION" placeholder="Type preview text"></label>
+          <div class="text-preview-stage"><span id="textPreviewTarget">TONYFX MOTION</span><i></i></div>
+          <div class="graph-instruction"><span>Text animations</span><small>Click an animation to preview it</small></div>
+          <div id="textMotionGrid" class="animation-preset-grid"></div>
+          <div class="graph-apply-bar"><span id="selectedTextName">Word Fade selected</span><button id="applyTextPreset"><span data-lucide="check"></span>Apply to Text</button></div>
+        </div>
+        <div id="motionGraphMode" class="graph-mode">
+          <div class="motion-preview-stage"><div id="motionPreviewTarget"><span>T</span></div><i class="axis-x"></i><i class="axis-y"></i></div>
+          <div class="graph-instruction"><span>Motion animations</span><small>Preview using the graphic, then apply to a selected AE layer</small></div>
+          <div id="layerMotionGrid" class="animation-preset-grid"></div>
+          <div class="graph-apply-bar"><span id="selectedMotionName">Scale Impact selected</span><button id="applyMotionPreset"><span data-lucide="check"></span>Apply to Layer</button></div>
+        </div>
+      </section>
+
+      <section id="colorTab" class="tab-panel color-studio">
+        <div class="color-hero">
+          <div><span>COLOR STUDIO</span><strong>Lumetri control surface</strong><small>Real AE Lumetri controls on selected scene footage</small></div>
+          <div class="color-actions"><button id="readColor" title="Read selected grade"><span data-lucide="scan-eye"></span>Read</button><button id="resetColor" title="Reset selected grade"><span data-lucide="rotate-ccw"></span>Reset</button><button id="applyColor" class="primary" title="Apply grade to selection"><span data-lucide="check"></span>Apply</button></div>
+        </div>
+        <div class="color-status"><i></i><span id="colorTarget">Select one or more scene layers</span><label><input id="liveColor" type="checkbox" checked><span>Live</span></label></div>
+        <section class="color-match-lab">
+          <div class="color-match-heading">
+            <div><span>REFERENCE MATCH</span><strong>Shot Match Lab</strong><small>Offline temporal analysis, face-aware color transfer, editable Lumetri, and precision render</small></div>
+            <span id="colorMatchSafety" class="local-badge">LOCAL SAFE</span>
+          </div>
+          <div class="color-match-sources">
+            <article><span data-lucide="film"></span><div><strong id="colorMatchTargetName">Choose target shot</strong><small id="colorMatchTargetMeta">Select one AE scene layer</small></div><button id="colorMatchUseTarget" type="button">Use AE Target</button></article>
+            <article><span data-lucide="image"></span><div><strong id="colorMatchReferenceName">Choose color reference</strong><small id="colorMatchReferenceMeta">Video, still, or selected AE layer</small></div><button id="colorMatchUseReferenceAE" type="button">Use AE Ref</button><button id="colorMatchBrowseReference" type="button">Browse</button></article>
+          </div>
+          <div class="color-match-options">
+            <label><span>Match mode</span><select id="colorMatchMode"><option value="continuity">Shot Continuity</option><option value="look">Creative Look</option><option value="skin">Skin Priority</option></select></label>
+            <label><span>Temporal samples</span><select id="colorMatchSamples"><option value="3">3 Fast</option><option value="7" selected>7 Balanced</option><option value="11">11 Deep</option></select></label>
+            <label data-engine-pair="colorMatchStrength"><span>Strength</span><input id="colorMatchStrength" type="range" min="0" max="100" value="70"><input type="number" min="0" max="100" value="70"></label>
+            <label><span>Reference start</span><input id="colorMatchReferenceStart" type="number" min="0" step="0.01" value="0"></label>
+            <label><span>Reference range</span><input id="colorMatchReferenceDuration" type="number" min="0" step="0.01" value="0" title="0 samples the available reference"></label>
+          </div>
+          <div class="color-match-toggles">
+            <label><input id="colorMatchTone" type="checkbox" checked><span>Tone and exposure</span></label>
+            <label><input id="colorMatchColor" type="checkbox" checked><span>Color and saturation</span></label>
+            <label><input id="colorMatchSkin" type="checkbox" checked><span>Protect detected faces</span></label>
+          </div>
+          <div class="color-match-preview-grid">
+            <figure><img id="colorMatchTargetPreview" alt="Target preview"><figcaption>Target</figcaption></figure>
+            <figure><img id="colorMatchReferencePreview" alt="Reference preview"><figcaption>Reference</figcaption></figure>
+            <figure><img id="colorMatchResultPreview" alt="Matched preview"><figcaption>Matched</figcaption></figure>
+            <figure class="color-match-scopes"><img id="colorMatchScopesPreview" alt="Color scopes"><figcaption>Scopes</figcaption></figure>
+          </div>
+          <div id="colorMatchMetrics" class="color-match-metrics"><div><strong>-</strong><span>Improvement</span></div><div><strong>-</strong><span>Confidence</span></div><div><strong>-</strong><span>Faces</span></div><div><strong>-</strong><span>Samples</span></div><div><strong>-</strong><span>Skin drift</span></div><div><strong>-</strong><span>Highlight clip</span></div></div>
+          <div class="color-match-progress"><div><i id="colorMatchProgressFill"></i></div><span id="colorMatchProgressText">Ready</span></div>
+          <div class="color-match-actions">
+            <button id="colorMatchCancel" class="danger hidden" type="button"><span data-lucide="square"></span>Cancel</button>
+            <button id="colorMatchRemove" type="button"><span data-lucide="undo-2"></span>Remove Match</button>
+            <button id="colorMatchApply" type="button" disabled><span data-lucide="sliders-horizontal"></span>Apply Editable</button>
+            <button id="colorMatchRender" type="button" disabled><span data-lucide="clapperboard"></span>Render Precision</button>
+            <button id="colorMatchAnalyze" class="primary" type="button"><span data-lucide="scan-search"></span>Analyze Match</button>
+          </div>
+          <p id="colorMatchStatus" class="color-match-note">No layer is changed during analysis. Editable apply creates a dedicated TonyFX Lumetri effect; Remove Match deletes only that effect.</p>
+        </section>
+        <div class="grade-presets" aria-label="Color grade presets">
+          <button data-grade="clean">Clean Bright</button><button data-grade="warm">Warm Romance</button><button data-grade="cool">Cool Steel</button><button data-grade="night">Night Lift</button><button data-grade="neutral">Neutral</button>
+          <button data-grade="tealOrange">Teal + Orange</button><button data-grade="filmWarm">Film Print Warm</button><button data-grade="bleach">Bleach Bypass</button><button data-grade="cyber">Cyber Neon</button><button data-grade="golden">Golden Hour</button>
+          <button data-grade="pastel">Pastel Airy</button><button data-grade="moodyGreen">Moody Green</button><button data-grade="sunset">Sunset Magenta</button><button data-grade="monoContrast">Contrast Mono</button><button data-grade="skinPop">Luxury Skin Pop</button>
+        </div>
+        <div class="color-sections">
+          <section class="color-band open" data-color-band>
+            <button class="color-band-title" type="button"><span>01</span><strong>Basic Correction</strong><i data-lucide="chevron-down"></i></button>
+            <div class="color-band-body color-control-grid">
+              <label data-color-control="temperature"><span>Temperature</span><input type="range" min="-100" max="100" step="1" value="0"><input type="number" min="-100" max="100" value="0"></label>
+              <label data-color-control="tint"><span>Tint</span><input type="range" min="-100" max="100" step="1" value="0"><input type="number" min="-100" max="100" value="0"></label>
+              <label data-color-control="exposure"><span>Exposure</span><input type="range" min="-5" max="5" step="0.05" value="0"><input type="number" min="-5" max="5" step="0.05" value="0"></label>
+              <label data-color-control="contrast"><span>Contrast</span><input type="range" min="-100" max="100" step="1" value="0"><input type="number" min="-100" max="100" value="0"></label>
+              <label data-color-control="highlights"><span>Highlights</span><input type="range" min="-100" max="100" step="1" value="0"><input type="number" min="-100" max="100" value="0"></label>
+              <label data-color-control="shadows"><span>Shadows</span><input type="range" min="-100" max="100" step="1" value="0"><input type="number" min="-100" max="100" value="0"></label>
+              <label data-color-control="whites"><span>Whites</span><input type="range" min="-100" max="100" step="1" value="0"><input type="number" min="-100" max="100" value="0"></label>
+              <label data-color-control="blacks"><span>Blacks</span><input type="range" min="-100" max="100" step="1" value="0"><input type="number" min="-100" max="100" value="0"></label>
+              <label data-color-control="saturation"><span>Saturation</span><input type="range" min="0" max="200" step="1" value="100"><input type="number" min="0" max="200" value="100"></label>
+            </div>
+          </section>
+          <section class="color-band open" data-color-band>
+            <button class="color-band-title" type="button"><span>02</span><strong>Creative</strong><i data-lucide="chevron-down"></i></button>
+            <div class="color-band-body color-control-grid">
+              <label data-color-control="vibrance"><span>Vibrance</span><input type="range" min="-100" max="100" step="1" value="0"><input type="number" min="-100" max="100" value="0"></label>
+              <label data-color-control="sharpen"><span>Sharpen</span><input type="range" min="0" max="100" step="1" value="0"><input type="number" min="0" max="100" value="0"></label>
+              <label data-color-control="fadedFilm"><span>Faded Film</span><input type="range" min="0" max="100" step="1" value="0"><input type="number" min="0" max="100" value="0"></label>
+              <label data-color-control="creativeSaturation"><span>Creative Saturation</span><input type="range" min="0" max="200" step="1" value="100"><input type="number" min="0" max="200" value="100"></label>
+            </div>
+          </section>
+          <section class="color-band open" data-color-band>
+            <button class="color-band-title" type="button"><span>03</span><strong>Color Wheels</strong><i data-lucide="chevron-down"></i></button>
+            <div class="color-band-body wheel-grid">
+              <label class="color-wheel" data-wheel="shadows"><strong>Shadows</strong><span class="wheel-disc"><input type="color" value="#808080"><i></i></span><span class="wheel-luma">Luma<input type="range" min="-100" max="100" value="0"><input type="number" min="-100" max="100" value="0"></span></label>
+              <label class="color-wheel" data-wheel="midtones"><strong>Midtones</strong><span class="wheel-disc"><input type="color" value="#808080"><i></i></span><span class="wheel-luma">Luma<input type="range" min="-100" max="100" value="0"><input type="number" min="-100" max="100" value="0"></span></label>
+              <label class="color-wheel" data-wheel="highlights"><strong>Highlights</strong><span class="wheel-disc"><input type="color" value="#808080"><i></i></span><span class="wheel-luma">Luma<input type="range" min="-100" max="100" value="0"><input type="number" min="-100" max="100" value="0"></span></label>
+            </div>
+          </section>
+          <section class="color-band" data-color-band>
+            <button class="color-band-title" type="button"><span>04</span><strong>Vignette</strong><i data-lucide="chevron-down"></i></button>
+            <div class="color-band-body color-control-grid">
+              <label data-color-control="vignetteAmount"><span>Amount</span><input type="range" min="-5" max="5" step="0.05" value="0"><input type="number" min="-5" max="5" step="0.05" value="0"></label>
+              <label data-color-control="vignetteMidpoint"><span>Midpoint</span><input type="range" min="0" max="100" step="1" value="50"><input type="number" min="0" max="100" value="50"></label>
+              <label data-color-control="vignetteRoundness"><span>Roundness</span><input type="range" min="-100" max="100" step="1" value="0"><input type="number" min="-100" max="100" value="0"></label>
+              <label data-color-control="vignetteFeather"><span>Feather</span><input type="range" min="0" max="100" step="1" value="50"><input type="number" min="0" max="100" value="50"></label>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section id="createTab" class="tab-panel create-studio">
+        <div class="create-hero"><div><span>CREATE STUDIO</span><strong>Text styling, 3D treatments, and vector icons</strong><small>Preview and apply editable native AE typography treatments</small></div><span class="local-badge">LOCAL</span></div>
+        <div class="create-layout">
+          <section class="text-style-panel">
+            <div class="section-heading"><div><span>Text appearance</span><small>Applied directly to selected text layers</small></div></div>
+            <div class="text-composer">
+              <label class="text-composer-copy"><span>Timeline text</span><textarea id="textComposeValue" rows="2" maxlength="240" placeholder="Type the text to create in After Effects">TONYFX</textarea></label>
+              <div class="text-composer-grid">
+                <label><span>Animation</span><select id="textComposeAnimation"></select></label>
+                <label><span>Placement</span><select id="textComposePlacement"><option value="center">Center</option><option value="bottom">Bottom safe</option><option value="top">Top safe</option></select></label>
+                <label><span>Layer frames</span><input id="textComposeDuration" type="number" min="30" max="1800" value="150"></label>
+                <label><span>Entry frames</span><input id="textComposeEntry" type="number" min="6" max="90" value="22"></label>
+                <label><span>Exit frames</span><input id="textComposeExit" type="number" min="6" max="90" value="22"></label>
+                <label class="check-line"><input id="textComposeMatchedExit" type="checkbox" checked><span>Matched exit</span></label>
+              </div>
+              <button id="createStyledText" class="wide-primary"><span data-lucide="type"></span>Create Styled Text on Timeline</button>
+            </div>
+            <div class="text-style-preview" id="textStylePreview"><span>TONYFX</span></div>
+            <div class="style-grid">
+              <label><span>Font</span><select id="textStyleFont"><option value="Arial-BoldMT">Arial Bold</option><option value="Montserrat-Bold">Montserrat Bold</option><option value="Poppins-Bold">Poppins Bold</option><option value="Impact">Impact</option><option value="TimesNewRomanPS-BoldMT">Times Bold</option></select></label>
+              <label><span>Size</span><input id="textStyleSize" type="number" min="8" max="500" value="58"></label>
+              <label><span>Fill</span><input id="textStyleFill" type="color" value="#ffffff"></label>
+              <label class="check-line"><input id="textStyleStrokeEnabled" type="checkbox"><span>Stroke</span><input id="textStyleStroke" type="color" value="#111111"><input id="textStyleStrokeWidth" type="number" min="0" max="30" step="0.5" value="3"></label>
+            </div>
+            <div class="style-options">
+              <label class="check-line"><input id="textStyleShadowEnabled" type="checkbox" checked><span>Shadow</span></label>
+              <label><span>Opacity</span><input id="textStyleShadowOpacity" type="range" min="0" max="100" value="65"><input id="textStyleShadowOpacityNumber" type="number" min="0" max="100" value="65"></label>
+              <label><span>Distance</span><input id="textStyleShadowDistance" type="range" min="0" max="80" value="12"><input id="textStyleShadowDistanceNumber" type="number" min="0" max="80" value="12"></label>
+              <label><span>Softness</span><input id="textStyleShadowSoftness" type="range" min="0" max="100" value="28"><input id="textStyleShadowSoftnessNumber" type="number" min="0" max="100" value="28"></label>
+              <label><span>Direction</span><input id="textStyleShadowDirection" type="range" min="0" max="360" value="135"><input id="textStyleShadowDirectionNumber" type="number" min="0" max="360" value="135"></label>
+            </div>
+            <div class="style-pills"><button data-text-look="clean">Clean</button><button data-text-look="soft">Soft Glow</button><button data-text-look="neon">Neon</button><button data-text-look="cinema">Cinema</button><button data-text-look="impact">Impact</button></div>
+            <div class="style-options glow-options">
+              <label class="check-line"><input id="textStyleGlowEnabled" type="checkbox"><span>Glow</span></label>
+              <label><span>Intensity</span><input id="textStyleGlowIntensity" type="range" min="0" max="5" step="0.05" value="1.1"><input id="textStyleGlowIntensityNumber" type="number" min="0" max="5" step="0.05" value="1.1"></label>
+              <label><span>Radius</span><input id="textStyleGlowRadius" type="range" min="0" max="250" value="45"><input id="textStyleGlowRadiusNumber" type="number" min="0" max="250" value="45"></label>
+            </div>
+            <button id="applyTextStyle" class="wide-primary"><span data-lucide="check"></span>Apply Text Style</button>
+            <div class="text-fx-lab">
+              <div class="section-heading"><div><span>Text FX Lab</span><small>Editable effects and genuine per-character 3D</small></div></div>
+              <div id="textFxPreview" class="text-fx-preview" data-text-fx="none"><span>TONYFX</span></div>
+              <div id="textFxGrid" class="text-fx-grid"></div>
+              <div class="text-fx-controls">
+                <label><span>Strength</span><input id="textFxStrength" type="range" min="10" max="200" value="100"><input id="textFxStrengthNumber" type="number" min="10" max="200" value="100"></label>
+                <label><span>Duration</span><input id="textFxDuration" type="range" min="4" max="60" value="18"><input id="textFxDurationNumber" type="number" min="4" max="60" value="18"></label>
+              </div>
+              <div class="text-fx-apply"><span id="selectedTextFxName">Clean Reveal selected</span><button id="applyTextFx" class="primary"><span data-lucide="wand-sparkles"></span>Apply Text FX</button></div>
+            </div>
+          </section>
+          <section class="icon-browser-panel">
+            <div class="section-heading"><div><span>Icon browser</span><small>Editable AE vector shape layers</small></div></div>
+            <label class="search-box"><span data-lucide="search"></span><input id="iconSearch" type="search" placeholder="Search icons"></label>
+            <div class="icon-controls"><label><span>Color</span><input id="iconColor" type="color" value="#ffffff"></label><label><span>Size</span><input id="iconSize" type="number" min="20" max="800" value="180"></label></div>
+            <div id="iconGrid" class="icon-grid"></div>
+            <div class="icon-selection"><span id="selectedIconName">Star selected</span><button id="addIcon" class="primary"><span data-lucide="plus"></span>Add to Timeline</button></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="captionsTab" class="tab-panel caption-studio">
+        <div class="caption-hero"><div><span>OFFLINE CAPTIONS</span><strong>English and Arabic speech to text</strong><small>Runs locally with Faster Whisper. No Codex usage and no media upload.</small></div><span class="local-badge">LOCAL</span></div>
+        <div class="caption-workflow">
+          <section class="caption-source-card"><span data-lucide="audio-waveform"></span><div><strong>Selected AE media layer</strong><small id="captionSourceStatus">Select one video or audio layer in the active comp.</small></div><button id="inspectCaptionSource">Inspect</button></section>
+          <div class="caption-settings-grid">
+            <label><span>Spoken language</span><select id="captionLanguage"><option value="auto">Auto detect</option><option value="en">English</option><option value="ar">Arabic</option></select></label>
+            <label><span>Words per caption</span><input id="captionWords" type="number" min="1" max="10" value="4"></label>
+            <label><span>Placement</span><select id="captionPlacement"><option value="bottom">Bottom safe</option><option value="center">Center</option></select></label>
+            <label><span>Animation</span><select id="captionAnimation"><option value="wordFade">Word fade</option><option value="letterFade">Letter fade</option><option value="pop">Soft pop</option><option value="scalePunch">Scale punch</option><option value="wipeLeft">Wipe left</option><option value="wipeRight">Wipe right</option><option value="blurReveal">Blur reveal</option><option value="trackingTight">Tracking tighten</option><option value="flipX">3D flip X</option><option value="flipY">3D flip Y</option><option value="depthPush">3D depth push</option><option value="waveRise">Wave rise</option><option value="none">None</option></select></label>
+            <label><span>Font size</span><input id="captionFontSize" type="number" min="18" max="160" value="48"></label>
+            <label><span>Model</span><select id="captionModel"><option value="large-v3-turbo">Large v3 Turbo (best)</option><option value="small.en">Small English (faster)</option></select></label>
+            <label><span>Caption look</span><select id="captionLook"><option value="clean">Clean</option><option value="soft">Soft Glow</option><option value="neon">Neon</option><option value="cinema">Cinema</option><option value="impact">Impact</option></select></label>
+            <label><span>Text effect</span><select id="captionTextFx"></select></label>
+            <label><span>FX strength</span><input id="captionFxStrength" type="number" min="10" max="200" value="90"></label>
+            <label><span>Exit frames</span><input id="captionExitFrames" type="number" min="6" max="60" value="14"></label>
+            <label class="check-line"><input id="captionMatchedExit" type="checkbox" checked><span>Matched animated exit</span></label>
+          </div>
+          <div class="caption-style-preview"><span>Caption style preview</span><div id="captionPreview" data-text-fx="none">YOUR CAPTION</div><small>Animation and appearance are applied to every generated editable layer.</small></div>
+          <div class="caption-progress"><div><i id="captionProgressFill"></i></div><span id="captionProgressText">Ready</span></div>
+          <div class="caption-actions"><button id="cancelCaptions" class="danger hidden"><span data-lucide="square"></span>Cancel</button><button id="generateCaptions" class="primary"><span data-lucide="captions"></span>Generate Captions</button></div>
+          <p class="caption-note">Clear speech produces the best timing. Generated layers remain fully editable in After Effects.</p>
+        </div>
+      </section>
+
+      <section id="analyzeTab" class="tab-panel local-engine-studio reference-analyzer-studio">
+        <div class="engine-hero analyzer-hero">
+          <div><span>REFERENCE FORENSICS</span><strong>Measure edits frame by frame</strong><small>Offline cut, motion, zoom, blur, flash, repeat, graph, and beat analysis with evidence-backed AE recipes.</small></div>
+          <div class="engine-health"><i id="analyzeHealthDot"></i><span id="analyzeHealth">Checking analyzer</span><button id="setupAnalyze" type="button"><span data-lucide="download"></span>Setup</button></div>
+        </div>
+        <div class="engine-source-row">
+          <div><span data-lucide="clapperboard"></span><p><strong id="analyzeSourceName">Choose a reference video</strong><small id="analyzeSourceMeta">The original file stays on this computer.</small></p></div>
+          <button id="inspectAnalyzeSource" type="button">Use AE Selection</button><button id="browseAnalyzeSource" type="button">Browse</button>
+        </div>
+        <div class="engine-workspace analyzer-workspace">
+          <section class="engine-controls">
+            <div class="engine-section-title"><span>Analysis depth</span><small>Balanced is fast; Deep samples more pixels and evidence</small></div>
+            <div class="engine-field-grid three">
+              <label><span>Accuracy</span><select id="analyzeAccuracy"><option value="balanced">Balanced</option><option value="deep" selected>Deep Replica Lab</option></select></label>
+              <label><span>Analysis width</span><select id="analyzeWidth"><option value="360">360 px Fast</option><option value="420" selected>420 px Balanced</option><option value="540">540 px Deep</option></select></label>
+              <label><span>Timeline offset</span><input id="analyzeOffset" type="number" min="0" max="3600" step="0.001" value="0"></label>
+            </div>
+            <div class="engine-toggle-row analyzer-toggles">
+              <label><input id="analyzeAudio" type="checkbox" checked><span>Beat and drop map</span></label>
+              <label><input id="analyzeOcr" type="checkbox"><span>Burned-in text scan</span></label>
+              <label><input id="analyzeDeepFlow" type="checkbox"><span>Deep optical flow</span></label>
+              <label><input id="analyzeVision" type="checkbox" checked><span>AI vision and footage search</span></label>
+            </div>
+            <div class="analyzer-song-source">
+              <div><span data-lucide="music-2"></span><p><strong id="analyzeSongName">Optional song file or folder</strong><small id="analyzeSongMeta">TonyFX can identify the exact song excerpt and align the full track in the built composition.</small></p></div>
+              <button id="browseAnalyzeSongFolder" type="button">Song Folder</button><button id="browseAnalyzeSongFile" type="button">Song File</button><button id="clearAnalyzeSong" type="button">Clear</button>
+            </div>
+            <div class="engine-section-title"><span>Detected edit map</span><small>Click an event to inspect its AE-native recipe</small></div>
+            <div id="analyzeSummary" class="analyzer-summary"><div><strong>-</strong><span>Cuts</span></div><div><strong>-</strong><span>Tempo</span></div><div><strong>-</strong><span>Repeats</span></div><div><strong>-</strong><span>Confidence</span></div></div>
+            <div id="analyzeEvents" class="analyzer-events"><p class="muted">Analyze a reference to see exact frames, transition families, graphs, and recipes.</p></div>
+          </section>
+          <aside class="engine-monitor analyzer-monitor">
+            <div class="engine-monitor-head"><span>REFERENCE MONITOR</span><strong id="analyzeMonitorTitle">Ready for reference</strong></div>
+            <div class="engine-preview-frame"><video id="analyzePreviewVideo" controls preload="metadata" playsinline></video><img id="analyzePreviewImage" alt="Reference evidence"><div id="analyzePreviewEmpty"><span data-lucide="scan-search"></span><small>Reference and evidence appear here</small></div></div>
+            <div class="engine-progress"><div><i id="analyzeProgressFill"></i></div><span id="analyzeProgressText">Idle</span></div>
+            <div class="analyzer-marker-options"><label><input id="analyzeMarkerCuts" type="checkbox" checked>Cut/effect markers</label><label><input id="analyzeMarkerBeats" type="checkbox">Beat markers</label><label><input id="analyzeReplaceMarkers" type="checkbox" checked>Replace TonyFX REF markers</label></div>
+            <div class="analyzer-compare-source"><span>FINISHED EDIT QA</span><strong id="compareSourceName">Choose a rendered edit</strong><small id="compareSourceMeta">Compare timing, transitions, graphs, and shot duration against this analysis.</small><button id="browseCompareSource" type="button">Browse Render</button></div>
+            <div class="analyzer-report-actions"><button id="openAnalyzeReport" type="button"><span data-lucide="file-chart-column"></span>Report</button><button id="applyAnalyzeMarkers" type="button"><span data-lucide="map-pin-plus"></span>AE Markers</button></div>
+            <div class="analyzer-report-actions"><button id="compareFinishedEdit" type="button"><span data-lucide="scan-line"></span>Compare Edit</button><button id="openRepairPlan" type="button"><span data-lucide="wrench"></span>Repair Plan</button></div>
+            <div class="analyzer-report-actions"><button id="applySafeRepair" type="button"><span data-lucide="shield-check"></span>Apply Safe Repair</button></div>
+            <div class="offline-builder-card">
+              <span>OFFLINE DIRECTOR</span><strong>Reference reconstruction and local re-editing</strong><small>Global clip planning, measured transitions, prompt-driven revisions, and structural QA. Every build remains a separate composition.</small>
+              <div class="offline-director-grid">
+                <label><span>Build mode</span><select id="offlineMode"><option value="exact" selected>Exact Replica</option><option value="balanced">Clean Balanced</option><option value="creative">Creative Remix</option></select></label>
+                <label><span>Variation</span><input id="offlineSeed" type="number" min="1" max="9999" value="1"></label>
+                <label><span>Reference fidelity</span><input id="offlineFidelity" type="range" min="50" max="100" value="92"><output id="offlineFidelityValue">92%</output></label>
+                <label><span>Effect intensity</span><input id="offlineIntensity" type="range" min="50" max="160" value="100"><output id="offlineIntensityValue">100%</output></label>
+                <label><span>Transition density</span><input id="offlineDensity" type="range" min="0" max="100" value="85"><output id="offlineDensityValue">85%</output></label>
+                <label><span>Repeat protection</span><input id="offlineRepeatWindow" type="number" min="1" max="12" value="5"><small>shots</small></label>
+              </div>
+              <label class="offline-prompt"><span>Local re-edit instruction</span><textarea id="offlinePrompt" rows="3" placeholder="Example: keep the exact cuts, replace repeated clips after 12 seconds, use more couple shots, reduce glow, make directional blur heavier, and disable slides"></textarea></label>
+              <div id="offlineDirectivePreview" class="offline-directive-preview"><span>Policy ready</span><small>Exact cut timing, one camera angle per scene, muted clip audio, and protected scene boundaries.</small></div>
+              <div class="offline-builder-options"><label><input id="offlineBlurMo" type="checkbox" checked>Approved BlurMoCurves ramps</label><label><input id="offlineFullStack" type="checkbox" checked>Measured component stack</label><label><input id="offlineStrictMatch" type="checkbox" checked>Strict reference timing</label><label><input id="offlineAutoQA" type="checkbox" checked>Audit every build</label></div>
+              <div class="offline-builder-actions"><button id="buildOfflineEdit" type="button"><span data-lucide="wand-sparkles"></span>Build New Edit</button><button id="reeditOfflineEdit" type="button"><span data-lucide="refresh-cw"></span>Re-edit Last Build</button><button id="auditOfflineEdit" type="button"><span data-lucide="shield-check"></span>Audit Active Edit</button></div>
+            </div>
+            <div class="engine-run-actions"><button id="cancelAnalyze" class="danger hidden" type="button"><span data-lucide="square"></span>Cancel</button><button id="runAnalyze" class="primary" type="button"><span data-lucide="scan-search"></span>Analyze</button></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="enhanceTab" class="tab-panel local-engine-studio">
+        <div class="engine-hero">
+          <div><span>LOCAL ENHANCE</span><strong>Restoration and intelligent upscale</strong><small>Real-ESRGAN when installed, with a high-quality FFmpeg path always available.</small></div>
+          <div class="engine-health"><i id="enhanceHealthDot"></i><span id="enhanceHealth">Checking engine</span><button id="setupEnhance" type="button"><span data-lucide="download"></span>Setup</button></div>
+        </div>
+        <div class="enhance-source-modes" role="group" aria-label="Enhancement source mode">
+          <button class="active" data-enhance-source-mode="clips" type="button"><span data-lucide="layers-3"></span><strong>Selected Clips</strong><small>Queue every selected timeline layer</small></button>
+          <button data-enhance-source-mode="composition" type="button"><span data-lucide="panels-top-left"></span><strong>Whole Composition</strong><small>Render one precomp or the active comp</small></button>
+        </div>
+        <div class="engine-source-row">
+          <div><span data-lucide="film"></span><p><strong id="enhanceSourceName">Select AE media or choose a file</strong><small id="enhanceSourceMeta">Video and still images are supported.</small></p></div>
+          <button id="inspectEnhanceSource" type="button">Use AE Selection</button><button id="browseEnhanceSource" type="button">Browse</button>
+        </div>
+        <div class="engine-workspace">
+          <section class="engine-controls">
+            <div class="engine-section-title"><span>Output</span><small>Square social delivery defaults</small></div>
+            <div class="engine-field-grid three">
+              <label><span>Width</span><input id="enhanceWidth" type="number" min="256" max="7680" step="2" value="2160"></label>
+              <label><span>Height</span><input id="enhanceHeight" type="number" min="256" max="7680" step="2" value="2160"></label>
+              <label><span>Codec</span><select id="enhanceCodec"><option value="prores">ProRes 422 HQ</option><option value="h264">H.264 Preview</option></select></label>
+            </div>
+            <div class="engine-preset-row" aria-label="Enhancement presets"><button data-enhance-preset="clean">Clean</button><button data-enhance-preset="ultra" class="active">Ultra HD</button><button data-enhance-preset="detail">Maximum Detail</button><button data-enhance-preset="soft">Natural Skin</button></div>
+            <div class="engine-section-title"><span>Enhancement</span><small>Values remain editable before processing</small></div>
+            <div class="engine-slider-grid">
+              <label data-engine-pair="enhanceCompression"><span>Revert compression</span><input type="range" min="0" max="100" value="45"><input type="number" min="0" max="100" value="45"></label>
+              <label data-engine-pair="enhanceDetail"><span>Recover details</span><input type="range" min="0" max="100" value="42"><input type="number" min="0" max="100" value="42"></label>
+              <label data-engine-pair="enhanceSharpen"><span>Sharpen</span><input type="range" min="0" max="100" value="28"><input type="number" min="0" max="100" value="28"></label>
+              <label data-engine-pair="enhanceDenoise"><span>Reduce noise</span><input type="range" min="0" max="100" value="12"><input type="number" min="0" max="100" value="12"></label>
+              <label data-engine-pair="enhanceDehalo"><span>Dehalo</span><input type="range" min="0" max="100" value="8"><input type="number" min="0" max="100" value="8"></label>
+              <label data-engine-pair="enhanceDeblur"><span>Deblur</span><input type="range" min="0" max="100" value="32"><input type="number" min="0" max="100" value="32"></label>
+              <label data-engine-pair="enhanceGrain"><span>Add grain</span><input type="range" min="0" max="100" value="0"><input type="number" min="0" max="100" value="0"></label>
+            </div>
+            <div class="engine-toggle-row"><label><input id="enhanceAI" type="checkbox" checked><span>Use Real-ESRGAN</span></label><label><input id="enhanceInterpolate" type="checkbox"><span>Frame interpolation</span></label><label><span>FPS</span><input id="enhanceFps" type="number" min="12" max="120" value="30"></label><label><span>Tile</span><input id="enhanceTile" type="number" min="64" max="1024" step="64" value="256"></label></div>
+          </section>
+          <aside class="engine-monitor">
+            <div class="engine-monitor-head"><span>OUTPUT MONITOR</span><strong id="enhanceMonitorTitle">Ready for source</strong></div>
+            <div class="engine-preview-frame"><video id="enhancePreviewVideo" controls preload="metadata" playsinline></video><img id="enhancePreviewImage" alt="Enhanced preview"><div id="enhancePreviewEmpty"><span data-lucide="scan-line"></span><small>Your processed result appears here</small></div></div>
+            <div class="engine-progress"><div><i id="enhanceProgressFill"></i></div><span id="enhanceProgressText">Idle</span></div>
+            <label class="engine-import-check"><input id="enhanceAutoImport" type="checkbox" checked><span>Import and align in active composition</span></label>
+            <div class="engine-run-actions"><button id="cancelEnhance" class="danger hidden" type="button"><span data-lucide="square"></span>Cancel</button><button id="runEnhance" class="primary" type="button"><span data-lucide="sparkles"></span>Enhance</button></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="audioLabTab" class="tab-panel local-engine-studio">
+        <div class="engine-hero audio-engine-hero">
+          <div><span>OFFLINE AUDIO LAB</span><strong>Remove background audio locally</strong><small>Keep speech or vocals while removing music, ambience, and competing background audio.</small></div>
+          <div class="engine-health"><i id="audioHealthDot"></i><span id="audioHealth">Checking engine</span><button id="setupAudio" type="button"><span data-lucide="download"></span>Setup</button></div>
+        </div>
+        <div class="engine-source-row">
+          <div><span data-lucide="audio-waveform"></span><p><strong id="audioSourceName">Select AE media or choose a file</strong><small id="audioSourceMeta">Video and audio layers are supported.</small></p></div>
+          <button id="inspectAudioSource" type="button">Use AE Selection</button><button id="browseAudioSource" type="button">Browse</button>
+        </div>
+        <div class="engine-workspace">
+          <section class="engine-controls">
+            <div class="engine-section-title"><span>Separation mode</span><small>Choose the material you want to keep</small></div>
+            <div class="audio-mode-grid">
+              <button data-audio-mode="remove-background" class="active"><span data-lucide="mic-2"></span><strong>Remove Background</strong><small>Keep speech and vocals</small></button>
+              <button data-audio-mode="background"><span data-lucide="waves"></span><strong>Remove Voice</strong><small>Background and ambience</small></button>
+              <button data-audio-mode="vocals"><span data-lucide="music-2"></span><strong>Vocals</strong><small>Song vocal stem</small></button>
+              <button data-audio-mode="instrumental"><span data-lucide="guitar"></span><strong>Instrumental</strong><small>Music without vocals</small></button>
+              <button data-audio-mode="stems"><span data-lucide="list-music"></span><strong>Four Stems</strong><small>Vocals, drums, bass, other</small></button>
+              <button data-audio-mode="cleanup"><span data-lucide="sparkles"></span><strong>Clean Only</strong><small>No source separation</small></button>
+            </div>
+            <div class="engine-section-title"><span>Cleanup</span><small>Applied after separation</small></div>
+            <div class="engine-preset-row audio-preset-row" aria-label="Audio enhancement presets"><button data-audio-preset="natural" class="active">Natural</button><button data-audio-preset="dialogue">Dialogue</button><button data-audio-preset="broadcast">Broadcast</button><button data-audio-preset="vocal">Music Vocal</button></div>
+            <div class="engine-slider-grid">
+              <label data-engine-pair="audioDenoise"><span>Noise reduction</span><input type="range" min="0" max="100" value="28"><input type="number" min="0" max="100" value="28"></label>
+              <label data-engine-pair="audioDereverb"><span>Room / reverb reduction</span><input type="range" min="0" max="100" value="15"><input type="number" min="0" max="100" value="15"></label>
+              <label data-engine-pair="audioDehum"><span>Hum removal</span><input type="range" min="0" max="100" value="10"><input type="number" min="0" max="100" value="10"></label>
+              <label data-engine-pair="audioPresence"><span>Voice presence</span><input type="range" min="0" max="100" value="28"><input type="number" min="0" max="100" value="28"></label>
+              <label data-engine-pair="audioClarity"><span>Clarity</span><input type="range" min="0" max="100" value="22"><input type="number" min="0" max="100" value="22"></label>
+              <label data-engine-pair="audioCompression"><span>Compression</span><input type="range" min="0" max="100" value="24"><input type="number" min="0" max="100" value="24"></label>
+              <label data-engine-pair="audioDeess"><span>De-ess</span><input type="range" min="0" max="100" value="18"><input type="number" min="0" max="100" value="18"></label>
+              <label data-engine-pair="audioHighpass"><span>Low cut Hz</span><input type="range" min="20" max="180" value="65"><input type="number" min="20" max="180" value="65"></label>
+              <label data-engine-pair="audioLowpass"><span>High cut Hz</span><input type="range" min="8000" max="20000" step="100" value="17500"><input type="number" min="8000" max="20000" step="100" value="17500"></label>
+            </div>
+            <div class="engine-toggle-row"><label><span>Model</span><select id="audioModel"><option value="htdemucs">HTDemucs Balanced</option><option value="htdemucs_ft">HTDemucs Fine Tune</option></select></label><label><input id="audioLoudness" type="checkbox" checked><span>Normalize to -16 LUFS</span></label><label class="engine-import-check"><input id="audioAutoImport" type="checkbox" checked><span>Import stems to AE at source time</span></label></div>
+          </section>
+          <aside class="engine-monitor">
+            <div class="engine-monitor-head"><span>AUDIO MONITOR</span><strong id="audioMonitorTitle">Ready for source</strong></div>
+            <div class="audio-meter-visual" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <audio id="audioPreview" controls></audio>
+            <div id="audioOutputList" class="audio-output-list"><span>No stems generated yet</span></div>
+            <div class="engine-progress"><div><i id="audioProgressFill"></i></div><span id="audioProgressText">Idle</span></div>
+            <div class="engine-run-actions"><button id="cancelAudio" class="danger hidden" type="button"><span data-lucide="square"></span>Cancel</button><button id="runAudio" class="primary" type="button"><span data-lucide="audio-lines"></span>Process Audio</button></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="generateTab" class="tab-panel local-engine-studio generation-studio">
+        <div class="engine-hero generation-hero">
+          <div><span>LOCAL GENERATE STUDIO</span><strong>Image and video generation</strong><small>Prompt, reference, and first-frame workflows run on your own RTX GPU.</small></div>
+          <div class="engine-health"><i id="generateHealthDot"></i><span id="generateHealth">Checking engine</span><button id="setupGenerate" type="button"><span data-lucide="download"></span>Setup</button></div>
+        </div>
+        <div class="generation-mode-switch" role="tablist"><button data-generation-mode="image"><span data-lucide="image"></span>Image</button><button data-generation-mode="video" class="active"><span data-lucide="clapperboard"></span>Video</button></div>
+        <div class="engine-workspace">
+          <section class="engine-controls">
+            <label class="generation-prompt"><span>Prompt</span><textarea id="generationPrompt" rows="5" placeholder="Describe the subject, shot, movement, lighting, lens, and mood..."></textarea></label>
+            <label class="generation-prompt negative"><span>Negative prompt</span><textarea id="generationNegative" rows="2" placeholder="blurry, jittery, distorted, low quality"></textarea></label>
+            <div class="reference-source-row"><div><span data-lucide="image-plus"></span><p><strong id="generationReferenceName">No reference image</strong><small>Optional for image-to-image or image-to-video</small></p></div><button id="browseGenerationReference" type="button">Choose</button><button id="clearGenerationReference" type="button">Clear</button></div>
+            <div class="engine-field-grid three">
+              <label><span>Aspect</span><select id="generationAspect"><option value="square">1:1 Square</option><option value="portrait">9:16 Portrait</option><option value="landscape">16:9 Landscape</option><option value="cinema">2.39:1 Cinema</option></select></label>
+              <label><span>Seed</span><input id="generationSeed" type="number" value="12345"></label>
+              <label><span>Steps</span><input id="generationSteps" type="number" min="4" max="80" value="28"></label>
+              <label><span>Guidance</span><input id="generationGuidance" type="number" min="0" max="20" step="0.1" value="6.5"></label>
+              <label id="generationStrengthField"><span>Reference strength</span><input id="generationStrength" type="number" min="0.05" max="1" step="0.01" value="0.72"></label>
+              <label id="generationDurationField" class="video-generation-only"><span>Duration</span><select id="generationDuration"><option value="2">2 seconds</option><option value="3" selected>3 seconds</option><option value="4">4 seconds</option><option value="5">5 seconds</option></select></label>
+              <label class="video-generation-only"><span>FPS</span><select id="generationFps"><option value="24">24</option><option value="25">25</option><option value="30">30</option></select></label>
+            </div>
+            <div id="imageGenerationOptions" class="generation-options">
+              <div class="engine-section-title"><span>Image model</span><small>Model downloads once, then remains offline</small></div>
+              <label class="wide-field"><span>Model ID or local path</span><input id="imageModel" type="text" value="Lykon/dreamshaper-8"></label>
+            </div>
+            <div id="videoGenerationOptions" class="generation-options active">
+              <div class="engine-section-title"><span>Video direction</span><small>TonyFX turns your idea and these controls into a structured shot prompt</small></div>
+              <div class="engine-field-grid three">
+                <label><span>Creative recipe</span><select id="videoStyle"><option value="cinematic photorealism, coherent subject identity, natural physical motion">Cinematic Realism</option><option value="high-energy social edit, bold composition, immediate visual hook">Viral Energy</option><option value="premium commercial cinematography, polished surfaces, controlled motion">Commercial</option><option value="dramatic narrative filmmaking, emotional performance, atmospheric depth">Narrative</option><option value="stylized music video, expressive lighting, rhythmic visual movement">Music Video</option></select></label>
+                <label><span>Camera</span><select id="videoCamera"><option value="locked camera">Locked</option><option value="slow cinematic push in">Push In</option><option value="slow pull back">Pull Back</option><option value="smooth orbit around subject">Orbit</option><option value="handheld tracking shot">Handheld</option><option value="fast whip pan">Whip Pan</option></select></label>
+                <label><span>Motion</span><select id="videoMotion"><option value="subtle natural movement">Subtle</option><option value="dynamic energetic movement">Dynamic</option><option value="slow motion, graceful movement">Slow Motion</option><option value="high impact action movement">Action</option></select></label>
+                <label><span>Lens</span><select id="videoLens"><option value="50mm cinematic lens">50 mm</option><option value="35mm wide cinematic lens">35 mm</option><option value="85mm portrait lens, shallow depth of field">85 mm</option><option value="anamorphic lens, cinematic flares">Anamorphic</option></select></label>
+                <label><span>Lighting</span><select id="videoLighting"><option value="cinematic natural lighting">Natural</option><option value="dramatic rim lighting">Dramatic Rim</option><option value="soft golden hour lighting">Golden Hour</option><option value="moody neon lighting">Neon</option></select></label>
+                <label><span>Framing</span><select id="videoFraming"><option value="medium shot, subject centered">Medium Centered</option><option value="close-up, face centered and visible">Close-up</option><option value="wide establishing shot">Wide</option><option value="low angle hero shot">Low Hero</option></select></label>
+                <label><span>Generation engine</span><select id="videoBackend"><option value="ltx" selected>Balanced Local (LTX)</option><option value="framepack">Experimental FramePack (32 GB+ RAM)</option></select></label>
+                <label><span>Performance</span><select id="videoQuality"><option value="draft">Draft Preview</option><option value="fast">Fast</option><option value="balanced" selected>Balanced</option><option value="quality">Maximum Quality</option></select></label>
+                <label><span>Generation priority</span><select id="videoProfile"><option value="identity" selected>Face / Identity Safe</option><option value="realism">Scene Realism</option><option value="fast">Fast Draft</option></select></label>
+                <label><span>Reference framing</span><select id="videoReferenceFit"><option value="face" selected>Smart Face Crop</option><option value="center">Center Crop</option><option value="contain">Preserve Full Image</option></select></label>
+                <label><span>Motion sampling</span><select id="videoBaseFps"><option value="12">Fast</option><option value="16" selected>Face Safe</option><option value="24">Native 24 fps</option></select></label>
+                <label><span>Model</span><input id="videoModel" type="text" value="Lightricks/LTX-Video" title="Official LTX-Video model or compatible local path"></label>
+              </div>
+              <p class="generation-local-note"><strong>Local RTX mode:</strong> Balanced Local is the supported engine on this 8 GB GPU / 16 GB RAM system. TonyFX compiles one literal shot instruction and rejects frozen, cut-heavy, or unstable-face results before AE import. FramePack is experimental here because its 13B model can require roughly 50 GB of RAM plus pagefile and may take many minutes before its first frame.</p>
+            </div>
+          </section>
+          <aside class="engine-monitor generation-monitor">
+            <div class="engine-monitor-head"><span>GENERATION MONITOR</span><strong id="generationMonitorTitle">Ready for prompt</strong></div>
+            <div class="engine-preview-frame"><video id="generationPreviewVideo" controls loop playsinline></video><img id="generationPreviewImage" alt="Generated output"><div id="generationPreviewEmpty"><span data-lucide="sparkles"></span><small>Local generations appear here</small></div></div>
+            <div class="engine-progress"><div><i id="generationProgressFill"></i></div><span id="generationProgressText">Idle</span></div>
+            <label class="engine-import-check"><input id="generationAutoImport" type="checkbox" checked><span>Import result to active AE project</span></label>
+            <div class="engine-run-actions"><button id="cancelGeneration" class="danger hidden" type="button"><span data-lucide="square"></span>Cancel</button><button id="runGeneration" class="primary" type="button"><span data-lucide="sparkles"></span>Generate</button></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="projectTab" class="tab-panel">
+        <div class="project-summary">
+          <div class="summary-head"><div><span>Active composition</span><strong id="compName">No composition inspected</strong></div><button id="refreshProject" class="icon-button" title="Refresh" aria-label="Refresh"><span data-lucide="refresh-cw"></span></button></div>
+          <div class="metric-grid"><div><span>Size</span><strong id="compSize">-</strong></div><div><span>FPS</span><strong id="compFps">-</strong></div><div><span>Layers</span><strong id="compLayers">-</strong></div><div><span>Selected</span><strong id="selectedLayers">-</strong></div></div>
+        </div>
+        <div class="audit-panel"><div class="audit-title"><span data-lucide="shield-check"></span><strong>Guard status</strong></div><ul id="guardList"><li class="muted">Inspect the active composition to view guard status.</li></ul></div>
+        <div class="session-panel"><span>Codex session</span><code id="sessionId">A new session will start with your first command.</code><button id="newSession"><span data-lucide="message-square-plus"></span>Start new session</button></div>
+      </section>
+    </main>
+
+    <footer><span id="footerStatus">TonyFX private local extension</span><span class="version">v0.60.0</span></footer>
+  </div>
+
+  <dialog id="settingsDialog"><form method="dialog"><div class="dialog-head"><strong>Panel settings</strong><button value="cancel" class="icon-button" aria-label="Close"><span data-lucide="x"></span></button></div><label>Codex workspace<input id="workspacePath" type="text"></label><label>Bridge directory<input id="bridgePath" type="text"></label><label>Python executable<input id="pythonPath" type="text" placeholder="python"></label><label>Multilingual Whisper model<input id="captionModelPath" type="text"></label><label>TonyFX local engine<input id="localEnginePath" type="text" placeholder="C:\Users\TUF\Documents\TonyFX Local Engine"></label><label>Local output folder<input id="localOutputPath" type="text" placeholder="C:\Users\TUF\Videos\TonyFX Outputs"></label><p>Creative commands use your Codex plan. Library, captions, enhancement, audio, generation, icons, color, and Quick Actions run locally.</p><div class="dialog-actions"><button value="cancel">Cancel</button><button id="saveSettings" value="default" class="primary">Save</button></div></form></dialog>
+
+  <script src="vendor/lucide.min.js"></script>
+  <script src="js/presets.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/features.js"></script>
+  <script src="js/local-engines.js"></script>
+</body>
+</html>

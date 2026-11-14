@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-03T18:49:58.857866+00:00",
+  "purpose": "Codex bounded existing-evidence locator for Claude revision; no AE mutation, source decision or new media processing",
+  "source_pool": {
+    "path": "data/dexter-repair-20261101/D03_SOURCE_POOL.json",
+    "candidates": 173,
+    "limits": "Machine tags/scores only, not scene approval. Reassess against new mood-montage brief."
+  },
+  "sheet_labels": "data/dexter-repair-20261101/D03_SOURCE_POOL_SHEET_LABELS.json",
+  "cached_sheet_job": "c6f944cbed514ca5beb89fb05b3092e0",
+  "earlier_context_review": "data/dexter-repair-20261101/D03_SOURCE_POOL_DIRECTOR_SCREEN_F03.json",
+  "audio_candidates": [
+    "data/dexter-repair-20261101/audio/D01_CHEMICAL_P02_FLOAT48K_PREGAIN_MINUS6.wav",
+    "data/dexter-repair-20261101/audio/D02_E5_INTRO_ORIGINAL_VOICE_PCM24_F02.wav",
+    "data/dexter-repair-20261101/audio/D02_OFFLINE_ORIGINAL_FLOAT48K_PREGAIN_MINUS6.wav"
+  ],
+  "word_timing_candidate": "data/dexter-repair-20261101/D01_E1_P02_WORD_TIMING_CANDIDATES.json",
+  "limits": [
+    "Audio filenames ORIGINAL_VOICE do not establish score removal; validate before reuse.",
+    "Old shot-story screen verdicts may conflict with new brief; use original pixels and source clocks.",
+    "No new listening/word-sync/visual approval claimed."
+  ]
+}

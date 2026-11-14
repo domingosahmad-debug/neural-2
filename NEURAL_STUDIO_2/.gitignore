@@ -1,0 +1,6 @@
+workspace.sqlite3*
+__pycache__/
+.desktop-profile/
+runtime/
+desktop-service.log
+.desktop-service.json

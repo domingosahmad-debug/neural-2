@@ -1,0 +1,1869 @@
+{
+ "schema": "neural.accepted-edit-template.v1",
+ "id": "quinn-res2-accepted-20261112",
+ "status": "Tony finished and uploaded this edit himself on 12 Nov 2026 after rejecting Neural r2. Values are measured offline from his project file; they are a reference template, not defaults for an unrelated brief.",
+ "proof": {
+  "finalVideo": "C:\\Users\\TUF\\Desktop\\Dexter res 2 joey quinn edit hq tryxtazfx.mp4",
+  "finalVideoFacts": "2160x2160, 23.976 fps, 999 frames, 41.67 s",
+  "projectSnapshot": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO_2\\data\\reference-edits\\quinn-res2-accepted-20261112\\tony-project-snapshot-autosave7-20261112.aep",
+  "composition": "Joey Quinn Door Intro 30s + Curated Body - Neural2 r2 (item id 853; Tony refined Neural r2 in place; 107 layers)",
+  "neuralRejected": {
+   "project": "e965c19132a7450da92d20c53073a0cc rev 2",
+   "aep": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO_2\\data\\projects\\e965c19132a7450da92d20c53073a0cc\\work\\ae\\joey-quinn-r2-repair-01.aep",
+   "layers": 72,
+   "frames": 1151
+  },
+  "extracts": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO_2\\data\\reference-edits\\quinn-res2-accepted-20261112",
+  "method": "Offline RIFX parse of a copied .aep (tools/ folder). After Effects was not touched. Transform values are raw project units; time is comp frames at 24000/1001."
+ },
+ "comp": {
+  "fps": "24000/1001",
+  "frames": 999,
+  "layout": "square master; delivered 2160 square",
+  "song": "Alfie Castley - Killer, Baby (one continuous section, layer 0-999)",
+  "musicLevelsDb": "-22 under dialogue, -12 four frames before the body, 0 at body start (rise over the last 36 f of the intro)"
+ },
+ "structure": {
+  "introFrames": [
+   0,
+   567
+  ],
+  "bodyFrames": [
+   567,
+   999
+  ],
+  "bodyShots": 29,
+  "bodyBeatFrames": "alternating 14/15 (final shot 26)"
+ },
+ "intro": {
+  "lesson": "Neural intro was 718 f with one long layer per source and keyframed position slides. Tony cut the first 151 f (captions C01-C03 and their footage), ending at 567 f, and split the reunion source at each framing change into pieces with a STATIC position per piece.",
+  "gradeStack": [
+   "Sharpen",
+   "Unsharp Mask",
+   "Exposure",
+   "CS Vignette",
+   "Curves",
+   "Brightness & Contrast",
+   "Hue/Saturation"
+  ],
+  "pieces": [
+   {
+    "name": "[R2_INTRO_A] S02E02 setup+knock src 29560-29866",
+    "inFrame": 0,
+    "outFrame": 156,
+    "position": "keyframed",
+    "scale": 1.35,
+    "effects": [
+     "Brightness & Contrast 2",
+     "Exposure2",
+     "Sharpen",
+     "Unsharp Mask2"
+    ]
+   },
+   {
+    "name": "[R2_INTRO_B] S02E02 door+reunion src 30030-30444",
+    "inFrame": 156,
+    "outFrame": 250,
+    "position": "keyframed",
+    "scale": 1.35,
+    "effects": [
+     "Brightness & Contrast 2",
+     "CS Vignette",
+     "Exposure2",
+     "Sharpen",
+     "Unsharp Mask2"
+    ]
+   },
+   {
+    "name": "[R2_INTRO_B] S02E02 door+reunion src 30030-30445",
+    "inFrame": 159,
+    "outFrame": 166,
+    "position": "keyframed",
+    "scale": null,
+    "effects": []
+   },
+   {
+    "name": "[R2_INTRO_B] S02E02 door+reunion src 30030-30447",
+    "inFrame": 166,
+    "outFrame": 168,
+    "position": "keyframed",
+    "scale": 1.35,
+    "effects": []
+   },
+   {
+    "name": "[R2_INTRO_B] S02E02 door+reunion src 30030-30450",
+    "inFrame": 249,
+    "outFrame": 250,
+    "position": "keyframed",
+    "scale": 1.35,
+    "effects": [
+     "Brightness & Contrast 2",
+     "CS Vignette",
+     "Exposure2",
+     "Sharpen",
+     "Unsharp Mask2"
+    ]
+   },
+   {
+    "name": "[R2_INTRO_B] S02E02 door+reunion src 30030-30449",
+    "inFrame": 250,
+    "outFrame": 328,
+    "position": "keyframed",
+    "scale": 1.35,
+    "effects": [
+     "Brightness & Contrast 2",
+     "CS Vignette",
+     "Exposure2",
+     "Sharpen",
+     "Unsharp Mask2"
+    ]
+   },
+   {
+    "name": "[R2_INTRO_B] S02E02 door+reunion src 30030-30451",
+    "inFrame": 328,
+    "outFrame": 386,
+    "position": [
+     739.5,
+     540.0
+    ],
+    "scale": 1.35,
+    "effects": [
+     "Brightness & Contrast 2",
+     "CS Vignette",
+     "Exposure2",
+     "Sharpen",
+     "Unsharp Mask2"
+    ]
+   },
+   {
+    "name": "[R2_INTRO_B] S02E02 door+reunion src 30030-30452",
+    "inFrame": 386,
+    "outFrame": 451,
+    "position": [
+     248.5,
+     540.0
+    ],
+    "scale": 1.35,
+    "effects": [
+     "Brightness & Contrast 2",
+     "CS Vignette",
+     "Exposure2",
+     "Sharpen",
+     "Unsharp Mask2"
+    ]
+   },
+   {
+    "name": "[R2_INTRO_B] S02E02 door+reunion src 30030-30453",
+    "inFrame": 451,
+    "outFrame": 524,
+    "position": [
+     654.5,
+     540.0
+    ],
+    "scale": 1.35,
+    "effects": [
+     "Brightness & Contrast 2",
+     "CS Vignette",
+     "Exposure2",
+     "Sharpen",
+     "Unsharp Mask2"
+    ]
+   },
+   {
+    "name": "[R2_INTRO_B] S02E02 door+reunion src 30030-30454",
+    "inFrame": 524,
+    "outFrame": 569,
+    "position": [
+     284.5,
+     548.0
+    ],
+    "scale": 1.2,
+    "effects": [
+     "Brightness & Contrast 2",
+     "CS Vignette",
+     "Exposure2",
+     "Sharpen",
+     "Tile",
+     "Unsharp Mask2"
+    ]
+   }
+  ]
+ },
+ "bodyShotStack": [
+  "TOP: \"Blur transition N\" adjustment - BCC Directional Blur, 8 frames centred on the cut",
+  "adjustment (shot-bounded) - S_BlurMoCurves: Z Dist keyframed = THE ZOOM; Wrap X/Y = 3",
+  "BOTTOM: footage layer (from the clips comp) with Motion Tile 200/200 mirror edges; layer Scale stays constant (about 102%), Position only chooses the crop"
+ ],
+ "zoom": {
+  "rule": "Zoom is S_BlurMoCurves Z Dist on the shot-bounded adjustment, never layer Scale keyframes. One zoom owner per shot.",
+  "effect": "S_BlurMoCurves",
+  "params": {
+   "S_BlurMoCurves-0050": "Center XY (0-1 of frame)",
+   "S_BlurMoCurves-0051": "Z Dist",
+   "S_BlurMoCurves-0059/0060": "Wrap X/Y = 3"
+  },
+  "curveA": "odd shots: Z Dist 1.0 -> 0.52 across the whole shot; key1 out speed -2.4545 influence 21.92%; key2 in speed -2.024 influence 26.77%",
+  "curveB": "even shots: Z Dist 0.52 -> 1.0; key1 out speed 1.5696 influence 31.25%; key2 in speed 1.9687 influence 27.84%",
+  "variations": "shot 6 ends at 1.11 (key1 out 1.7137 / 31.29%); final shot 29: 1.0 -> 0.7 over 25 f, speed -0.5, influence 50% both sides (slow settle)",
+  "centre": "Default Center XY 0.5,0.2148; Tony moved it onto the subject where needed (shot 1 0.7901,0.2997; shot 2 0.5401,0.2738; shot 3 0.2901,0.1912). Aim the centre at the face/subject."
+ },
+ "cutTransition": {
+  "effect": "BCC Directional Blur (BCC3Directional Blur) on its own adjustment above the zoom adjustment",
+  "durationFrames": 8,
+  "placement": "4 f before the cut to 4 f after; peak exactly on the cut",
+  "angle": 140,
+  "spread": 38,
+  "point1": [
+   0.5,
+   0.5
+  ],
+  "point2": [
+   0.95,
+   0.95
+  ],
+  "blurAmountKeys": [
+   {
+    "offset": -4,
+    "value": 0,
+    "outSpeed": 1183.55,
+    "outInfluence": 5.99
+   },
+   {
+    "offset": 0,
+    "value": 44,
+    "inSpeed": 1591.92,
+    "inInfluence": 6.78,
+    "outSpeed": -599.86,
+    "outInfluence": 19.8
+   },
+   {
+    "offset": 4,
+    "value": 0,
+    "inSpeed": -909.13,
+    "inInfluence": 11.24
+   }
+  ],
+  "note": "Neural r2 had NO cut transitions; Tony added 27 over the 28 body cuts.",
+  "instances": [
+   {
+    "name": "Blur transition",
+    "inFrame": 577,
+    "outFrame": 585,
+    "peakFrame": 581
+   },
+   {
+    "name": "Blur transition 2",
+    "inFrame": 592,
+    "outFrame": 600,
+    "peakFrame": 596
+   },
+   {
+    "name": "Blur transition 3",
+    "inFrame": 606,
+    "outFrame": 614,
+    "peakFrame": 610
+   },
+   {
+    "name": "Blur transition 4",
+    "inFrame": 621,
+    "outFrame": 629,
+    "peakFrame": 625
+   },
+   {
+    "name": "Blur transition 6",
+    "inFrame": 635,
+    "outFrame": 643,
+    "peakFrame": 639
+   },
+   {
+    "name": "Blur transition 5",
+    "inFrame": 650,
+    "outFrame": 658,
+    "peakFrame": 654
+   },
+   {
+    "name": "Blur transition 7",
+    "inFrame": 664,
+    "outFrame": 672,
+    "peakFrame": 668
+   },
+   {
+    "name": "Blur transition 8",
+    "inFrame": 679,
+    "outFrame": 687,
+    "peakFrame": 683
+   },
+   {
+    "name": "Blur transition 9",
+    "inFrame": 693,
+    "outFrame": 701,
+    "peakFrame": 697
+   },
+   {
+    "name": "Blur transition 10",
+    "inFrame": 708,
+    "outFrame": 716,
+    "peakFrame": 712
+   },
+   {
+    "name": "Blur transition 11",
+    "inFrame": 722,
+    "outFrame": 730,
+    "peakFrame": 726
+   },
+   {
+    "name": "Blur transition 12",
+    "inFrame": 737,
+    "outFrame": 745,
+    "peakFrame": 741
+   },
+   {
+    "name": "Blur transition 13",
+    "inFrame": 750,
+    "outFrame": 758,
+    "peakFrame": 754
+   },
+   {
+    "name": "Blur transition 14",
+    "inFrame": 766,
+    "outFrame": 774,
+    "peakFrame": 770
+   },
+   {
+    "name": "Blur transition 15",
+    "inFrame": 780,
+    "outFrame": 788,
+    "peakFrame": 784
+   },
+   {
+    "name": "Blur transition 16",
+    "inFrame": 795,
+    "outFrame": 803,
+    "peakFrame": 799
+   },
+   {
+    "name": "Blur transition 17",
+    "inFrame": 809,
+    "outFrame": 817,
+    "peakFrame": 813
+   },
+   {
+    "name": "Blur transition 18",
+    "inFrame": 824,
+    "outFrame": 832,
+    "peakFrame": 828
+   },
+   {
+    "name": "Blur transition 19",
+    "inFrame": 853,
+    "outFrame": 861,
+    "peakFrame": 857
+   },
+   {
+    "name": "Blur transition 20",
+    "inFrame": 867,
+    "outFrame": 875,
+    "peakFrame": 871
+   },
+   {
+    "name": "Blur transition 21",
+    "inFrame": 882,
+    "outFrame": 890,
+    "peakFrame": 886
+   },
+   {
+    "name": "Blur transition 22",
+    "inFrame": 896,
+    "outFrame": 904,
+    "peakFrame": 900
+   },
+   {
+    "name": "Blur transition 23",
+    "inFrame": 911,
+    "outFrame": 919,
+    "peakFrame": 915
+   },
+   {
+    "name": "Blur transition 24",
+    "inFrame": 925,
+    "outFrame": 933,
+    "peakFrame": 929
+   },
+   {
+    "name": "Blur transition 25",
+    "inFrame": 940,
+    "outFrame": 948,
+    "peakFrame": 944
+   },
+   {
+    "name": "Blur transition 26",
+    "inFrame": 954,
+    "outFrame": 962,
+    "peakFrame": 958
+   },
+   {
+    "name": "Blur transition 27",
+    "inFrame": 969,
+    "outFrame": 977,
+    "peakFrame": 973
+   }
+  ]
+ },
+ "typography": {
+  "font": "SitkaSmall",
+  "position": [
+   540,
+   720
+  ],
+  "animator": "Scale 112% + Blur 10, range selector Start 0 -> 100",
+  "revealFrames": "Tony 18-41 f on five of seven captions (Neural used 9.6 f on every caption)",
+  "glow": "Glow threshold 39.2 radius 13; intensity 0.95 -> 0.55 over about 27 f (Neural about 4 f)",
+  "echo": "Echo time 0.4667 s decay 0.45 on selected captions",
+  "dropShadow": "130/180/18",
+  "opacity": "in 1 f, out 5 f eased",
+  "overlap": "neighbouring captions overlap 6-9 f so one fades as the next reveals",
+  "censorship": "SH*T, F**KING kept",
+  "captions": [
+   {
+    "name": "[R2_C01] YOU'RE NOT HAPPY.",
+    "neural": [
+     6,
+     38
+    ],
+    "tony": null,
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": null,
+    "echo": null
+   },
+   {
+    "name": "[R2_C02] YOU DON'T KNOW WHAT TO DO, / SO YOU'RE DOING NOTHING.",
+    "neural": [
+     45,
+     87
+    ],
+    "tony": null,
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": null,
+    "echo": null
+   },
+   {
+    "name": "[R2_C03] YOU DON'T WANT / TO CHANGE ANYTHING.",
+    "neural": [
+     91,
+     141
+    ],
+    "tony": null,
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": null,
+    "echo": null
+   },
+   {
+    "name": "[R2_C04] HELL, WHAT DOES / BLESSING WANT NOW?",
+    "neural": [
+     228,
+     280
+    ],
+    "tony": [
+     77,
+     129
+    ],
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": 31.8,
+    "echo": true
+   },
+   {
+    "name": "[R2_C05] HOLY SH*T.",
+    "neural": [
+     345,
+     390
+    ],
+    "tony": [
+     194,
+     252
+    ],
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": 40.8,
+    "echo": true
+   },
+   {
+    "name": "[R2_C06] YOU ARE F**KING ALIVE.",
+    "neural": [
+     394,
+     436
+    ],
+    "tony": [
+     243,
+     298
+    ],
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": 32.0,
+    "echo": false
+   },
+   {
+    "name": "[R2_C07] GET OVER HERE.",
+    "neural": [
+     440,
+     475
+    ],
+    "tony": [
+     289,
+     324
+    ],
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": 9.6,
+    "echo": true
+   },
+   {
+    "name": "[R2_C08] IT'S GOOD TO SEE YOU.",
+    "neural": [
+     554,
+     590
+    ],
+    "tony": [
+     404,
+     449
+    ],
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": 17.8,
+    "echo": false
+   },
+   {
+    "name": "[R2_C09] F**KING JOEY QUINN.",
+    "neural": [
+     596,
+     652
+    ],
+    "tony": [
+     446,
+     502
+    ],
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": 29.0,
+    "echo": true
+   },
+   {
+    "name": "[R2_C10] YEAH.",
+    "neural": [
+     674,
+     706
+    ],
+    "tony": [
+     523,
+     555
+    ],
+    "revealFramesNeural": 9.6,
+    "revealFramesTony": 9.6,
+    "echo": true
+   }
+  ]
+ },
+ "shots": [
+  {
+   "shot": 1,
+   "label": "T13 confrontation glare",
+   "piece": null,
+   "inFrame": 567,
+   "outFrame": 581,
+   "sourceInFrameComp133": 873,
+   "position": [
+    289.2585,
+    782.7565
+   ],
+   "neuralPosition": [
+    296.9,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.7901,
+    0.2997
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 567,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 581,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 2,
+   "label": "T05 red-lit head lowered",
+   "piece": null,
+   "inFrame": 581,
+   "outFrame": 596,
+   "sourceInFrameComp133": 265,
+   "position": [
+    179.5,
+    790.398
+   ],
+   "neuralPosition": [
+    179.5,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5401,
+    0.2738
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 581,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 596,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 3,
+   "label": "T10 club close dancers",
+   "piece": null,
+   "inFrame": 596,
+   "outFrame": 610,
+   "sourceInFrameComp133": 644,
+   "position": [
+    179.5,
+    790.398
+   ],
+   "neuralPosition": [
+    179.5,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.2901,
+    0.1912
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 596,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 610,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 4,
+   "label": "T02 sky two-shot",
+   "piece": null,
+   "inFrame": 610,
+   "outFrame": 625,
+   "sourceInFrameComp133": 50,
+   "position": [
+    970.7,
+    790.398
+   ],
+   "neuralPosition": [
+    970.7,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 610,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 625,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 5,
+   "label": "T14 interrogation hands spread",
+   "piece": null,
+   "inFrame": 625,
+   "outFrame": 639,
+   "sourceInFrameComp133": 1044,
+   "position": [
+    257.8,
+    790.398
+   ],
+   "neuralPosition": [
+    257.8,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 625,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 639,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 6,
+   "label": "T08 SALUD close",
+   "piece": null,
+   "inFrame": 639,
+   "outFrame": 654,
+   "sourceInFrameComp133": 534,
+   "position": [
+    239.3076,
+    719.0773
+   ],
+   "neuralPosition": [
+    336.1,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 639,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.7137,
+     "outInfluence": 0.3129
+    },
+    {
+     "frame": 654,
+     "value": 1.11,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.1667
+    }
+   ]
+  },
+  {
+   "shot": 7,
+   "label": "T16 blue shirt stairs",
+   "piece": null,
+   "inFrame": 654,
+   "outFrame": 668,
+   "sourceInFrameComp133": 1204,
+   "position": [
+    923.4,
+    790.398
+   ],
+   "neuralPosition": [
+    923.4,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 654,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 668,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 8,
+   "label": "T03 club warm",
+   "piece": null,
+   "inFrame": 668,
+   "outFrame": 683,
+   "sourceInFrameComp133": 105,
+   "position": [
+    942.9,
+    790.398
+   ],
+   "neuralPosition": [
+    942.9,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 668,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 683,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 9,
+   "label": "T21 looking up",
+   "piece": null,
+   "inFrame": 683,
+   "outFrame": 697,
+   "sourceInFrameComp133": 1504,
+   "position": [
+    649.3,
+    790.398
+   ],
+   "neuralPosition": [
+    649.3,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 683,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 697,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 10,
+   "label": "T09 flashlight crowd",
+   "piece": null,
+   "inFrame": 697,
+   "outFrame": 712,
+   "sourceInFrameComp133": 589,
+   "position": [
+    335.6679,
+    698.6999
+   ],
+   "neuralPosition": [
+    531.8,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 697,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 712,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 11,
+   "label": "T23 dark room turn",
+   "piece": null,
+   "inFrame": 712,
+   "outFrame": 726,
+   "sourceInFrameComp133": 1611,
+   "position": [
+    447.5264,
+    792.9452
+   ],
+   "neuralPosition": [
+    786.3,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 712,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 726,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 12,
+   "label": "T06 arms crossed",
+   "piece": null,
+   "inFrame": 726,
+   "outFrame": 741,
+   "sourceInFrameComp133": 455,
+   "position": [
+    720.0,
+    790.398
+   ],
+   "neuralPosition": [
+    720.0,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 726,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 741,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 13,
+   "label": "T19 phone",
+   "piece": null,
+   "inFrame": 741,
+   "outFrame": 749,
+   "sourceInFrameComp133": 1334,
+   "position": [
+    697.5943,
+    787.8508
+   ],
+   "neuralPosition": [
+    962.5,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 741,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 755,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 13,
+   "label": "T19 phone",
+   "piece": "5",
+   "inFrame": 749,
+   "outFrame": 750,
+   "sourceInFrameComp133": 1343,
+   "position": [
+    697.5943,
+    787.8508
+   ],
+   "neuralPosition": [
+    962.5,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": null,
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": null
+  },
+  {
+   "shot": 13,
+   "label": "T19 phone",
+   "piece": "4",
+   "inFrame": 750,
+   "outFrame": 755,
+   "sourceInFrameComp133": 1343,
+   "position": [
+    697.5943,
+    787.8508
+   ],
+   "neuralPosition": [
+    962.5,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": null,
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": null
+  },
+  {
+   "shot": 14,
+   "label": "T04 club dark",
+   "piece": null,
+   "inFrame": 755,
+   "outFrame": 770,
+   "sourceInFrameComp133": 227,
+   "position": [
+    1051.6509,
+    795.4924
+   ],
+   "neuralPosition": [
+    962.5,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 755,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 770,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 15,
+   "label": "T20 office desk",
+   "piece": null,
+   "inFrame": 770,
+   "outFrame": 784,
+   "sourceInFrameComp133": 1384,
+   "position": [
+    406.3264,
+    792.9452
+   ],
+   "neuralPosition": [
+    610.1,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 770,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 784,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 16,
+   "label": "T15 standing white wall",
+   "piece": null,
+   "inFrame": 784,
+   "outFrame": 799,
+   "sourceInFrameComp133": 1136,
+   "position": [
+    699.1359,
+    787.8508
+   ],
+   "neuralPosition": [
+    551.4,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 784,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 799,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 17,
+   "label": "T22 turning office",
+   "piece": null,
+   "inFrame": 799,
+   "outFrame": 813,
+   "sourceInFrameComp133": 1565,
+   "position": [
+    786.3,
+    790.398
+   ],
+   "neuralPosition": [
+    786.3,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 799,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 813,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 18,
+   "label": "T24 close dark",
+   "piece": null,
+   "inFrame": 813,
+   "outFrame": 828,
+   "sourceInFrameComp133": 1683,
+   "position": [
+    218.6,
+    790.398
+   ],
+   "neuralPosition": [
+    218.6,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 813,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 828,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 19,
+   "label": "T05 red-lit looking up",
+   "piece": null,
+   "inFrame": 828,
+   "outFrame": 842,
+   "sourceInFrameComp133": 350,
+   "position": [
+    531.8,
+    765.105
+   ],
+   "neuralPosition": [
+    531.8,
+    765.105
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 828,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 842,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 20,
+   "label": "T18 profile with woman",
+   "piece": null,
+   "inFrame": 842,
+   "outFrame": 857,
+   "sourceInFrameComp133": 1264,
+   "position": [
+    93.0,
+    790.398
+   ],
+   "neuralPosition": [
+    93.0,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 842,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 857,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 21,
+   "label": "T03 club warm turned",
+   "piece": null,
+   "inFrame": 857,
+   "outFrame": 871,
+   "sourceInFrameComp133": 170,
+   "position": [
+    970.7,
+    765.105
+   ],
+   "neuralPosition": [
+    970.7,
+    765.105
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 857,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 871,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 22,
+   "label": "T06 arms crossed earlier head turn",
+   "piece": null,
+   "inFrame": 871,
+   "outFrame": 886,
+   "sourceInFrameComp133": 390,
+   "position": [
+    700.0,
+    765.105
+   ],
+   "neuralPosition": [
+    700.0,
+    765.105
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 871,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 886,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 23,
+   "label": "T20 office head down",
+   "piece": null,
+   "inFrame": 886,
+   "outFrame": 900,
+   "sourceInFrameComp133": 1459,
+   "position": [
+    450.7358,
+    749.822
+   ],
+   "neuralPosition": [
+    708.0,
+    765.105
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 886,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 900,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 24,
+   "label": "T01 outdoor walk",
+   "piece": null,
+   "inFrame": 900,
+   "outFrame": 915,
+   "sourceInFrameComp133": 5,
+   "position": [
+    558.7094,
+    747.0961
+   ],
+   "neuralPosition": [
+    747.2,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 900,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 915,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 25,
+   "label": "T14 interrogation earlier gesture",
+   "piece": null,
+   "inFrame": 915,
+   "outFrame": 929,
+   "sourceInFrameComp133": 949,
+   "position": [
+    257.8,
+    765.105
+   ],
+   "neuralPosition": [
+    257.8,
+    765.105
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 915,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 929,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 26,
+   "label": "T11 wide arm on table",
+   "piece": null,
+   "inFrame": 929,
+   "outFrame": 944,
+   "sourceInFrameComp133": 692,
+   "position": [
+    473.1,
+    790.398
+   ],
+   "neuralPosition": [
+    473.1,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 929,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 944,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 27,
+   "label": "T07 SALUD close a",
+   "piece": null,
+   "inFrame": 944,
+   "outFrame": 958,
+   "sourceInFrameComp133": 504,
+   "position": [
+    215.1736,
+    693.6056
+   ],
+   "neuralPosition": [
+    551.4,
+    790.398
+   ],
+   "scale": 0.8596,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 944,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.3333,
+     "outSpeed": -2.4545,
+     "outInfluence": 0.2192
+    },
+    {
+     "frame": 958,
+     "value": 0.52,
+     "inSpeed": -2.024,
+     "inInfluence": 0.2677,
+     "outSpeed": 0.0,
+     "outInfluence": 0.3333
+    }
+   ]
+  },
+  {
+   "shot": 28,
+   "label": "T17 dark profile",
+   "piece": null,
+   "inFrame": 958,
+   "outFrame": 973,
+   "sourceInFrameComp133": 1229,
+   "position": [
+    257.8,
+    790.398
+   ],
+   "neuralPosition": [
+    257.8,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 958,
+     "value": 0.52,
+     "inSpeed": 0.0,
+     "inInfluence": 0.1667,
+     "outSpeed": 1.5696,
+     "outInfluence": 0.3125
+    },
+    {
+     "frame": 973,
+     "value": 1.0,
+     "inSpeed": 1.9687,
+     "inInfluence": 0.2784,
+     "outSpeed": 0.0,
+     "outInfluence": 0.2192
+    }
+   ]
+  },
+  {
+   "shot": 29,
+   "label": "T12 pink-neon hero stare ENDING",
+   "piece": null,
+   "inFrame": 973,
+   "outFrame": 999,
+   "sourceInFrameComp133": 819,
+   "position": [
+    640.334,
+    782.7565
+   ],
+   "neuralPosition": [
+    805.9,
+    790.398
+   ],
+   "scale": 1.0196,
+   "blurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "neuralBlurMoCenterXY": [
+    0.5,
+    0.2148
+   ],
+   "zDistKeys": [
+    {
+     "frame": 973,
+     "value": 1.0,
+     "inSpeed": 0.0,
+     "inInfluence": 0.33,
+     "outSpeed": -0.5,
+     "outInfluence": 0.5
+    },
+    {
+     "frame": 998,
+     "value": 0.7,
+     "inSpeed": -0.5,
+     "inInfluence": 0.5,
+     "outSpeed": 0.0,
+     "outInfluence": 0.33
+    }
+   ]
+  }
+ ],
+ "neuralMistakes": [
+  "Intro too long and slow (718 f); the first three caption lines were dead weight - Tony removed 151 f.",
+  "Intro framing done with keyframed position slides on one long layer - reads as sliding/misplaced; correct way is cut + static reframe per piece.",
+  "No transitions between body shots - hard cuts felt choppy; needs the 8 f directional-blur hit on every cut.",
+  "Zoom centre left at one default for every shot and crops not aimed at the subject - Tony re-centred 3 shots and repositioned 13 of 29 footage layers.",
+  "Captions revealed in 9.6 f with a 4 f glow - harsh; Tony slowed reveals, lengthened glow decay to about 27 f, overlapped neighbours and added Echo.",
+  "Intro footage ungraded; Tony added a sharpen/exposure/vignette/contrast stack."
+ ],
+ "neuralKeptByTony": [
+  "The 29 body shot choices, their order and source ranges",
+  "14/15-frame beat cuts on the same song section",
+  "BlurMoCurves Z Dist curves and eases (alternating A/B)",
+  "Caption wording, font, position and censorship for C04-C10"
+ ]
+}

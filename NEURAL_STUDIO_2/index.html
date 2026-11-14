@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neural 2.0</title>
+<link rel="stylesheet" href="workflow.css">
+<link rel="stylesheet" href="editor.css">
+<body><div class="app-shell"><aside class="sidebar" aria-label="Application navigation"><div class="brand"><span aria-hidden="true">N</span><div>Neural <small>STUDIO 2.0</small></div></div><p class="nav-label">Workspace</p><nav aria-label="Workspace"><button id="workflow-tab" aria-pressed="true"><span aria-hidden="true">◇</span> Workflow</button><button id="edit-tab" aria-pressed="false"><span aria-hidden="true">✂</span> Edit</button><button id="review-tab" aria-pressed="false"><span aria-hidden="true">▣</span> Review</button><button id="library-tab" aria-pressed="false"><span aria-hidden="true">▤</span> Editing knowledge</button><button id="debug-tab" aria-pressed="false"><span aria-hidden="true">⚙</span> Debug</button></nav><div class="sidebar-footer"><span class="workspace-mark" aria-hidden="true"></span><div>Local workspace<small>Projects · Evidence · Methods</small></div></div></aside><div class="app-content"><header class="titlebar">
+  <span class="header-label">Project</span>
+  <select id="projects" aria-label="Project"></select>
+  <button id="new-project">New project</button>
+
+  <button id="theme" aria-pressed="false">Dark mode</button>
+  <button id="relay-open" class="relay-open" aria-controls="relay-panel" aria-expanded="false"><span class="relay-orb" aria-hidden="true">R</span> Relay <span class="relay-command-hint">Workspace assistant</span></button>
+</header>
+<main>
+  <p id="notice" role="status" hidden></p>
+  <form id="project-form" class="review" hidden>
+    <h1>New project</h1>
+    <label>Project name <input id="project-name" maxlength="100" required></label>
+    <label>Creative brief <textarea id="project-brief" maxlength="12000" required></textarea></label>
+    <button>Create project</button>
+  </form>
+  <section id="workflow-view" class="workspace" hidden>
+    <div class="production">
+      <div class="heading">
+        <div><p id="revision" class="eyebrow"></p><h1>Production workspace<span class="title-dot">.</span></h1><p class="page-description">Your team, current work, and saved evidence in one place.</p></div>
+        <span id="control-badge" class="mode-badge">Checking project status</span>
+      </div>
+      <div class="overview" aria-label="Current revision overview">
+        <div><span>Running now</span><strong id="assigned-count">0</strong></div>
+        <div><span>Queued</span><strong id="handoff-count">0</strong></div>
+        <div><span>Needs your input</span><strong id="review-count">0</strong></div>
+        <div><span>Saved job results</span><strong id="approved-count">0</strong></div>
+      </div>
+      <section class="crew-overview" aria-label="Model activity"><div><strong>Who’s doing what</strong><span id="crew-summary">No assignments yet</span></div><div id="crew-detail" class="crew-stations">Select a station to see its current work and saved history.</div></section>
+      <div class="canvas" aria-label="Workflow stages">
+        <div class="canvas-heading"><div><span class="canvas-label">Production pipeline</span><span class="canvas-hint">Enter a station to continue work or inspect evidence</span></div><span class="board-caption">05 stations</span></div>
+        <div class="graph-body">
+          <svg class="connections" viewBox="0 0 900 480" preserveAspectRatio="none" aria-hidden="true"><path d="M450 110 V148 Q450 165 430 165 H175 Q150 165 150 190 V204 M270 255 H330 M570 255 H630 M750 306 V330 Q750 350 730 350 H470 Q450 350 450 370 V390"/><circle cx="450" cy="110" r="4"/><circle cx="450" cy="390" r="4"/></svg>
+          <div class="nodes" id="nodes"></div>
+        </div>
+        <div class="canvas-footer"><span><i></i> Connected stations · saved work</span><span>Status follows returned evidence</span></div>
+        <section id="station-work" class="station-work" hidden aria-label="Expanded station tasks">
+          <div class="work-heading"><div><span class="eyebrow">Inside the station</span><h2 id="work-title"></h2></div><button id="collapse-work" aria-label="Back to pipeline">← Back to pipeline</button></div>
+          <p id="work-description"></p><div id="work-nodes" class="work-nodes"></div>
+        </section>
+      </div>
+      <div class="current"><span class="current-icon" aria-hidden="true">↳</span><div><strong>Next action</strong><span id="next-action"></span></div></div>
+      <details id="relay"><summary><strong>Workspace activity</strong><span id="event-count"></span></summary><ol id="activity"></ol></details>
+    </div>
+    <aside class="inspector" aria-label="Station details">
+      <div class="inspector-label"><p class="eyebrow">Station inspector</p><span id="station-number">01 / 05</span></div>
+      <h2 id="station"></h2>
+      <p id="station-status" class="muted"></p>
+      <div class="segments" aria-label="Station view">
+        <button id="brief-tab" aria-pressed="true">Brief & notes</button>
+        <button id="route-tab" aria-pressed="false">Model routing</button>
+      </div>
+      <div id="brief-panel">
+        <p id="task" class="station-purpose"></p>
+        <form id="brief-form" hidden>
+          <label for="brief-text">Project brief</label>
+          <textarea id="brief-text" maxlength="12000" required></textarea>
+          <button>Save new revision</button>
+        </form>
+        <form id="message-form" hidden>
+          <ol id="messages"></ol>
+          <label for="message-text">Director notebook</label>
+          <textarea id="message-text" maxlength="12000" required></textarea>
+          <button>Save note</button>
+        </form>
+        <p id="result"></p>
+      </div>
+      <div id="route-panel" hidden>
+        <p class="field-help">Choose a model and Continue in the station workspace.</p><details class="advanced-handoff"><summary>Advanced · portable task and result files</summary>
+        <form id="assign-form">
+          <label for="model">Portable task model</label>
+          <select id="model-picker" aria-label="Choose a registered model"><option value="">Choose a registered model…</option></select>
+          <input id="model" placeholder="Or type any model, e.g. Fable" maxlength="100" required aria-describedby="model-help">
+          <p id="model-help" class="field-help">Portable packets are available for external hosts. Saving a packet does not run a model.</p>
+          <label for="assignment-task">Task</label>
+          <textarea id="assignment-task" maxlength="12000" required></textarea>
+          <button>Save portable task</button>
+        </form>
+        <button id="download-again" hidden>Download current task</button>
+        <label class="import-label" for="file">Import result JSON</label>
+        <input type="file" id="file" accept=".json,application/json">
+        </details>
+      </div>
+    </aside>
+  </section>
+  <section id="review-view" class="review" hidden>
+    <p class="eyebrow">Screening / Evidence</p>
+    <h1>Review workspace</h1><p class="page-description">Compare your cuts and leave precise notes on the work.</p>
+    <div class="screening">
+      <div>
+        <p id="review-library-state" role="status">Loading saved project cuts…</p><details><summary>Advanced · open local cut files</summary><label>Local cut versions <input id="media" type="file" accept="video/*" multiple></label></details>
+        <select id="versions" aria-label="Cut version" disabled></select>
+        <video id="player" controls playsinline preload="metadata"></video>
+        <div class="transport">
+          <button id="back" aria-label="Back one second">−1s</button>
+          <input id="scrub" type="range" min="0" max="0" step="0.01" value="0" aria-label="Timeline position">
+          <button id="forward" aria-label="Forward one second">+1s</button>
+          <output id="time">00:00.00</output>
+        </div>
+      </div>
+      <section>
+        <h2>Timecoded notes</h2>
+        <form id="note-form">
+          <label for="note-text">Note at playhead</label>
+          <textarea id="note-text" maxlength="4000" required></textarea>
+          <button id="save-note" disabled>Add note</button>
+        </form>
+        <ol id="notes"></ol>
+      </section>
+    </div>
+    <h2>Station evidence</h2>
+    <div id="review-results" class="evidence-list"></div>
+  </section>
+<section id="edit-view" hidden></section><section id="library-view" class="library" hidden><div class="heading"><div><p class="eyebrow">Methods / Accepted work</p><h1>Editing knowledge</h1><p class="page-description">The workflow, references, and decisions behind your edits.</p></div></div><div id="knowledge-list"></div></section><section id="debug-view" class="library" hidden><div class="heading"><div><p class="eyebrow">Software / Isolated</p><h1>Debug</h1><p class="page-description">Ask a model about a Neural Studio 2 software problem. It receives only the diagnostics and source files listed here. It cannot touch an edit or After Effects, and nothing it writes is run.</p></div></div><div id="debug-root"></div></section></main></div></div>
+<dialog id="task-dialog" aria-labelledby="task-dialog-title"><div class="dialog-top"><p class="eyebrow">Task record</p><button id="close-task">Close ×</button></div><h2 id="task-dialog-title"></h2><p id="task-dialog-meta"></p><h3>Assignment</h3><p id="task-dialog-brief"></p><h3>Returned work</h3><p id="task-dialog-result"></p></dialog>
+<aside id="relay-panel" class="relay-panel" hidden aria-label="Relay workspace assistant"><div class="relay-heading"><span class="relay-orb" aria-hidden="true">R</span><div><h2>Relay</h2><span>Your workspace, in plain English</span></div><button id="relay-close" aria-label="Close Relay">×</button></div><p class="relay-connection">Local workspace commands available · AI model not connected</p><ol id="relay-messages" aria-live="polite"></ol><div class="relay-suggestions"><button data-relay="What is happening?">What’s happening?</button><button data-relay="Show director">Open director</button><button data-relay="Show review">Open review</button></div><form id="relay-form"><label for="relay-input">Ask Relay</label><textarea id="relay-input" maxlength="12000" placeholder="Show the plan, check saved tasks, or tell director: …" required></textarea><button>Send to Relay →</button></form></aside>
+<script src="stations.js"></script>
+<script src="studio.js"></script>
+<script src="services.js"></script><script src="editor.js"></script>
+<script src="executive.js"></script>
+<script src="production.js"></script>
+<script src="control.js"></script>
+<script src="debug.js"></script>
+</body></html>
+
+

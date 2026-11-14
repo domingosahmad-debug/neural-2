@@ -1,0 +1,11 @@
+# Measurement and evidence contract
+- Store FPS as numerator/denominator. Use half-open frame intervals [in,out), duration = out-in. A scene's last visible frame is out-1.
+- Keep film source time, extracted block offset, precomp-local time and main-comp time separate. At native speed: film time = block offset + trim offset + scene elapsed. Time remap/stretch requires its actual mapping. Never mix seconds and frames.
+- Reference metadata: hash, dimensions, rate, duration, native frame count, audio sample rate/layout. Mark variable-frame-rate sources for deliberate preparation; do not claim an approximate frame count is exact.
+- Provider evidence: name/version, input hash, output path, success/failure, confidence, fallback reason. No manually clearing crop-risk flags just to pass validation.
+- Cut consensus should retain each detector's candidate and observed boundary. Beat arrays and cut arrays are different.
+- Optical flow magnitude does not uniquely recover AE scale/easing; source subject motion, camera motion and added edit motion must be distinguished. Global brightness is not a zoom detector.
+- SigLIP2/OpenCLIP/DINO: candidate retrieval. Qwen3-VL: inspect finalists with neutral descriptions (prior character-specific prompts mislabeled Giyu as Akaza). SEA-RAFT: selected-range motion evidence. CP-SAT: global assignment under duration, uniqueness, narrative and framing constraints; it cannot rescue a poor pool.
+- Repeat topology includes explicit group ID, source range and direction for each occurrence. Reverse only if requested/measured and technically supported.
+- VMAF/SSIM are correspondence or encoding diagnostics for aligned versions of the same content, not artistic similarity scores for different footage.
+- A technically complete provider certificate does not certify an emotionally successful edit.

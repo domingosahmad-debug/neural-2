@@ -1,0 +1,124 @@
+{
+  "references": [
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\01_YT_wodbash_MAKI_ZENIN_WE_ON_GO_AMV.mp4",
+      "bytes": 83758970
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\02_YT_N_X_Tengen_Gyutaro_x_WE_ON_GO_SFX_EDIT.mp4",
+      "bytes": 34474445
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\03_YT_PoseidonFx_WE_ON_GO_Frieren_AMV.mp4",
+      "bytes": 19850497
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\04_YT_kojizae_Gojo_We_on_go_Edit_AMV_4K.mp4",
+      "bytes": 14281277
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\05_YT_Blubz_Black_Clover_Season_2_WE_ON_GO_Edit_AMV_4K.mp4",
+      "bytes": 32994575
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\06_YT_Sekai_Hashira_EDIT_WE_ON_GO.mp4",
+      "bytes": 28427793
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\07_YT_CallMeDwayne_Honorable_WE_ON_GO_X_ONE_PIECE_EDIT.mp4",
+      "bytes": 30109290
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\08_YT_Wekisava_This_BLUE_LOCK_EDIT_Took_Me_1_Week_To_Make.mp4",
+      "bytes": 14870003
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\09_YT_Muden_Eris_x_WE_ON_GO_AMV.mp4",
+      "bytes": 18257681
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\10_YT_Sensei_Editz_Gojo_Vs_Sukuna_But_Their_Battle_Is_Honoura.mp4",
+      "bytes": 38860195
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\11_YT_CARLIRUS_Giyu_Vs_Akaza_WE_ON_GO_Edit_AMV_4K.mp4",
+      "bytes": 14398747
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\12_YT_Thamuz_Villain_SATORU_GOJO_x_HONORABLE_WE_ON_GO_Jujutsu_K.mp4",
+      "bytes": 17591717
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\references\\WE_ON_GO_REFERENCES\\downloads\\ONE PIECE HONORABLE EDIT - DNKS_Dom (1080p, h264).mp4",
+      "bytes": 27778642
+    }
+  ],
+  "song_original_candidates_and_copies": [
+    {
+      "label": "Standard BIA track candidate",
+      "path": "C:\\Users\\TUF\\Downloads\\BIA - WE ON GO (Lyrics) - Rap Samurai.mp3",
+      "bytes": 6746022,
+      "sha256": "7939a603f0561d7728abb3bc34afb124bb47d96bfd844c1de35a540c3d2450c6",
+      "duplicate_of": null,
+      "metadata": "Not yet probed/listened; filename labels are candidate descriptions, not quality claims."
+    },
+    {
+      "label": "Cinematic brass intro / Honorable arrangement candidate",
+      "path": "C:\\Users\\TUF\\Downloads\\New folder (14)\\WE ON GO CINEMATIC BRASS INTRO - AMBNT (youtube).mp3",
+      "bytes": 7916146,
+      "sha256": "338668c7dc478ddce95275889bd9fa3120ccbd2d91874fe62aa68f0b692f26e7",
+      "duplicate_of": null,
+      "metadata": "Not yet probed/listened; filename labels are candidate descriptions, not quality claims."
+    },
+    {
+      "label": "Alternate Tiger speech intro arrangement candidate",
+      "path": "C:\\Users\\TUF\\Downloads\\You Can Not Reason With a Tiger When Your Head Is In It's Mouth x WE ON GO - BIA - B e z i m e n i (youtube).mp3",
+      "bytes": 6952751,
+      "sha256": "d9db90594e355965139ab6e96a3c12a8e3f091c28a249e17dcfd9d0d4aa70c3b",
+      "duplicate_of": null,
+      "metadata": "Not yet probed/listened; filename labels are candidate descriptions, not quality claims."
+    },
+    {
+      "label": "Desktop cinematic brass copy",
+      "path": "C:\\Users\\TUF\\Desktop\\reference video + song\\Song\\WE ON GO CINEMATIC BRASS INTRO - AMBNT (youtube).mp3",
+      "bytes": 7916146,
+      "sha256": "338668c7dc478ddce95275889bd9fa3120ccbd2d91874fe62aa68f0b692f26e7",
+      "duplicate_of": "C:\\Users\\TUF\\Downloads\\New folder (14)\\WE ON GO CINEMATIC BRASS INTRO - AMBNT (youtube).mp3",
+      "metadata": "Not yet probed/listened; filename labels are candidate descriptions, not quality claims."
+    }
+  ],
+  "derived_audio_inspect_before_use": [
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\sessions\\GIYU_VS_AKAZA_SHINOBU_FLOW_20260926\\audio\\music_we_on_go_master.wav",
+      "exists": true,
+      "note": "Derived previous-project analysis/master; may be trimmed/resampled/edited."
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\TFX_ANTIGRAVITY_STUDIO\\sessions\\GIYU_VS_AKAZA_SHINOBU_FLOW_20260926\\analysis\\we_on_go.wav",
+      "exists": true,
+      "note": "Derived previous-project analysis/master; may be trimmed/resampled/edited."
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\honorable_infinity_proof_20260906\\song_analysis_work\\WE ON GO CINEMATIC BRASS INTRO - AMBNT (youtube)-22050.wav",
+      "exists": true,
+      "note": "Derived previous-project analysis/master; may be trimmed/resampled/edited."
+    },
+    {
+      "path": "C:\\Users\\TUF\\Documents\\New project\\hashira_love_me_replica_20260830\\beat_this_reference_work\\Hashira EDIT - WE ON GO-22050.wav",
+      "exists": true,
+      "note": "Derived previous-project analysis/master; may be trimmed/resampled/edited."
+    }
+  ],
+  "bleach_raw_folder": "C:/Users/TUF/Videos/Clips for edits/Bleach",
+  "existing_source_knowledge": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\bleach-bankai-two-edits-20261025\\STATE.md",
+  "live_ae_read_only": {
+    "aeVersion": "24.0x55",
+    "project": null,
+    "dirty": false,
+    "rendering": false,
+    "active": null
+  },
+  "live_inspection_command_id": "tfx-378b39dcc9024f17905f1911e575f96d",
+  "previous_edit_status": "Tony explicitly says finished; protect it and start a new edit. Historical repair instructions superseded.",
+  "resource_note": "User Topaz Halawa inference was observed active; check ownership before new heavy jobs."
+}

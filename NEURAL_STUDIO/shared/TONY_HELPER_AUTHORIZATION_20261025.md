@@ -1,0 +1,13 @@
+# Current human authorization: Argon and simple Flash support
+
+Tony explicitly adds helper authorization to the CURRENT Bleach LUZ ROJA project, overriding older instructions that restricted expanded delegation to future projects. This does not replace the current edit brief or authorize unrelated historical work.
+
+Sol GPT-6.1 High remains director. Only native Claude Opus may succeed Sol on actual allowance refusal/reserve. If Claude remains unavailable, preserve current state and wait for its availability. Gemini 4 Argon and Gemini 3.8 Flash must never become director, final decision maker or independent AE writer. Do not change the empty Gemini backup list or Claude-only backup route.
+
+Both Sol and Claude should delegate useful bounded support to Gemini 4 Argon when its real allowance and installed adapter permit it. Use Gemini 3.8 Flash only for genuinely simple tasks. No make-work, duplicated creative review, background debate or model polling; economize on both director and helper usage. Local deterministic work stays in the shared engine.
+
+Current installed Argon profiles: planning specialist 2a116cff5ec14502b99c5118dba00102 and evidence reviewer 2a116cff5ec14502b99c5118dba00103, model gemini-4-argon-high. These ordinary adapters report TEXT capability only. They may inspect supplied compact plans, text/source ledgers, consistency questions, caption duplicate audits, bounded implementation proposals and technical evidence summaries. Their names do not grant perception, source access, audio listening, video viewing or AE tools. Director owns creative selection, type/animation decisions, native integration and final judgment.
+
+Before dispatch query staffing and current account metadata. Tony reports Argon's weekly allowance has returned; the initial cached roster still reported the old <=1% state and one Argon profile had prior execution needing reconciliation. Refresh real metadata without an inference test, inspect existing ownership/results, prefer an eligible profile and never clear unknown execution merely to dispatch. Record an exact blocker if actual metadata/ownership remains unavailable. Flash profiles likewise may carry old unresolved ownership; do not reuse blindly.
+
+All helpers receive a frozen bounded task/blueprint context, relevant skills, exact output and acceptance criteria. Review their actual result once, preserve their provider conversation, register a real completion watch and end director inference while waiting. No unsupported listening or fabricated quality claims. This authorization is durable for the current Sol/Claude continuation, including after Claude's provider-reported reset; no scheduled model wake or repeated quota probe is requested.

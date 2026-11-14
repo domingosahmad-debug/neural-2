@@ -1,0 +1,24 @@
+# Runtime state, never committed
+NEURAL_STUDIO_2/data/
+NEURAL_STUDIO_2/runtime/
+NEURAL_STUDIO_2/.desktop-profile/
+NEURAL_STUDIO_2/.desktop-service.json
+NEURAL_STUDIO_2/.maintenance/
+NEURAL_STUDIO/.models/
+NEURAL_STUDIO/.tools/
+.caption_deps/
+__pycache__/
+*.pyc
+workspace.sqlite3*
+*.sqlite3*
+scope.json
+desktop-service.log
+*.log
+*.bak
+.env
+# Media and AE projects (copyrighted / large)
+*.aep
+*.mp3
+*.wav
+*.mkv
+*.mov

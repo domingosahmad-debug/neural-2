@@ -1,0 +1,17 @@
+# Internal Codex supervision — actual task ownership
+
+Tony explicitly rejects scheduled supervision from the outside Codex chat. The outside heartbeat was deleted. The current implementation uses Neural's existing Review & Delivery station and real Sol worker 00db872c4e4c443db782a670faa17aed (configured gpt-6.1-sol), with its durable worker conversation, structured results, real team replies and app-owned completion events. No new decorative station, timer or app restart is needed.
+
+First actual task: 4aef5cbc2cbd436d92d48ac2bb6b43a7, job cdc7427751e646ff8b0ba1e5ae84da12, title "Codex supervision | D03 cadence audit and repair gates". Inputs include the actual D03 musical audit JSON and its analysis source, latest human brief, and the supervising chat's initial D02 ledger findings. The job is tagged to current director direction 6a473d006c42410aaadaa26ba578b7d8; its completion watch is registered. At setup it was RUNNING with an owned Codex process and persisted worker session. Do not dispatch a duplicate of it. Inspect its real terminal result and attributed team reply when delivered.
+
+Claude retains direction and the only TonyFX/AE writer lane. Sol independently challenges evidence and prepares precise corrections/plans; it does not edit AE. It can review actual supplied text/code/ledgers and explicitly attached still images. It cannot claim unsupported video playback or listening. A job's existence or numerical PASS does not establish creative acceptance.
+
+## Required event-driven cycle
+
+1. Inspect the current initial supervisor result once, reconcile its diagnosis, and resolve supported audit defects before relying on its beat grid. A plausible BPM or scene-cut detector alone is not musical alignment.
+2. Before scaling a D03 body build, create a fresh review-delivery task for this SAME Sol profile with the exact revision-bound song-offset/event/cut/source ledger, E1 benchmark context, intended hold reasons, and relevant labeled source/sequence stills. Register a completion watch, save state and END inference while review runs. Do not substitute a path-only brief for evidence the worker cannot access.
+3. Sol returns failed ranges, evidence, concrete repair tickets, missing inputs and untested checks through its normal result and team_messages to Director. Claude reads and addresses objections; unresolved objections remain visible. Dispatch, a completed task, and artistic approval are separate states. Use a revised scoped task only after the underlying evidence actually changes.
+4. Build one short representative passage, then provide its actual rendered sheets and updated timing/source/beat ledger to the same internal reviewer through a fresh task. Correct confirmed defects before scaling the rejected edits. Repeat only at meaningful changed plan/proof checkpoints, not on a timer or after every tiny action.
+5. Completion events automatically return the owning director to a decision point. The worker process ends on its terminal result and no model stays alive merely to wait. Claude alone executes approved scoped native repairs under the existing guards. Keep full-speed motion, listening and final human acceptance explicitly separate.
+
+The outside chat performed setup and may answer Tony, but it must not run recurring checks or become the gate mechanism. If the director ends while a required internal reviewer result or repair is unresolved, record a specific recovery checkpoint inside Neural; do not silently call the edit finished or require Tony to retype these directions.

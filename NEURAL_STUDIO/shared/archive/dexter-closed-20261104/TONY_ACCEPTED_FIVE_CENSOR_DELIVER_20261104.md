@@ -1,0 +1,10 @@
+LATEST HUMAN OVERRIDE: Tony requests all FIVE compositions opened in AE for his own censorship review and manual rendering. DO NOT auto-render or resume delivery jobs. Root performs bounded review-project assembly while Claude is idle. Wait for Tony after opening. Previous automatic-render instructions below are superseded.
+
+# Current human direction: accepted five, final censored delivery
+Tony accepted all five Dexter edits as perfect and the usual film/TV TikTok standard; anime unchanged. Exact evidence: data/dexter-repair-20261101/TONY_ACCEPTED_FIVE_LIVE_ACTION_20261104.json. Updated tfx-live-action-accepted-pipeline is installed in Codex, Claude and Neural.
+
+Only change: stylized VISIBLE censorship of profanity plus SERIAL, KILLER, KILLERS and combinations. Choose clean internal asterisks/graphic interruption, e.g. S*RIAL K*LLERS. Preserve exact word timings, centered animation, all other accepted scene/motion/audio decisions. Audio unchanged unless separately requested. Verify partial reveals too; no uncensored text flash. Keep original accepted AEPs/media; save NEW censored project variants. Refit typography bounds only as needed. Do not re-open accepted artistic decisions.
+
+Before handing rendering to local tools, POST in the Director tab the exact absolute destination folder below, plainly marked pending until verification. Use existing local-ops native rendering, serialized one AE writer, exact guard/results and completion watches. Render all FIVE edited versions once, normal good 1080square 24000/1001 ProRes Standard suitable for Tony's own Topaz then Media Encoder, not ultra/upscaled. Reuse native output for audio loudness packaging rather than another AE render. Files should clearly identify Chemical, Taxidermy, Sweet Daydream, Pitiful and Offline with censored revision. Full decode/frame/audio and typography checks; register updated full reviews and a five-file manifest. Never replay UNKNOWN. End inference during watched work. No intermediate continue prompt required.
+
+Destination: C:\Users\TUF\Documents\New project\NEURAL_STUDIO\data\dexter-repair-20261101\deliveries\D06_CENSORED_FIVE_TOPAZ

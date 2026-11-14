@@ -1,0 +1,1 @@
+{"ok":false,"error":"Error: Narrative peak markers were not created: Source: TONYFX V060 MATCHED MOMENT SOURCES | Seed: 60 | Structural QA: PASS | Contract: v060-regression-contract | Prompt:  | Shot 2 | first_highlight | action_peak | matched source 0.500s | motion 0.740 | Shot 3 | climax | climax_action | matched source 0.950s | motion 0.820 at line 36"}

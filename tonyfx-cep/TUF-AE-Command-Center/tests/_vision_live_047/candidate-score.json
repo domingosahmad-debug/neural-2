@@ -1,0 +1,23 @@
+{
+  "winner": {
+    "family": "self",
+    "path": "C:\\\\Users\\\\TUF\\\\Documents\\\\New project\\\\tuf-ae-command-center\\\\tests\\\\_enhance_artifacts\\\\source.mp4",
+    "score": 0.7693,
+    "signatureError": 0.01007,
+    "temporalCorrelation": 0.2222
+  },
+  "candidates": [
+    {
+      "family": "self",
+      "path": "C:\\\\Users\\\\TUF\\\\Documents\\\\New project\\\\tuf-ae-command-center\\\\tests\\\\_enhance_artifacts\\\\source.mp4",
+      "score": 0.7693,
+      "signatureError": 0.01007,
+      "temporalCorrelation": 0.2222
+    }
+  ],
+  "method": "real AE render motion-signature comparison",
+  "referenceSpan": [
+    0.26,
+    0.74
+  ]
+}

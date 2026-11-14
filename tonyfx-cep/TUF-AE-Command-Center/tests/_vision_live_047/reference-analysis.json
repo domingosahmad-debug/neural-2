@@ -1,0 +1,509 @@
+{
+  "schema": "tonyfx.reference-analysis.v3",
+  "analyzerVersion": "0.46.0",
+  "media": {
+    "path": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+    "name": "source.mp4",
+    "duration": 1.0,
+    "fps": 6.0,
+    "width": 256,
+    "height": 256,
+    "frames": 6,
+    "videoCodec": "h264",
+    "audioCodec": "aac",
+    "hasAudio": true
+  },
+  "settings": {
+    "width": 240,
+    "accuracy": "balanced",
+    "audio": false,
+    "ocr": false,
+    "deepFlow": false,
+    "candidateRenderer": true,
+    "subjectQA": true,
+    "semanticShots": true,
+    "visionEngine": true,
+    "semanticFootageSearch": false
+  },
+  "summary": {
+    "eventCount": 0,
+    "cutCount": 0,
+    "effectOnlyCount": 0,
+    "shotCount": 1,
+    "transitionGroupCount": 0,
+    "families": {},
+    "repeatCount": 0,
+    "suggestedEditStart": 0.0,
+    "candidatePeakCount": 0,
+    "collapsedPeakCount": 0,
+    "warning": "Likely AE recipes are inferences from rendered pixels, not recovered source metadata. V3 adds multi-frame candidate renders, fitted curves, framing QA, semantic shot roles, and repair guidance."
+  },
+  "events": [],
+  "cutEvents": [],
+  "effectEvents": [],
+  "shots": [
+    {
+      "index": 1,
+      "startFrame": 0,
+      "endFrame": 5,
+      "startTime": 0.0,
+      "endTime": 1.0,
+      "durationFrames": 6,
+      "durationSeconds": 1.0,
+      "zoomDirection": "none",
+      "zoomRatio": 1.0036,
+      "translationPx": {
+        "x": 1.01,
+        "y": 17.3
+      },
+      "graph": "sharp_start",
+      "curve": "0.02, 0.87, 0.17, 1.00",
+      "graphFit": {
+        "q25": 0.951,
+        "q50": 0.968,
+        "q75": 0.99
+      },
+      "advancedCurve": {
+        "name": "sharp_start",
+        "curve": "0.02, 0.87, 0.17, 1.00",
+        "controls": [
+          0.02,
+          0.87,
+          0.17,
+          1.0
+        ],
+        "fitError": 0.001086,
+        "confidence": 0.99,
+        "direction": "increasing",
+        "presetRanking": [
+          {
+            "name": "sharp_start",
+            "error": 0.006788
+          },
+          {
+            "name": "speed_ramp",
+            "error": 0.140152
+          },
+          {
+            "name": "linear",
+            "error": 0.158281
+          },
+          {
+            "name": "smooth_in_out",
+            "error": 0.181447
+          },
+          {
+            "name": "sharp_end",
+            "error": 0.479543
+          }
+        ]
+      },
+      "framing": {
+        "shot": 1,
+        "faceDetected": false,
+        "subjectDetected": true,
+        "detectionSource": "saliency",
+        "center": {
+          "x": 0.374,
+          "y": 0.5
+        },
+        "faceArea": 0.0,
+        "subjectArea": 0.7333,
+        "safeFrameStatus": "safe",
+        "sampleCount": 6,
+        "violations": 0,
+        "suggestedPositionOffsetNormalized": {
+          "x": 0.126,
+          "y": -0.04
+        }
+      },
+      "semantic": {
+        "shot": 1,
+        "role": "action_beat",
+        "keywords": [
+          "wide_or_detail",
+          "high_action",
+          "balanced",
+          "action_beat",
+          "none_zoom"
+        ],
+        "visual": {
+          "luma": 122.45,
+          "contrast": 64.7,
+          "shotScale": "wide_or_detail",
+          "energy": "high_action",
+          "lighting": "balanced"
+        },
+        "searchInstruction": "Find unused footage matching: wide_or_detail, high_action, balanced, action_beat, none_zoom. Keep the primary subject centered and use one continuous camera angle."
+      },
+      "visionSubject": {
+        "detected": false
+      },
+      "depthEvidence": {
+        "available": true,
+        "subjectDepth": 2.4878,
+        "sceneDepth": 2.4878,
+        "depthSpread": 1.1278,
+        "separation": 0.0
+      },
+      "segmentationEvidence": {
+        "available": false
+      },
+      "trackingEvidence": {
+        "available": true,
+        "samples": 6,
+        "points": 100,
+        "visibleRatio": 0.697,
+        "medianTravelPx": 1.025,
+        "p90TravelPx": 10.579
+      }
+    }
+  ],
+  "transitionGroups": [],
+  "repeats": [],
+  "frameRepeats": [],
+  "editStartCandidates": [],
+  "editBlueprint": {
+    "version": 3,
+    "fps": 6.0,
+    "editStart": 0.0,
+    "cutFrames": [],
+    "cutTimes": [],
+    "shots": [
+      {
+        "index": 1,
+        "startFrame": 0,
+        "endFrame": 5,
+        "startTime": 0.0,
+        "endTime": 1.0,
+        "durationFrames": 6,
+        "durationSeconds": 1.0,
+        "zoomDirection": "none",
+        "zoomRatio": 1.0036,
+        "translationPx": {
+          "x": 1.01,
+          "y": 17.3
+        },
+        "graph": "sharp_start",
+        "curve": "0.02, 0.87, 0.17, 1.00",
+        "graphFit": {
+          "q25": 0.951,
+          "q50": 0.968,
+          "q75": 0.99
+        },
+        "advancedCurve": {
+          "name": "sharp_start",
+          "curve": "0.02, 0.87, 0.17, 1.00",
+          "controls": [
+            0.02,
+            0.87,
+            0.17,
+            1.0
+          ],
+          "fitError": 0.001086,
+          "confidence": 0.99,
+          "direction": "increasing",
+          "presetRanking": [
+            {
+              "name": "sharp_start",
+              "error": 0.006788
+            },
+            {
+              "name": "speed_ramp",
+              "error": 0.140152
+            },
+            {
+              "name": "linear",
+              "error": 0.158281
+            },
+            {
+              "name": "smooth_in_out",
+              "error": 0.181447
+            },
+            {
+              "name": "sharp_end",
+              "error": 0.479543
+            }
+          ]
+        },
+        "framing": {
+          "shot": 1,
+          "faceDetected": false,
+          "subjectDetected": true,
+          "detectionSource": "saliency",
+          "center": {
+            "x": 0.374,
+            "y": 0.5
+          },
+          "faceArea": 0.0,
+          "subjectArea": 0.7333,
+          "safeFrameStatus": "safe",
+          "sampleCount": 6,
+          "violations": 0,
+          "suggestedPositionOffsetNormalized": {
+            "x": 0.126,
+            "y": -0.04
+          }
+        },
+        "semantic": {
+          "shot": 1,
+          "role": "action_beat",
+          "keywords": [
+            "wide_or_detail",
+            "high_action",
+            "balanced",
+            "action_beat",
+            "none_zoom"
+          ],
+          "visual": {
+            "luma": 122.45,
+            "contrast": 64.7,
+            "shotScale": "wide_or_detail",
+            "energy": "high_action",
+            "lighting": "balanced"
+          },
+          "searchInstruction": "Find unused footage matching: wide_or_detail, high_action, balanced, action_beat, none_zoom. Keep the primary subject centered and use one continuous camera angle."
+        },
+        "visionSubject": {
+          "detected": false
+        },
+        "depthEvidence": {
+          "available": true,
+          "subjectDepth": 2.4878,
+          "sceneDepth": 2.4878,
+          "depthSpread": 1.1278,
+          "separation": 0.0
+        },
+        "segmentationEvidence": {
+          "available": false
+        },
+        "trackingEvidence": {
+          "available": true,
+          "samples": 6,
+          "points": 100,
+          "visibleRatio": 0.697,
+          "medianTravelPx": 1.025,
+          "p90TravelPx": 10.579
+        }
+      }
+    ],
+    "transitions": [],
+    "repeatInstructions": [],
+    "builderRule": "Build one scene layer per shot. Treat transition components as one stack at its canonical boundary; never turn component peaks into extra cuts.",
+    "shotRequirements": [
+      {
+        "shot": 1,
+        "role": "action_beat",
+        "keywords": [
+          "wide_or_detail",
+          "high_action",
+          "balanced",
+          "action_beat",
+          "none_zoom"
+        ],
+        "visual": {
+          "luma": 122.45,
+          "contrast": 64.7,
+          "shotScale": "wide_or_detail",
+          "energy": "high_action",
+          "lighting": "balanced"
+        },
+        "searchInstruction": "Find unused footage matching: wide_or_detail, high_action, balanced, action_beat, none_zoom. Keep the primary subject centered and use one continuous camera angle."
+      }
+    ],
+    "framingQA": [
+      {
+        "shot": 1,
+        "faceDetected": false,
+        "subjectDetected": true,
+        "detectionSource": "saliency",
+        "center": {
+          "x": 0.374,
+          "y": 0.5
+        },
+        "faceArea": 0.0,
+        "subjectArea": 0.7333,
+        "safeFrameStatus": "safe",
+        "sampleCount": 6,
+        "violations": 0,
+        "suggestedPositionOffsetNormalized": {
+          "x": 0.126,
+          "y": -0.04
+        }
+      }
+    ],
+    "audioStructure": {
+      "available": false,
+      "phrases": [],
+      "sections": []
+    },
+    "effectInventory": {
+      "count": 0,
+      "missing": [],
+      "checked": false
+    },
+    "instruction": "Choose footage by shotRequirements, then reproduce each fitted curve and transition span. Render once and run TonyFX Compare before approving the edit."
+  },
+  "audio": {
+    "available": false,
+    "reason": "No audio stream or audio analysis disabled"
+  },
+  "audioStructure": {
+    "available": false,
+    "phrases": [],
+    "sections": []
+  },
+  "burnedInText": [],
+  "framingQA": [
+    {
+      "shot": 1,
+      "faceDetected": false,
+      "subjectDetected": true,
+      "detectionSource": "saliency",
+      "center": {
+        "x": 0.374,
+        "y": 0.5
+      },
+      "faceArea": 0.0,
+      "subjectArea": 0.7333,
+      "safeFrameStatus": "safe",
+      "sampleCount": 6,
+      "violations": 0,
+      "suggestedPositionOffsetNormalized": {
+        "x": 0.126,
+        "y": -0.04
+      }
+    }
+  ],
+  "semanticShotRequirements": [
+    {
+      "shot": 1,
+      "role": "action_beat",
+      "keywords": [
+        "wide_or_detail",
+        "high_action",
+        "balanced",
+        "action_beat",
+        "none_zoom"
+      ],
+      "visual": {
+        "luma": 122.45,
+        "contrast": 64.7,
+        "shotScale": "wide_or_detail",
+        "energy": "high_action",
+        "lighting": "balanced"
+      },
+      "searchInstruction": "Find unused footage matching: wide_or_detail, high_action, balanced, action_beat, none_zoom. Keep the primary subject centered and use one continuous camera angle."
+    }
+  ],
+  "effectInventory": {
+    "count": 0,
+    "missing": [],
+    "checked": false
+  },
+  "feedback": {
+    "correctionCount": 0,
+    "curveOverrides": 0,
+    "familyBias": {}
+  },
+  "contactSheet": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_vision_live_047\\transition-evidence.jpg",
+  "repairPlan": {
+    "version": 1,
+    "checks": [],
+    "blockingCount": 0,
+    "workflow": [
+      "Build from canonical cut frames",
+      "Render the edit at reference resolution and fps",
+      "Run compare-edit",
+      "Apply only high-confidence repairs",
+      "Re-render and require all timing errors <= 1 frame"
+    ]
+  },
+  "manifest": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_vision_live_047\\reference-analysis.json",
+  "htmlReport": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_vision_live_047\\reference-analysis.html",
+  "sourceMedia": {
+    "original": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+    "analyzed": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+    "normalization": {
+      "duration": 1.0,
+      "fps": 6.0,
+      "nominalFps": 6.0,
+      "frames": 6,
+      "startTime": 0.0,
+      "codec": "h264",
+      "width": 256,
+      "height": 256,
+      "normalized": false,
+      "reasons": []
+    }
+  },
+  "visionEngine": {
+    "version": 1,
+    "ready": true,
+    "cuda": true,
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "root": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine",
+    "models": {
+      "sam2": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\sam2.1_hiera_small.pt",
+        "bytes": 184416285
+      },
+      "cotracker": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\cotracker3_scaled_offline.pth",
+        "bytes": 101890938
+      },
+      "depth": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\depth_anything_v2_vits.pth",
+        "bytes": 99218434
+      },
+      "openclip": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\open_clip_vit_b32_laion2b.safetensors",
+        "bytes": 605143316
+      },
+      "dinov2": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\dinov2_vits14_pretrain.pth",
+        "bytes": 88283115
+      },
+      "yolo": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\yolo11n.pt",
+        "bytes": 5613764
+      }
+    },
+    "modules": {
+      "torch": true,
+      "open_clip": true,
+      "faiss": true,
+      "sam2": true,
+      "cotracker": true,
+      "ultralytics": true
+    },
+    "capabilities": {
+      "semanticSearch": true,
+      "visualSimilarity": true,
+      "personDetection": true,
+      "segmentation": true,
+      "tracking": true,
+      "depth": true,
+      "normalization": true
+    }
+  },
+  "footageIndex": {
+    "ready": false,
+    "count": 0
+  },
+  "visionShotQA": [
+    {
+      "shot": 1,
+      "subject": {
+        "detected": false
+      },
+      "matches": []
+    }
+  ]
+}

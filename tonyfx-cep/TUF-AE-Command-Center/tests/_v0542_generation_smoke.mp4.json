@@ -1,0 +1,82 @@
+{
+  "engine": "TonyFX Local Video",
+  "backend": "Diffusers LTX-Video",
+  "model": "Lightricks/LTX-Video",
+  "quantizedTextEncoder": true,
+  "prompt": "The same man remains clearly recognizable, blinks once naturally, then shifts his eyes gently toward the camera, subtle breathing, locked camera, stable face and clothing, realistic daylight portrait. One continuous realistic shot. Execute only the requested subject action and camera move. Keep the same person, body proportions, facial structure, eyes, skin, hair, hands, clothing, and background consistent for the whole shot. Motion is physically natural and temporally coherent. No cuts, transformations, duplicate people, new objects, writing, logos, captions, or watermarks. The supplied image is the exact first frame and identity reference.",
+  "negativePrompt": "warped face, deformed eyes, asymmetrical features, morphing identity, duplicate person, extra limbs, melted skin, text, subtitles, logos, frozen frame, static image, camera shake, scene change",
+  "seed": 12254,
+  "quality": "fast",
+  "steps": 24,
+  "width": 320,
+  "height": 320,
+  "duration": 1.0,
+  "fps": 24,
+  "baseFps": 16,
+  "generatedFrames": 17,
+  "generationProfile": "identity",
+  "referencePreparation": {
+    "sourceSize": [
+      183,
+      275
+    ],
+    "targetSize": [
+      320,
+      320
+    ],
+    "fit": "face",
+    "crop": [
+      0,
+      56,
+      183,
+      239
+    ],
+    "faceDetected": true,
+    "face": {
+      "x": 46.79353923797608,
+      "y": 54.27980411052704,
+      "width": 96.8286226272583,
+      "height": 127.28207459449769,
+      "confidence": 0.9218655824661255,
+      "landmarks": [
+        [
+          79.40085067749024,
+          104.33504920005798
+        ],
+        [
+          121.09974946975709,
+          102.43163809776307
+        ],
+        [
+          106.47177057266235,
+          128.15925035476684
+        ],
+        [
+          84.12321739196777,
+          150.12566928863527
+        ],
+        [
+          119.98086891174317,
+          148.43065538406373
+        ]
+      ]
+    },
+    "preparedFaceArea": 0.3680177959367302
+  },
+  "elapsedSeconds": 49.51,
+  "validation": {
+    "luminance": 117.125,
+    "detail": 63.049,
+    "motion": 13.523,
+    "opticalMotion": 3.575,
+    "opticalPeak": 7.774,
+    "flicker": 1.515,
+    "abruptCuts": 0.0,
+    "faceCoverage": 1.0,
+    "faceConfidence": 0.881,
+    "faceAreaVariation": 0.059,
+    "faceCenterJump": 0.028,
+    "faceGeometryJump": 0.088,
+    "faceDetail": 180.034
+  }
+}

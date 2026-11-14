@@ -1,0 +1,25 @@
+# Current human direction — Dexter continuation, 3 November 2026
+
+Tony explicitly requests: continue Dexter inside Neural, Sol directing; first inspect his screenshot/live composition, persist the correct impact treatment as a skill, investigate excessive usage/stalled bots, then finish all five without routine approval/continue waits. This supersedes old construction/planning waits. Preserve required QA and final artistic acceptance.
+
+## Current verified state and protected manual work
+
+Read `data/dexter-repair-20261101/STATE.md` latest first, plus this note. At03:34 UTC native read-only command `tfx-b64a002236a54969b367a5661b3e7a1f` completed. AE24 now has `C:/Users/TUF/Desktop/42341.aep`, DIRTY,663 items, active comp1030 `DEXTER D01 E2 F01 TAXIDERMY`. DO NOT open/rebuild from the older F06 AEP over this live project. Preserve all manual changes with a NEW recovery save before mutation. The outside coordinator only inspected AE and updated knowledge; you are the ONLY native writer after selection. Read-only snapshot: `C:/Users/TUF/Documents/New project/.maintenance/dexter-motion-20261103/AE_MOTION_SNAPSHOT.json`.
+
+## Mandatory motion/selection correction
+
+Read `knowledge/skills/tfx-motion-transitions/SKILL.md` and `references/tony-dexter-impact-20261103.md` plus the exact JSON and PNG there. Tony explicitly wants added BlurMoCurves zooms on named adjustment layers ABOVE scenes, directional blur on a SEPARATE adjustment above the zoom owner. Keep scene/source retiming isolated with one Twixtor owner, not buried with added zoom and grades. Use measured authored speed-ramp easing, forceful motivated accents and readable settles. No stock linear slow pushes or meaningless alternating zooms. Better meaningful Dexter action/emotion shots; no unsynchronized visible talking.
+
+The live example still has authored zooms on scene layers1050/1051; preserve their curve evidence but implement Tony's newer adjustment hierarchy for repaired/new work. Upper layer6929 BCC directional blur amount0→56→0, angle67, asymmetric easing. Existing source-space centers need conversion for comp-space adjustments. Original D01 comp lacks Twixtor on those shots, whereas later F06 reports it on nested retime owners: inspect actual used tree before claiming absence or adding a duplicate. Exact keys/easing are saved, no need to remeasure unchanged reference.
+
+## Usage and interruption findings
+
+At initial live check no jobs/native commands/watches active; Claude's last confirmed provider refusal was session limit resets07:10 Cairo. Sol profile available with saved thread01a16dbd-82ec-7840-8d69-d2197ee8cc19. Preserve both director sessions and current Sol High model. No app restart/model reset/quota probe.
+
+Latest2 E3 native render failures: jobs22f73e0b822c4a199779e5d3725ae85c and6c83bb9b0af449e98cf01791766c8bbf. TonyFX explicitly terminal-interrupted after panel restarts; do not replay. E2 old F06 render evidence exists, E4–E5 skipped. Root cause of repeated panel restarts remains UNRESOLVED. Diagnose exact native/render reports and existing panel/runtime logs before a NEW scoped operation. Never render the obsolete rejected motion just to tick a checklist. Reconcile latest live identity first.
+
+Usage ledger records large cached-context reads on successive Claude director turns (roughly2.7–3.6million reported cache-read tokens on several turns); this is provider call accounting, not exact subscription cost or current-hour billing. Latest100 calls span history. There are36 returned recovery tickets/25 distinct diagnoses, including stale F05 planning-review quota blocks superseded by Tony's02:34 override and completed F06 builds. The production guard has unchanged-state recovery limits; duplicated diagnoses alone do not prove an infinite loop. Reconcile current board with actual artifacts and superseded requirements, resolve only with result evidence, and avoid stale checklist wakes. Do not delete historical evidence or fabricate completed QA.
+
+Use compact projected API fields and local deterministic tools/cache, not whole messages/events, raw image payloads, or repeated status inference. Keep capable creative models; no forced cheap substitution, paused Flash/Gemini activation, fresh provider conversation, full EGM swarm or unnecessary helper. Bounded milestones: inspect/protect current work; prove a corrected representative transition using existing measured curves and a strong shot; then propagate supported repair and finish all edits. A short local/native job must have ONE real completion watch; END inference during its wait, then resume on completion. This is waiting for real work, not abandoning the edit. Do not finish with only a plan or ask Tony to type continue. Keep momentum until registered full reviews or a specific real blocker after independent work is exhausted. Required motion/listening limitations remain explicit.
+
+Knowledge check after motion synchronization: bundled hashes PASS, motion skill matches canonical; unrelated pre-existing canonical difference `tfx-amv-accepted-pipeline` left untouched. No backend restart needed to read updated skill files.

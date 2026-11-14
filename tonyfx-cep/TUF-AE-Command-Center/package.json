@@ -1,0 +1,9 @@
+{
+  "name": "tonyfx-ae-command-center",
+  "version": "0.60.1",
+  "private": true,
+  "description": "Private TonyFX panel for the After Effects 2023-2026 Codex editing workflow.",
+  "scripts": {
+    "check": "node tests/check-extension.js && node tests/test-bridge-regressions.js && node tests/test-offline-director-v2.js"
+  }
+}

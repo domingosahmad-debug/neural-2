@@ -1,0 +1,11 @@
+# Current LUZ ROJA duration authority
+
+Tony explicitly permits the current BLEACH LUZ ROJA edit to expand to 1 minute 30 seconds, or up to 1 minute 40 seconds when it materially improves the sequence. This supersedes every earlier <=60-second instruction for this edit. It is permission and creative room, not a required minimum or permission to fill time with repetition.
+
+Use the extra room for clear Ichigo/Aizen illusion setup and reveal, emotional storytelling, complete authentic dialogue and technique actions, musical anticipation, stronger fight highlights and payoffs, purposeful effects and connected transitions. Maintain contrast between emotional/quiet passages and editing/impact peaks. Do not stretch clips, recycle finished scenes, repeat source windows without a justified motif or add effects simply to occupy the extra duration.
+
+The director may revise the current sequence where the story/music benefits, while preserving Claude's successful hero treatment, grade, audio quality and manual changes. The previously requested single CRUSH/BROKEN emphasis, cinematic letter-by-letter ordinary text, sharper ordinary font and opening replacement remain required.
+
+Before any timeline expansion, adopt a fresh revision-bound blueprint, integer-frame shot/quote/beat plan and music/ending contract. Inspect the available original song beyond the former excerpt; map actual musical structure and phrase/stress timing, and choose a coherent extended section or justified musical edit with clean seams. Do not slow or loop the current 57.6 seconds merely to reach a runtime. Carry forward complete source actions, safe handles, whole quotes, single picture/audio/text ownership, source reuse/collision checks, and one intentional final resolution. Maximum authorized duration is 100 seconds.
+
+Sol High remains director, Claude only successor; both may use Argon bounded support and Flash only simple support under shared/TONY_HELPER_AUTHORIZATION_20261025.md. This brief authorizes continuation of the existing edit, not a competing editor, unrelated project or runtime restart. Save the new scope/checkpoints and finish with a fresh full review; technical, picture, motion/listening and human acceptance gates remain separate.

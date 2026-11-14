@@ -1,0 +1,698 @@
+{
+  "schema": "tonyfx.reference-analysis.v3",
+  "analyzerVersion": "0.47.0",
+  "media": {
+    "path": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+    "name": "source.mp4",
+    "duration": 1.0,
+    "fps": 6.0,
+    "width": 256,
+    "height": 256,
+    "frames": 6,
+    "videoCodec": "h264",
+    "audioCodec": "aac",
+    "hasAudio": true
+  },
+  "settings": {
+    "width": 240,
+    "accuracy": "balanced",
+    "audio": true,
+    "ocr": false,
+    "deepFlow": false,
+    "candidateRenderer": true,
+    "subjectQA": true,
+    "semanticShots": true,
+    "visionEngine": true,
+    "semanticFootageSearch": true
+  },
+  "summary": {
+    "eventCount": 0,
+    "cutCount": 0,
+    "effectOnlyCount": 0,
+    "shotCount": 1,
+    "transitionGroupCount": 0,
+    "families": {},
+    "repeatCount": 0,
+    "suggestedEditStart": 0.0,
+    "candidatePeakCount": 0,
+    "collapsedPeakCount": 0,
+    "warning": "Likely AE recipes are inferences from rendered pixels, not recovered source metadata. V3 adds multi-frame candidate renders, fitted curves, framing QA, semantic shot roles, and repair guidance."
+  },
+  "events": [],
+  "cutEvents": [],
+  "effectEvents": [],
+  "shots": [
+    {
+      "index": 1,
+      "startFrame": 0,
+      "endFrame": 5,
+      "startTime": 0.0,
+      "endTime": 1.0,
+      "durationFrames": 6,
+      "durationSeconds": 1.0,
+      "zoomDirection": "none",
+      "zoomRatio": 1.0036,
+      "translationPx": {
+        "x": 1.01,
+        "y": 17.3
+      },
+      "graph": "sharp_start",
+      "curve": "0.02, 0.87, 0.17, 1.00",
+      "graphFit": {
+        "q25": 0.951,
+        "q50": 0.968,
+        "q75": 0.99
+      },
+      "advancedCurve": {
+        "name": "sharp_start",
+        "curve": "0.02, 0.87, 0.17, 1.00",
+        "controls": [
+          0.02,
+          0.87,
+          0.17,
+          1.0
+        ],
+        "fitError": 0.001086,
+        "confidence": 0.99,
+        "direction": "increasing",
+        "presetRanking": [
+          {
+            "name": "sharp_start",
+            "error": 0.006788
+          },
+          {
+            "name": "speed_ramp",
+            "error": 0.140152
+          },
+          {
+            "name": "linear",
+            "error": 0.158281
+          },
+          {
+            "name": "smooth_in_out",
+            "error": 0.181447
+          },
+          {
+            "name": "sharp_end",
+            "error": 0.479543
+          }
+        ]
+      },
+      "framing": {
+        "shot": 1,
+        "faceDetected": false,
+        "subjectDetected": true,
+        "detectionSource": "saliency",
+        "center": {
+          "x": 0.374,
+          "y": 0.5
+        },
+        "faceArea": 0.0,
+        "subjectArea": 0.7333,
+        "safeFrameStatus": "safe",
+        "sampleCount": 6,
+        "violations": 0,
+        "suggestedPositionOffsetNormalized": {
+          "x": 0.126,
+          "y": -0.04
+        }
+      },
+      "semantic": {
+        "shot": 1,
+        "role": "action_beat",
+        "keywords": [
+          "wide_or_detail",
+          "high_action",
+          "balanced",
+          "action_beat",
+          "none_zoom"
+        ],
+        "visual": {
+          "luma": 122.45,
+          "contrast": 64.7,
+          "shotScale": "wide_or_detail",
+          "energy": "high_action",
+          "lighting": "balanced"
+        },
+        "searchInstruction": "Find unused footage matching: wide_or_detail, high_action, balanced, action_beat, none_zoom. Keep the primary subject centered and use one continuous camera angle.",
+        "rankedProjectMatches": [
+          {
+            "path": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+            "layerName": "ANIYA TEST SHOT",
+            "compName": "CUT CLIPS BY TONY",
+            "time": 0.16,
+            "sourceStart": 0.0,
+            "sourceDuration": 2.0,
+            "sample": 0,
+            "catalogIndex": 0,
+            "score": 0.9817,
+            "confidence": 1.0
+          }
+        ],
+        "searchMethod": "OpenCLIP plus DINOv2 cosine similarity over AE project footage"
+      },
+      "visionSubject": {
+        "detected": false
+      },
+      "footageMatches": [
+        {
+          "path": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+          "layerName": "ANIYA TEST SHOT",
+          "compName": "CUT CLIPS BY TONY",
+          "time": 0.16,
+          "sourceStart": 0.0,
+          "sourceDuration": 2.0,
+          "sample": 0,
+          "catalogIndex": 0,
+          "score": 0.9817,
+          "confidence": 1.0
+        }
+      ],
+      "depthEvidence": {
+        "available": true,
+        "subjectDepth": 2.4878,
+        "sceneDepth": 2.4878,
+        "depthSpread": 1.1278,
+        "separation": 0.0
+      },
+      "segmentationEvidence": {
+        "available": false
+      },
+      "trackingEvidence": {
+        "available": true,
+        "samples": 6,
+        "points": 100,
+        "visibleRatio": 0.697,
+        "medianTravelPx": 1.025,
+        "p90TravelPx": 10.579
+      }
+    }
+  ],
+  "transitionGroups": [],
+  "repeats": [],
+  "frameRepeats": [],
+  "editStartCandidates": [],
+  "editBlueprint": {
+    "version": 3,
+    "fps": 6.0,
+    "editStart": 0.0,
+    "cutFrames": [],
+    "cutTimes": [],
+    "shots": [
+      {
+        "index": 1,
+        "startFrame": 0,
+        "endFrame": 5,
+        "startTime": 0.0,
+        "endTime": 1.0,
+        "durationFrames": 6,
+        "durationSeconds": 1.0,
+        "zoomDirection": "none",
+        "zoomRatio": 1.0036,
+        "translationPx": {
+          "x": 1.01,
+          "y": 17.3
+        },
+        "graph": "sharp_start",
+        "curve": "0.02, 0.87, 0.17, 1.00",
+        "graphFit": {
+          "q25": 0.951,
+          "q50": 0.968,
+          "q75": 0.99
+        },
+        "advancedCurve": {
+          "name": "sharp_start",
+          "curve": "0.02, 0.87, 0.17, 1.00",
+          "controls": [
+            0.02,
+            0.87,
+            0.17,
+            1.0
+          ],
+          "fitError": 0.001086,
+          "confidence": 0.99,
+          "direction": "increasing",
+          "presetRanking": [
+            {
+              "name": "sharp_start",
+              "error": 0.006788
+            },
+            {
+              "name": "speed_ramp",
+              "error": 0.140152
+            },
+            {
+              "name": "linear",
+              "error": 0.158281
+            },
+            {
+              "name": "smooth_in_out",
+              "error": 0.181447
+            },
+            {
+              "name": "sharp_end",
+              "error": 0.479543
+            }
+          ]
+        },
+        "framing": {
+          "shot": 1,
+          "faceDetected": false,
+          "subjectDetected": true,
+          "detectionSource": "saliency",
+          "center": {
+            "x": 0.374,
+            "y": 0.5
+          },
+          "faceArea": 0.0,
+          "subjectArea": 0.7333,
+          "safeFrameStatus": "safe",
+          "sampleCount": 6,
+          "violations": 0,
+          "suggestedPositionOffsetNormalized": {
+            "x": 0.126,
+            "y": -0.04
+          }
+        },
+        "semantic": {
+          "shot": 1,
+          "role": "action_beat",
+          "keywords": [
+            "wide_or_detail",
+            "high_action",
+            "balanced",
+            "action_beat",
+            "none_zoom"
+          ],
+          "visual": {
+            "luma": 122.45,
+            "contrast": 64.7,
+            "shotScale": "wide_or_detail",
+            "energy": "high_action",
+            "lighting": "balanced"
+          },
+          "searchInstruction": "Find unused footage matching: wide_or_detail, high_action, balanced, action_beat, none_zoom. Keep the primary subject centered and use one continuous camera angle.",
+          "rankedProjectMatches": [
+            {
+              "path": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+              "layerName": "ANIYA TEST SHOT",
+              "compName": "CUT CLIPS BY TONY",
+              "time": 0.16,
+              "sourceStart": 0.0,
+              "sourceDuration": 2.0,
+              "sample": 0,
+              "catalogIndex": 0,
+              "score": 0.9817,
+              "confidence": 1.0
+            }
+          ],
+          "searchMethod": "OpenCLIP plus DINOv2 cosine similarity over AE project footage"
+        },
+        "visionSubject": {
+          "detected": false
+        },
+        "footageMatches": [
+          {
+            "path": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+            "layerName": "ANIYA TEST SHOT",
+            "compName": "CUT CLIPS BY TONY",
+            "time": 0.16,
+            "sourceStart": 0.0,
+            "sourceDuration": 2.0,
+            "sample": 0,
+            "catalogIndex": 0,
+            "score": 0.9817,
+            "confidence": 1.0
+          }
+        ],
+        "depthEvidence": {
+          "available": true,
+          "subjectDepth": 2.4878,
+          "sceneDepth": 2.4878,
+          "depthSpread": 1.1278,
+          "separation": 0.0
+        },
+        "segmentationEvidence": {
+          "available": false
+        },
+        "trackingEvidence": {
+          "available": true,
+          "samples": 6,
+          "points": 100,
+          "visibleRatio": 0.697,
+          "medianTravelPx": 1.025,
+          "p90TravelPx": 10.579
+        }
+      }
+    ],
+    "transitions": [],
+    "repeatInstructions": [],
+    "builderRule": "Build one scene layer per shot. Treat transition components as one stack at its canonical boundary; never turn component peaks into extra cuts.",
+    "shotRequirements": [
+      {
+        "shot": 1,
+        "role": "action_beat",
+        "keywords": [
+          "wide_or_detail",
+          "high_action",
+          "balanced",
+          "action_beat",
+          "none_zoom"
+        ],
+        "visual": {
+          "luma": 122.45,
+          "contrast": 64.7,
+          "shotScale": "wide_or_detail",
+          "energy": "high_action",
+          "lighting": "balanced"
+        },
+        "searchInstruction": "Find unused footage matching: wide_or_detail, high_action, balanced, action_beat, none_zoom. Keep the primary subject centered and use one continuous camera angle.",
+        "rankedProjectMatches": [
+          {
+            "path": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+            "layerName": "ANIYA TEST SHOT",
+            "compName": "CUT CLIPS BY TONY",
+            "time": 0.16,
+            "sourceStart": 0.0,
+            "sourceDuration": 2.0,
+            "sample": 0,
+            "catalogIndex": 0,
+            "score": 0.9817,
+            "confidence": 1.0
+          }
+        ],
+        "searchMethod": "OpenCLIP plus DINOv2 cosine similarity over AE project footage"
+      }
+    ],
+    "framingQA": [
+      {
+        "shot": 1,
+        "faceDetected": false,
+        "subjectDetected": true,
+        "detectionSource": "saliency",
+        "center": {
+          "x": 0.374,
+          "y": 0.5
+        },
+        "faceArea": 0.0,
+        "subjectArea": 0.7333,
+        "safeFrameStatus": "safe",
+        "sampleCount": 6,
+        "violations": 0,
+        "suggestedPositionOffsetNormalized": {
+          "x": 0.126,
+          "y": -0.04
+        }
+      }
+    ],
+    "audioStructure": {
+      "available": true,
+      "beatInterval": 0.464399,
+      "barCount": 1,
+      "sections": [
+        {
+          "start": 0.0697,
+          "end": 1.0,
+          "beats": [
+            0.0697,
+            0.5341,
+            0.9985
+          ],
+          "onsetDensity": 5.375,
+          "dropStart": true,
+          "recommendedPacing": "rapid"
+        }
+      ],
+      "strongDrops": [
+        0.0464
+      ],
+      "reverbSuggestions": [
+        {
+          "time": 0.0464,
+          "preRollSeconds": 0.65,
+          "instruction": "Place reverb on a separate removable audio layer ending exactly at this drop."
+        }
+      ]
+    },
+    "effectInventory": {
+      "count": 0,
+      "missing": [],
+      "checked": false
+    },
+    "instruction": "Choose footage by shotRequirements, then reproduce each fitted curve and transition span. Render once and run TonyFX Compare before approving the edit."
+  },
+  "audio": {
+    "available": true,
+    "engine": "librosa HPSS + recurrence + onset ensemble",
+    "tempo": 129.2,
+    "beats": [
+      0.06966,
+      0.534059,
+      0.998458
+    ],
+    "beatStrengths": [
+      {
+        "time": 0.06966,
+        "strength": 2.566
+      },
+      {
+        "time": 0.534059,
+        "strength": 0.503
+      },
+      {
+        "time": 0.998458,
+        "strength": 0.921
+      }
+    ],
+    "onsets": [
+      0.06966,
+      0.394739,
+      0.673379,
+      0.812698,
+      0.928798,
+      0.998458
+    ],
+    "drops": [
+      0.04644
+    ],
+    "sections": [
+      0.464399
+    ],
+    "percussiveEnergy": 0.1564,
+    "harmonicRatio": 0.9962
+  },
+  "audioStructure": {
+    "available": true,
+    "beatInterval": 0.464399,
+    "barCount": 1,
+    "sections": [
+      {
+        "start": 0.0697,
+        "end": 1.0,
+        "beats": [
+          0.0697,
+          0.5341,
+          0.9985
+        ],
+        "onsetDensity": 5.375,
+        "dropStart": true,
+        "recommendedPacing": "rapid"
+      }
+    ],
+    "strongDrops": [
+      0.0464
+    ],
+    "reverbSuggestions": [
+      {
+        "time": 0.0464,
+        "preRollSeconds": 0.65,
+        "instruction": "Place reverb on a separate removable audio layer ending exactly at this drop."
+      }
+    ]
+  },
+  "burnedInText": [],
+  "framingQA": [
+    {
+      "shot": 1,
+      "faceDetected": false,
+      "subjectDetected": true,
+      "detectionSource": "saliency",
+      "center": {
+        "x": 0.374,
+        "y": 0.5
+      },
+      "faceArea": 0.0,
+      "subjectArea": 0.7333,
+      "safeFrameStatus": "safe",
+      "sampleCount": 6,
+      "violations": 0,
+      "suggestedPositionOffsetNormalized": {
+        "x": 0.126,
+        "y": -0.04
+      }
+    }
+  ],
+  "semanticShotRequirements": [
+    {
+      "shot": 1,
+      "role": "action_beat",
+      "keywords": [
+        "wide_or_detail",
+        "high_action",
+        "balanced",
+        "action_beat",
+        "none_zoom"
+      ],
+      "visual": {
+        "luma": 122.45,
+        "contrast": 64.7,
+        "shotScale": "wide_or_detail",
+        "energy": "high_action",
+        "lighting": "balanced"
+      },
+      "searchInstruction": "Find unused footage matching: wide_or_detail, high_action, balanced, action_beat, none_zoom. Keep the primary subject centered and use one continuous camera angle.",
+      "rankedProjectMatches": [
+        {
+          "path": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+          "layerName": "ANIYA TEST SHOT",
+          "compName": "CUT CLIPS BY TONY",
+          "time": 0.16,
+          "sourceStart": 0.0,
+          "sourceDuration": 2.0,
+          "sample": 0,
+          "catalogIndex": 0,
+          "score": 0.9817,
+          "confidence": 1.0
+        }
+      ],
+      "searchMethod": "OpenCLIP plus DINOv2 cosine similarity over AE project footage"
+    }
+  ],
+  "effectInventory": {
+    "count": 0,
+    "missing": [],
+    "checked": false
+  },
+  "feedback": {
+    "correctionCount": 0,
+    "curveOverrides": 0,
+    "familyBias": {}
+  },
+  "contactSheet": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_vision_e2e_047\\transition-evidence.jpg",
+  "repairPlan": {
+    "version": 1,
+    "checks": [],
+    "blockingCount": 0,
+    "workflow": [
+      "Build from canonical cut frames",
+      "Render the edit at reference resolution and fps",
+      "Run compare-edit",
+      "Apply only high-confidence repairs",
+      "Re-render and require all timing errors <= 1 frame"
+    ]
+  },
+  "manifest": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_vision_e2e_047\\reference-analysis.json",
+  "htmlReport": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_vision_e2e_047\\reference-analysis.html",
+  "sourceMedia": {
+    "original": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+    "analyzed": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+    "normalization": {
+      "duration": 1.0,
+      "fps": 6.0,
+      "nominalFps": 6.0,
+      "frames": 6,
+      "startTime": 0.0,
+      "codec": "h264",
+      "width": 256,
+      "height": 256,
+      "normalized": false,
+      "reasons": []
+    }
+  },
+  "visionEngine": {
+    "version": 1,
+    "ready": true,
+    "cuda": true,
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "root": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine",
+    "models": {
+      "sam2": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\sam2.1_hiera_small.pt",
+        "bytes": 184416285
+      },
+      "cotracker": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\cotracker3_scaled_offline.pth",
+        "bytes": 101890938
+      },
+      "depth": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\depth_anything_v2_vits.pth",
+        "bytes": 99218434
+      },
+      "openclip": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\open_clip_vit_b32_laion2b.safetensors",
+        "bytes": 605143316
+      },
+      "dinov2": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\dinov2_vits14_pretrain.pth",
+        "bytes": 88283115
+      },
+      "yolo": {
+        "ready": true,
+        "path": "C:\\Users\\TUF\\Documents\\TonyFX Vision Engine\\models\\yolo11n.pt",
+        "bytes": 5613764
+      }
+    },
+    "modules": {
+      "torch": true,
+      "open_clip": true,
+      "faiss": true,
+      "sam2": true,
+      "cotracker": true,
+      "ultralytics": true
+    },
+    "capabilities": {
+      "semanticSearch": true,
+      "visualSimilarity": true,
+      "personDetection": true,
+      "segmentation": true,
+      "tracking": true,
+      "depth": true,
+      "normalization": true
+    }
+  },
+  "footageIndex": {
+    "ready": true,
+    "count": 1,
+    "files": 1,
+    "index": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_vision_e2e_047\\semantic-index\\footage.faiss",
+    "metadata": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_vision_e2e_047\\semantic-index\\footage-metadata.json",
+    "dimensions": 896
+  },
+  "visionShotQA": [
+    {
+      "shot": 1,
+      "subject": {
+        "detected": false
+      },
+      "matches": [
+        {
+          "path": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\_enhance_artifacts\\source.mp4",
+          "layerName": "ANIYA TEST SHOT",
+          "compName": "CUT CLIPS BY TONY",
+          "time": 0.16,
+          "sourceStart": 0.0,
+          "sourceDuration": 2.0,
+          "sample": 0,
+          "catalogIndex": 0,
+          "score": 0.9817,
+          "confidence": 1.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "by": "Tony",
+  "recorded_at": "2026-11-04T00:09:16.370011+00:00",
+  "project_id": "a16add7ec97a4e67a93f9dfccf26ece2",
+  "revision": "D04-two-edit-revisions",
+  "decision": "Both delivered edits accepted as good; promote the shared method as reference for comparable non-anime edits. Finish the remaining3Dexter edits using the same rules.",
+  "human_words": "The edits are done. Both are honestly really good.",
+  "explicit_reusable_requirements": [
+    "Strong coherent scenes/character moments",
+    "Established Twixtor150-35-150U and motion hierarchy",
+    "New scene on the chosen musical beat/cut; action matches accent",
+    "Centered engaging editable word-synced typography",
+    "Clean authentic dialogue over chosen edit song; no series backing score"
+  ],
+  "scope": "Live-action/non-anime methods; do not change anime pipeline. Adapt method to actual new footage/song; do not duplicate completed scenes.",
+  "artifacts": [
+    {
+      "name": "Chemical F03",
+      "preview_id": "f3cef5119c284be1aca5cea53d9f1571",
+      "comp_id": 7821,
+      "frames": 752,
+      "fps": "24000/1001",
+      "width": 1080,
+      "height": 1080,
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\masters\\DEXTER_D04_E1_CHEMICAL_F03_MASTER_-14LUFS.mov",
+      "bytes": 364902401,
+      "sha256": "6b90e5418578c8c15f22c57a821b816a66f2f08a2881712cd94237b102df24f7"
+    },
+    {
+      "name": "Offline F04",
+      "preview_id": "c32c3ee82c5c45ef84d0678fef102003",
+      "comp_id": 7761,
+      "frames": 756,
+      "fps": "24000/1001",
+      "width": 1080,
+      "height": 1080,
+      "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\masters\\DEXTER_D04_E5_OFFLINE_F04_MASTER_-14LUFS.mov",
+      "bytes": 333687329,
+      "sha256": "c8494cf0d14f8a9a1ce92147a788e32b8bdd99442899ade6fbb87f5509f2407b"
+    }
+  ],
+  "editable_project": {
+    "path": "C:\\Users\\TUF\\Documents\\New project\\NEURAL_STUDIO\\data\\dexter-repair-20261101\\DEXTER_D04_TWO_EDITS_F04_AE24.aep",
+    "bytes": 15447383,
+    "sha256": "68b4cf60bb05160a1cab12acfc3fc97b0312ba566be601b6511deda18221ff3d"
+  },
+  "quality_basis": "Human acceptance of the actual delivered pair; existing separate technical evidence retained. No assertion that the AI performed playback or listening.",
+  "remaining_edits": {
+    "E2": "Taxidermy",
+    "E3": "Sweet Daydream",
+    "E4": "Pitiful"
+  },
+  "accepted_pair_protection": "Do not rebuild or alter Chemical/Offline unless Tony explicitly requests a revision."
+}

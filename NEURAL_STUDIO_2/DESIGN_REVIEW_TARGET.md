@@ -1,0 +1,7 @@
+# Desktop redesign R2
+
+User rejected R1 as visually unchanged and wants a genuinely different professional desktop design. Preserve working project selection, notebook, external-model dropdown/custom entry, packet handoff, review and knowledge; preserve dark/light mode. Original Neural and AE are untouched.
+
+Direction: compact charcoal navigation rail with precise outline icons; white/ink-blue editorial work surface; project breadcrumb and restrained toolbar; production overview with real assignment counts; substantial connected workflow graph with detailed cards (director at top, Plan/Edit/Review in middle, Deliver at bottom), each showing actual model/status and task purpose. Right-hand inspector as a continuous panel with strong heading, tab underline, well sized forms. Activity below graph. Avoid futuristic effects, arbitrary glyphs, blank feature placeholders, invented work/progress/ETA. Responsive layout must preserve graph order and readable station content. No new frameworks or dependencies.
+
+Review this plan for consequential usability/truthfulness issues. Read-only, no mutations or unrelated history. Read index.html, studio.js, stations.js and workflow.css in this directory only as needed. Final concise report with severity, evidence and concrete correction; technical correctness and human aesthetic acceptance remain separate. Provider execution is manual external handoff today. This review concerns visual redesign, not commissioning providers or AE.

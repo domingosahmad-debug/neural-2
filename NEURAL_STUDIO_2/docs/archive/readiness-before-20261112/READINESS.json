@@ -1,0 +1,9 @@
+{
+  "scope": "Station control, paused production and automatic saved-review library; manual Edit excluded",
+  "supervised_ae_ready": false,
+  "unattended_ready": false,
+  "edit_ready": false,
+  "production_paused": true,
+  "message": "CA02 is safely paused by Tony. Actual station activity and saved reviews are connected. Supplied-text workers cannot operate AE. Full unattended native production is not commissioned; do not resume this edit.",
+  "evidence": "PRODUCTION_READINESS.md"
+}

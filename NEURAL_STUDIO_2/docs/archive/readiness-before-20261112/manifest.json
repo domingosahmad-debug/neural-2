@@ -1,0 +1,26 @@
+{
+  "CURRENT_STATE.md": {
+    "sha256": "b5b56ff4a7bdb2835fec068efdb9d6488d00b2c6e3c826073c62cd98aaa9b413",
+    "bytes": 8152
+  },
+  "PRODUCTION_READINESS.md": {
+    "sha256": "3d5c3208022c8963f73c1bff5095358f2f4071b7af149bc442402ee170a8c43b",
+    "bytes": 2450
+  },
+  "CONTINUE_PRODUCTION.md": {
+    "sha256": "05dfd29b412d2b7e836283fed6f7ba7edfd45ce995537861b0a4c70539009ab3",
+    "bytes": 2430
+  },
+  "READINESS.json": {
+    "sha256": "3661dac0417d991df0f2235fea7c3f93ff5f1ff5e0326c16846bdfa512e83b2e",
+    "bytes": 495
+  },
+  "AGENTS.md": {
+    "sha256": "54df1a38518af4f59af6263dcfc0a03c512d6537d6185614d6090919a6006617",
+    "bytes": 5155
+  },
+  "README.md": {
+    "sha256": "aca325ef25d41e0f6abeb4bf67bb1914a793ad4bee076a6216f97e18adbde19d",
+    "bytes": 1758
+  }
+}

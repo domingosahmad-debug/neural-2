@@ -1,0 +1,14 @@
+# Tony's latest direction — Claude return at 22:41 Cairo, 27 October 2026
+
+Tony explicitly requests Claude to resume directing the CURRENT WE ON GO/Honorable Bleach edit in Neural at 22:41 Africa/Cairo today (19:41 UTC), preserving its existing native conversation. This supersedes the temporary Sol direction at a safe checkpoint. Do not resume any older edit, cleanup or benchmark.
+
+## Critical new manual adjustment
+Tony has manually partly repaired the transition between Nicki Minaj singing and the HONORABLE section. This is NEWER than the old W7 music plan. Inspect the actual live AE timeline, identify the manual adjustment and save the dirty state to a NEW recovery AEP before changes. Preserve/use the repaired passage as the starting point. Do not blindly rebuild that passage from Claude's old M2 script, ARRANGE_W5 or a stale W7 blueprint; improve only verified remaining defects while keeping Tony's fix. Record exact layers/keyframes/offsets and snapshot paths so neither director loses it.
+
+## Creative requirements
+Read all current user review notes, latest Director conversation, DIRECTION_W7.md and later directions, latest STATE.md and DIRECTOR_CHANGELOG.md, production board and actual job/native results. Address every outstanding note, not superficial patches or ignored defects. Aim for a cinematic coherent edit with emotional impact, strong hero typography, integrated effects/transitions, technique setup/action/payoff and sustained engagement. Follow Claude's established plan and creative choices except where Tony's newer manual fix supersedes the old plan. Review the full resulting edit and fix supported defects before presenting it. Keep actual motion/listening gates truthful.
+
+## Allowance and succession
+Tony estimates Claude has roughly 10% left; this is an estimate, not verified provider metadata. On real allowance exhaustion, Sol High is explicitly authorized to take over as director INSIDE Neural and continue immediately at a safe boundary, not to edit independently from this Codex app. Preserve Claude session 08d743a0-6ab0-4d99-b662-ee5c1567d9d2 and Codex thread 01a16dbd-82ec-7840-8d69-d2197ee8cc19. Claude should checkpoint before exhaustion, but an actual quota failure can also trigger a reconciled handoff. No Gemini director, new provider conversation or competing AE writer.
+
+Maintain STATE.md and DIRECTOR_CHANGELOG.md after each milestone, with exact project/comp/master/review paths, manual protection, source/song offsets, scripts, completed/pending native/local IDs, decisions, remaining notes and quality gates. Do not rely on a final farewell message to make the work recoverable. Register exact completion watches and stop inference during processing. Never replay completed or UNKNOWN commands. No automatic app restart while native/job state is uncertain.

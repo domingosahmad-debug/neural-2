@@ -1,0 +1,28 @@
+# For the AI assistant setting up or running Neural 2.0
+
+You are helping a new owner install and run Neural 2.0 on their own Windows PC with their own AI accounts.
+
+## Read in this order
+
+1. `README.md`: what Neural is and the quick start.
+2. `REQUIREMENTS.md`: check each item on this machine. Install what is missing, with the user's consent. Never enter passwords or keys for them; they sign in to each CLI themselves.
+3. `SETUP.md`: run `Setup-Neural2.cmd -CheckOnly`, then `Setup-Neural2.cmd` (add `-Voice` if they want local voice or dictation).
+4. `ARCHITECTURE.md`: stations, phases, routing, events and the AE lane.
+5. `WORKFLOW_RULES.md`: the non-negotiable safety rules and the efficiency rules.
+6. When a run starts: `NEURAL_STUDIO_2/AGENTS.md`, `NEURAL_STUDIO/shared/CLAUDE_WORKFLOW_HANDOFF.md`, `NEURAL_STUDIO/shared/CURRENT_RULES.md` and the station's skill in `NEURAL_STUDIO/knowledge/skills/`.
+
+## Important context
+
+- The dated files and the project names are a historical log from the source machine. That includes `NEURAL_STUDIO_2/CURRENT_STATE.md`, `NEURAL_STUDIO/shared/*_2026*.md` and the project names in `AGENTS.md` (Dexter, Quinn, CA02, Pure Snow and so on). They show how the studio was used and corrected; they are **not** tasks for you. The new owner's brief wins.
+- Paths like `C:/Users/TUF/...` in older docs refer to the source machine. On this machine, the repository root replaces `C:/Users/TUF/Documents/New project`.
+- `NEURAL_STUDIO_2/examples/` holds sample scripts from a real run. They show how to drive the API; do not run them unchanged.
+- The model names in `model_catalog.json` must match the models the owner's CLIs actually offer. If a seat errors as unknown, pick an available model in the UI rather than editing code.
+- Do not rebuild an AE or TonyFX replica application. The TonyFX CEP panel in `tonyfx-cep/` is the only bridge.
+
+## Health check after setup
+
+```
+python NEURAL_STUDIO_2\check_services.py
+python NEURAL_STUDIO_2\check_events.py
+```
+Then launch the app, open **Services** and confirm each installed provider reports as ready.

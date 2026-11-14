@@ -1,0 +1,125 @@
+{
+  "ok": true,
+  "target": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\.color-match-smoke\\source.png",
+  "reference": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\.color-match-smoke\\reference.png",
+  "targetMetadata": {
+    "kind": "image",
+    "duration": 0.0,
+    "times": [
+      0.0
+    ],
+    "width": 540,
+    "height": 360
+  },
+  "referenceMetadata": {
+    "kind": "image",
+    "duration": 0.0,
+    "times": [
+      0.0
+    ],
+    "width": 540,
+    "height": 360
+  },
+  "previews": {
+    "target": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\.color-match-smoke\\output\\target.png",
+    "reference": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\.color-match-smoke\\output\\reference.png",
+    "matched": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\.color-match-smoke\\output\\matched.png",
+    "comparison": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\.color-match-smoke\\output\\comparison.png",
+    "scopes": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\.color-match-smoke\\output\\scopes.png"
+  },
+  "lut": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\.color-match-smoke\\output\\TonyFX_Color_Match.cube",
+  "recipe": {
+    "sourceKnots": [
+      0.17637178301811218,
+      0.21358823776245117,
+      0.2757623493671417,
+      0.45374274253845215,
+      0.6057976484298706,
+      0.6057976484298706,
+      0.6245505809783936
+    ],
+    "referenceKnots": [
+      0.21137178301811219,
+      0.26858823776245117,
+      0.3657623493671417,
+      0.5937427425384522,
+      0.7257976484298706,
+      0.7257976484298706,
+      0.7257976484298706
+    ],
+    "sourceMean": [
+      58.7227783203125,
+      3.8381121158599854,
+      15.140480041503906
+    ],
+    "referenceMean": [
+      58.7227783203125,
+      8.338111877441406,
+      19.640480041503906
+    ],
+    "matrix": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.88,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.88
+      ]
+    ],
+    "faceDelta": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "strength": 1.0,
+    "protectSkin": true,
+    "mode": "continuity",
+    "lumetri": {
+      "temperature": 9.9,
+      "tint": 9.0,
+      "exposure": 0.388,
+      "contrast": 10.77,
+      "highlights": 16.8,
+      "shadows": 9.9,
+      "whites": 13.16,
+      "blacks": 6.3,
+      "saturation": 116.0,
+      "vibrance": 8.8,
+      "creativeSaturation": 100.0
+    }
+  },
+  "recipePath": "C:\\Users\\TUF\\Documents\\New project\\tuf-ae-command-center\\tests\\.color-match-smoke\\output\\color_match_recipe.json",
+  "safe": true,
+  "warnings": [],
+  "safety": {
+    "safe": true,
+    "warnings": [],
+    "sourceHighlightClipping": 0.0,
+    "matchedHighlightClipping": 0.0,
+    "sourceShadowCrushing": 0.0,
+    "matchedShadowCrushing": 0.0,
+    "sourceSaturationClipping": 0.0,
+    "matchedSaturationClipping": 0.0,
+    "skinDeltaE": 0.0,
+    "skinLumaDelta": 0.0,
+    "skinPixels": 0
+  },
+  "metrics": {
+    "beforeError": 0.90215,
+    "afterError": 0.53477,
+    "improvementPercent": 40.72,
+    "confidence": 54.5,
+    "targetFaces": 0,
+    "referenceFaces": 0,
+    "targetTemporalLumaSpread": 0.0,
+    "referenceTemporalLumaSpread": 0.0
+  }
+}

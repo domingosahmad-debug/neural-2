@@ -1,0 +1,22 @@
+# Production roadmap release — 2026-10-21
+
+## Delivered behavior
+- Production button in the world HUD and a compact roadmap in the director room. Scrollable revision-specific nodes/checklist, evidence/scope and real local pipeline substeps. Full review shortcut opens existing Screening. No added3Dmeshes; backgroundworldrendering drops to existing overlay budget while the roadmap is open.
+- Current R3 board seeded from actual saved reports:6verified limited checkpoints,4open. Replacement-shot actioneffects blocked; full-speed motion/listening untested; human acceptance pending. No false end time for those unresolved gates.
+- Optional justified per-step remaining-minute ranges aggregate for a sequential plan, exclude human response time and expire after15minutes. Unknown/blocked/overrun/variable unmeasured workload abstains. Local job ranges remain separate from whole-edit estimates. Status reads no model calls.
+- Persisted revision/evidence hashes, stale-update rejection, explicit unresolved-step supersession, new-direction stale-plan marker and independent technical/source/sampled-picture/motion/listening/human methods. This validates evidence bookkeeping, not automatic artistic quality or a security boundary against trusted full-access local processes.
+- Shared validate_plan and native compiler reject unapproved reused source intervals, including alternate IDs pointing to the same physical file at different FPS. Touching half-open windows allowed; explicit intentional-repeat reason required. Does not detect semantic repeats in different files or unrepresented nested owners.
+- Replaced contradictory current handoffs with compact actualR3entry and correct nativeClaude fallback; original files preserved under shared/.history/2026-10-21-production-checkpoints. Both director routes and installed/bundled workflow-director instructions refer to the new checklist contract. No teaching/model calls started by this upgrade.
+
+## Verification
+10production backend tests PASS; source alias/repeat/touching-range tests; evidence changes and stale CAS; unresolved requirements and revision change; range/blocked/overrun semantics; human-gate guard. ProductionDOMfixturePASS (GET-only, escaping, real counts/ranges, error/stale states, preserved reading position/evidence, command-deck remount). Existing31command-service,19local-engine,6native-director,11backup tests PASS. CommandUI/localcrew regression tests PASS; localcrewfixedmeshno-growth1800frames unchanged. Python/JScompilePASS. Live GET /api/production and authenticated same-plan POST round-tripPASS; stale POST400. Live status32–53ms. No model inference started by these tests.
+
+Visual gate: live browser observation was rejected by browser URL policy; did not work around it. Desktop/native visual layout and end-to-end clicking remain unverified. Page needs refresh to load frontendassets. No claim of playback/listening or actual edit improvement follows these software tests.
+
+## Activation
+Core backend/frontend deployed after the real R3pipeline completed and all writers/watches/nativecommand were quiescent. Server31176, .runtime/production-board-server.out.log/.err.log. A subsequent small internal human-action guard change is source-tested but awaits safe companion reload: shutdownguard correctly refused whileLumenwaslearning. Do not interrupt it. See temporary activation follow-up; it must check actual live state, use guardedshutdown, restart hidden and verify GETproduction. No duplicateedit/modelprompt/nativewrite. Keep no recurring run afteractivation.
+
+No native edit/render/workerdispatch, source overwrite, quota-routing change, portableFINALZIP change or deferredAEreplica work performed. Current review registeredR03-v10-correction-r3 remains preserved.
+
+## Activation completed, with continuation correction
+On2026-10-21 the companion was restarted safely afterLumenfinished and all director/jobs/watches/nativecommand were quiescent. Final internal human-action guard is active. The temporary finish-neural-roadmap-activation heartbeat is PAUSED; no recurring activation remains. Currentserverlogs .runtime/production-continuation-server.out.log/.err.log. See shared/PRODUCTION_CONTINUATION_FIX_20261021.md for the new requirement-reconciliation and persistent sound-alert behavior. The previously mislabeled sound checkpoint was corrected to TO DO; a single explicit scoped continuation was submitted in Neural at the human request. No edit completion is claimed.

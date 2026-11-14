@@ -1,0 +1,6 @@
+interface:
+  display_name: "Project Goldfish"
+  short_description: "Bounded independent plan and proof review"
+  default_prompt: "Use $project-goldfish to review this substantial plan with one fresh reviewer before implementation."
+policy:
+  allow_implicit_invocation: true

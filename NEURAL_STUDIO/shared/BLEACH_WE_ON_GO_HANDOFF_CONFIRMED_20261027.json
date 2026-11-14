@@ -1,0 +1,46 @@
+{
+  "verified_at": "2026-10-27T02:51:03.301019+00:00",
+  "production_direction": "7954b8884e7a49fbad9c7e6987e2eaca",
+  "native_run": "c38058470cb3402486d84dd12a96a97f",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "same_session": "08d743a0-6ab0-4d99-b662-ee5c1567d9d2",
+  "actual_tool_activity": [
+    {
+      "provider": "claude",
+      "actual": true,
+      "session_id": "08d743a0-6ab0-4d99-b662-ee5c1567d9d2",
+      "kind": "tool",
+      "tools": [
+        {
+          "name": "PowerShell",
+          "id": "toolu_018VfSXXu8dGmqRpvXojwPeh",
+          "input": {
+            "command": "Get-Content shared\\BLEACH_WE_ON_GO_ASSETS_20261027.json -Raw -Encoding utf8; Get-Process | Where-Object { $_.ProcessName -match 'Topaz|ffmpeg|AfterFX|python' } | Select-Object ProcessName,Id,CPU | Format-Table | Out-String; nvidia-smi --query-gpu=utilization.gpu,memory.used,memory.total --format=csv",
+            "description": "Read asset inventory and resource state"
+          }
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "actual": true,
+      "session_id": "08d743a0-6ab0-4d99-b662-ee5c1567d9d2",
+      "kind": "tool",
+      "tools": [
+        {
+          "name": "PowerShell",
+          "id": "toolu_019qQgLCYLgupLCqErsU4Qff",
+          "input": {
+            "command": "$P='data\\bleach-we-on-go-20261027'; New-Item -ItemType Directory -Force \"$P\\analysis\\refs\",\"$P\\analysis\\song\",\"$P\\work\" | Out-Null; @{title='BLEACH | WE ON GO (Honorable) | ~90s AMV';goal='Tony 2026-10-27: new ~90 s Bleach AMV to BIA WE ON GO incl. cinematic Honorable variants. Coherent story (setup, threat, response, escalation, major technique, payoff) with verified quotes/speakers, real Getsuga Tensho + Kyoka Suigetsu setup/release/aftermath, 13-reference atlas (transitions, camera/depth, typography, overlays), purposeful overlays, cinematic native typography (emphasised word once), float mastering. Claude director; Sol bounded helper. Brief shared/BLEACH_WE_ON_GO_CLAUDE_BRIEF_20261027.md; assets shared/BLEACH_WE_ON_GO_ASSETS_20261027.json.'} | ConvertTo-Json | Set-Content \"$env:TEMP\\np.json\" -Encoding utf8; python -I data\\cyberpunk-two-references-20261023\\r03\\neural.py post /api/projects \"$env:TEMP\\np.json\" 1500",
+            "description": "Create new WE ON GO project"
+          }
+        }
+      ]
+    }
+  ],
+  "brief": "shared/BLEACH_WE_ON_GO_CLAUDE_BRIEF_20261027.md",
+  "assets": "shared/BLEACH_WE_ON_GO_ASSETS_20261027.json",
+  "previous_edit": "Finished by Tony; protected; no historical repairs resumed.",
+  "state": "Claude actively directing new assignment; edit itself not complete. No schedule started."
+}

@@ -1,0 +1,2518 @@
+{
+  "project": "C:\\Users\\TUF\\Desktop\\42341.aep",
+  "dirty": true,
+  "comp_id": 1030,
+  "comp_name": "DEXTER D01 E2 F01 TAXIDERMY",
+  "fps": 23.9760284423828,
+  "sample_time": 21.1044377711044,
+  "layers": [
+    {
+      "layer_id": 6929,
+      "index": 35,
+      "name": "Adjustment Layer 1",
+      "inPoint": 20.7290623957291,
+      "outPoint": 21.5215215215215,
+      "effects": [
+        {
+          "name": "BCC Directional Blur",
+          "matchName": "BCC3Directional Blur",
+          "index": 1,
+          "children": [
+            {
+              "name": "Effect Presets & Docs",
+              "matchName": "BCC3Directional Blur-0001",
+              "index": 1,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-0001\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Compare",
+              "matchName": "BCC3Directional Blur-10158085",
+              "index": 2,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-10158085\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Compare Mode",
+              "matchName": "BCC3Directional Blur-10158081",
+              "index": 3,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Wipe/Slide",
+              "matchName": "BCC3Directional Blur-10158083",
+              "index": 4,
+              "value": 50,
+              "keys": []
+            },
+            {
+              "name": "Right Offset",
+              "matchName": "BCC3Directional Blur-10158084",
+              "index": 5,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Host Layer",
+              "matchName": "BCC3Directional Blur-10158087",
+              "index": 6,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-10158086",
+              "index": 7,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-10158086\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Blur Amount",
+              "matchName": "BCC3Directional Blur-0002",
+              "index": 8,
+              "value": 56,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": [
+                {
+                  "time": 20.7290623957291,
+                  "value": 0,
+                  "inType": "6613",
+                  "outType": "6613",
+                  "inEase": [
+                    {
+                      "speed": 0,
+                      "influence": 33.333333
+                    }
+                  ],
+                  "outEase": [
+                    {
+                      "speed": 0.88838259580655,
+                      "influence": 59.3687745893555
+                    }
+                  ],
+                  "auto": false,
+                  "continuous": false
+                },
+                {
+                  "time": 21.1044377711044,
+                  "value": 56,
+                  "inType": "6613",
+                  "outType": "6613",
+                  "inEase": [
+                    {
+                      "speed": 59.4959331271345,
+                      "influence": 19.0125444257813
+                    }
+                  ],
+                  "outEase": [
+                    {
+                      "speed": -50.8437411902443,
+                      "influence": 16.2122571027832
+                    }
+                  ],
+                  "auto": false,
+                  "continuous": false
+                },
+                {
+                  "time": 21.5215215215215,
+                  "value": 0,
+                  "inType": "6613",
+                  "outType": "6613",
+                  "inEase": [
+                    {
+                      "speed": 0,
+                      "influence": 54.2180365217285
+                    }
+                  ],
+                  "outEase": [
+                    {
+                      "speed": 0,
+                      "influence": 33.333333
+                    }
+                  ],
+                  "auto": false,
+                  "continuous": false
+                }
+              ]
+            },
+            {
+              "name": "Angle",
+              "matchName": "BCC3Directional Blur-0003",
+              "index": 9,
+              "value": 67,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Thin",
+              "matchName": "BCC3Directional Blur-0004",
+              "index": 10,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Spread",
+              "matchName": "BCC3Directional Blur-0005",
+              "index": 11,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Blur Threshold",
+              "matchName": "BCC3Directional Blur-0006",
+              "index": 12,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Maximum Deviation",
+              "matchName": "BCC3Directional Blur-0015",
+              "index": 13,
+              "value": 255,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Avoid Clipping",
+              "matchName": "BCC3Directional Blur-0007",
+              "index": 14,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Displace Pixels",
+              "matchName": "BCC3Directional Blur-0008",
+              "index": 15,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Apply Mode",
+              "matchName": "BCC3Directional Blur-0009",
+              "index": 16,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Apply Mix",
+              "matchName": "BCC3Directional Blur-0010",
+              "index": 17,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Channels",
+              "matchName": "BCC3Directional Blur-0011",
+              "index": 18,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Mix with Original",
+              "matchName": "BCC3Directional Blur-0013",
+              "index": 19,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "PixelChooser / Mocha",
+              "matchName": "BCC3Directional Blur-11010050",
+              "index": 20,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-11010050\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "PixelChooser",
+              "matchName": "BCC3Directional Blur-11010055",
+              "index": 21,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "View Mask / Matte",
+              "matchName": "BCC3Directional Blur-11010153",
+              "index": 22,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Mocha Mask / Track",
+              "matchName": "BCC3Directional Blur-11010068",
+              "index": 23,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-11010068\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Apply PixelChooser",
+              "matchName": "BCC3Directional Blur-11010056",
+              "index": 24,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Presets",
+              "matchName": "BCC3Directional Blur-11010052",
+              "index": 25,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-11010052\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Mask",
+              "matchName": "BCC3Directional Blur-11010065",
+              "index": 26,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-11010065\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "PC Mask Intensity",
+              "matchName": "BCC3Directional Blur-11010057",
+              "index": 27,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shape",
+              "matchName": "BCC3Directional Blur-11010067",
+              "index": 28,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Mocha Data0",
+              "matchName": "BCC3Directional Blur-11010125",
+              "index": 29,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-11010125\u201d). This propertyValueType CUSTOM_VALUE has not been implemented.",
+              "keys": []
+            },
+            {
+              "name": "Feather",
+              "matchName": "BCC3Directional Blur-11010092",
+              "index": 30,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Invert Mask",
+              "matchName": "BCC3Directional Blur-11010081",
+              "index": 31,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Use AE Host Mask",
+              "matchName": "BCC3Directional Blur-11010059",
+              "index": 32,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Select Host Mask",
+              "matchName": "BCC3Directional Blur-11010060",
+              "index": 33,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Name Starts With",
+              "matchName": "BCC3Directional Blur-11010061",
+              "index": 34,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Host Mask Offset",
+              "matchName": "BCC3Directional Blur-11010062",
+              "index": 35,
+              "value": [
+                540,
+                540
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Center",
+              "matchName": "BCC3Directional Blur-11010069",
+              "index": 36,
+              "value": [
+                540,
+                540
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Master Scale",
+              "matchName": "BCC3Directional Blur-11010078",
+              "index": 37,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Scale X",
+              "matchName": "BCC3Directional Blur-11010073",
+              "index": 38,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Scale Y",
+              "matchName": "BCC3Directional Blur-11010074",
+              "index": 39,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Gradient Start",
+              "matchName": "BCC3Directional Blur-11010083",
+              "index": 40,
+              "value": [
+                540,
+                540
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Gradient Distance",
+              "matchName": "BCC3Directional Blur-11010085",
+              "index": 41,
+              "value": 25,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Gradation",
+              "matchName": "BCC3Directional Blur-11010086",
+              "index": 42,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Stretch",
+              "matchName": "BCC3Directional Blur-11010090",
+              "index": 43,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Start Angle",
+              "matchName": "BCC3Directional Blur-11010087",
+              "index": 44,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "End Angle",
+              "matchName": "BCC3Directional Blur-11010088",
+              "index": 45,
+              "value": 30,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Rotation",
+              "matchName": "BCC3Directional Blur-11010091",
+              "index": 46,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Egg Balance",
+              "matchName": "BCC3Directional Blur-11010126",
+              "index": 47,
+              "value": 45,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Rotate Around Shape Center",
+              "matchName": "BCC3Directional Blur-11010127",
+              "index": 48,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-11010066",
+              "index": 49,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-11010066\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Matte",
+              "matchName": "BCC3Directional Blur-11010093",
+              "index": 50,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-11010093\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "PC Matte Intensity",
+              "matchName": "BCC3Directional Blur-11010149",
+              "index": 51,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Channel",
+              "matchName": "BCC3Directional Blur-11010095",
+              "index": 52,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Matte Layer",
+              "matchName": "BCC3Directional Blur-11010096",
+              "index": 53,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Matte Type",
+              "matchName": "BCC3Directional Blur-11010097",
+              "index": 54,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Pre Smoothing Amount",
+              "matchName": "BCC3Directional Blur-11010154",
+              "index": 55,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Preserve Contrast",
+              "matchName": "BCC3Directional Blur-11010161",
+              "index": 56,
+              "value": 90,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Black Level",
+              "matchName": "BCC3Directional Blur-11010098",
+              "index": 57,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "White Level",
+              "matchName": "BCC3Directional Blur-11010099",
+              "index": 58,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Threshold",
+              "matchName": "BCC3Directional Blur-11010100",
+              "index": 59,
+              "value": 50,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Range From",
+              "matchName": "BCC3Directional Blur-11010101",
+              "index": 60,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Range To",
+              "matchName": "BCC3Directional Blur-11010102",
+              "index": 61,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Softness",
+              "matchName": "BCC3Directional Blur-11010105",
+              "index": 62,
+              "value": 8,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Color A",
+              "matchName": "BCC3Directional Blur-11010144",
+              "index": 63,
+              "value": [
+                0.66666666666667,
+                0.54901960784314,
+                0.50980392156863,
+                1
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Color B",
+              "matchName": "BCC3Directional Blur-11010145",
+              "index": 64,
+              "value": [
+                0.82352941176471,
+                0.58823529411765,
+                0.54901960784314,
+                1
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Hue Softness",
+              "matchName": "BCC3Directional Blur-11010146",
+              "index": 65,
+              "value": 25,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Saturation Softness",
+              "matchName": "BCC3Directional Blur-11010147",
+              "index": 66,
+              "value": 25,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Luma Softness",
+              "matchName": "BCC3Directional Blur-11010148",
+              "index": 67,
+              "value": 30,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Clip Black",
+              "matchName": "BCC3Directional Blur-11010150",
+              "index": 68,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Clip White",
+              "matchName": "BCC3Directional Blur-11010151",
+              "index": 69,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Gamma",
+              "matchName": "BCC3Directional Blur-11010152",
+              "index": 70,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Choke",
+              "matchName": "BCC3Directional Blur-11010108",
+              "index": 71,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Blur",
+              "matchName": "BCC3Directional Blur-11010107",
+              "index": 72,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Invert Matte",
+              "matchName": "BCC3Directional Blur-11010109",
+              "index": 73,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-11010094",
+              "index": 74,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-11010094\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Render Legacy PixelChooser",
+              "matchName": "BCC3Directional Blur-11010058",
+              "index": 75,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-11010051",
+              "index": 76,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-11010051\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Legacy PixelChooser",
+              "matchName": "BCC3Directional Blur-0986",
+              "index": 77,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Apply PixelChooser",
+              "matchName": "BCC3Directional Blur-0987",
+              "index": 78,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "PC Intensity",
+              "matchName": "BCC3Directional Blur-0988",
+              "index": 79,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Mask",
+              "matchName": "BCC3Directional Blur-0989",
+              "index": 80,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Shape",
+              "matchName": "BCC3Directional Blur-0955",
+              "index": 81,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Point 1",
+              "matchName": "BCC3Directional Blur-0956",
+              "index": 82,
+              "value": [
+                540,
+                540
+              ],
+              "keys": []
+            },
+            {
+              "name": "Point 2",
+              "matchName": "BCC3Directional Blur-0957",
+              "index": 83,
+              "value": [
+                1026,
+                1026
+              ],
+              "keys": []
+            },
+            {
+              "name": "From",
+              "matchName": "BCC3Directional Blur-0958",
+              "index": 84,
+              "value": -49.9999847412109,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "To",
+              "matchName": "BCC3Directional Blur-0959",
+              "index": 85,
+              "value": 30,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Scale",
+              "matchName": "BCC3Directional Blur-0982",
+              "index": 86,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Stretch/Direction",
+              "matchName": "BCC3Directional Blur-0961",
+              "index": 87,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Region Blend",
+              "matchName": "BCC3Directional Blur-0960",
+              "index": 88,
+              "value": 10,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Reverse Range",
+              "matchName": "BCC3Directional Blur-0962",
+              "index": 89,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Channel",
+              "matchName": "BCC3Directional Blur-0963",
+              "index": 90,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Matte Layer",
+              "matchName": "BCC3Directional Blur-0964",
+              "index": 91,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Type",
+              "matchName": "BCC3Directional Blur-0965",
+              "index": 92,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Black/Threshold/From",
+              "matchName": "BCC3Directional Blur-0966",
+              "index": 93,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "White/To",
+              "matchName": "BCC3Directional Blur-0967",
+              "index": 94,
+              "value": 255,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Matte Softness",
+              "matchName": "BCC3Directional Blur-0968",
+              "index": 95,
+              "value": 20,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Color",
+              "matchName": "BCC3Directional Blur-0969",
+              "index": 96,
+              "value": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Blur Matte",
+              "matchName": "BCC3Directional Blur-0970",
+              "index": 97,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Choke Matte",
+              "matchName": "BCC3Directional Blur-0971",
+              "index": 98,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Invert Matte",
+              "matchName": "BCC3Directional Blur-0972",
+              "index": 99,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Enable Beat Reactor",
+              "matchName": "BCC3Directional Blur-3236",
+              "index": 100,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Beat Reactor",
+              "matchName": "BCC3Directional Blur-3001",
+              "index": 101,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3001\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Beat Reactor Preset",
+              "matchName": "BCC3Directional Blur-10092915",
+              "index": 102,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-10092915\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "placeholder",
+              "matchName": "BCC3Directional Blur-3233",
+              "index": 103,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Host Sound Layer",
+              "matchName": "BCC3Directional Blur-3171",
+              "index": 104,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "placeholder",
+              "matchName": "BCC3Directional Blur-3234",
+              "index": 105,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "placeholder",
+              "matchName": "BCC3Directional Blur-3235",
+              "index": 106,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Hidden",
+              "matchName": "BCC3Directional Blur-10158088",
+              "index": 107,
+              "value": 0.10000610351562,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Channel",
+              "matchName": "BCC3Directional Blur-3016",
+              "index": 108,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Delay (sec)",
+              "matchName": "BCC3Directional Blur-3011",
+              "index": 109,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Show Graph",
+              "matchName": "BCC3Directional Blur-3172",
+              "index": 110,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Apply Parameter A",
+              "matchName": "BCC3Directional Blur-3021",
+              "index": 111,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Audio Apply Options A",
+              "matchName": "BCC3Directional Blur-3111",
+              "index": 112,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3111\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Effect on Parameter",
+              "matchName": "BCC3Directional Blur-3086",
+              "index": 113,
+              "value": 2,
+              "keys": []
+            },
+            {
+              "name": "Output Range",
+              "matchName": "BCC3Directional Blur-3031",
+              "index": 114,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Output Min",
+              "matchName": "BCC3Directional Blur-3036",
+              "index": 115,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Output Max",
+              "matchName": "BCC3Directional Blur-3041",
+              "index": 116,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Apply Strength (%)",
+              "matchName": "BCC3Directional Blur-3081",
+              "index": 117,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Falloff",
+              "matchName": "BCC3Directional Blur-3091",
+              "index": 118,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Falloff Time (sec)",
+              "matchName": "BCC3Directional Blur-3096",
+              "index": 119,
+              "value": 0.5,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Sampler",
+              "matchName": "BCC3Directional Blur-3126",
+              "index": 120,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Sampler Corner 1",
+              "matchName": "BCC3Directional Blur-3141",
+              "index": 121,
+              "value": [
+                0,
+                540
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Sampler Corner 2",
+              "matchName": "BCC3Directional Blur-3156",
+              "index": 122,
+              "value": [
+                540,
+                1080
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-3116",
+              "index": 123,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3116\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Apply Parameter B",
+              "matchName": "BCC3Directional Blur-3022",
+              "index": 124,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Audio Apply Options B",
+              "matchName": "BCC3Directional Blur-3112",
+              "index": 125,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3112\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Effect on Parameter",
+              "matchName": "BCC3Directional Blur-3087",
+              "index": 126,
+              "value": 2,
+              "keys": []
+            },
+            {
+              "name": "Output Range",
+              "matchName": "BCC3Directional Blur-3032",
+              "index": 127,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Output Min",
+              "matchName": "BCC3Directional Blur-3037",
+              "index": 128,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Output Max",
+              "matchName": "BCC3Directional Blur-3042",
+              "index": 129,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Apply Strength (%)",
+              "matchName": "BCC3Directional Blur-3082",
+              "index": 130,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Falloff",
+              "matchName": "BCC3Directional Blur-3092",
+              "index": 131,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Falloff Time (sec)",
+              "matchName": "BCC3Directional Blur-3097",
+              "index": 132,
+              "value": 0.5,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Sampler",
+              "matchName": "BCC3Directional Blur-3127",
+              "index": 133,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Sampler Corner 1",
+              "matchName": "BCC3Directional Blur-3142",
+              "index": 134,
+              "value": [
+                118.8,
+                540
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Sampler Corner 2",
+              "matchName": "BCC3Directional Blur-3157",
+              "index": 135,
+              "value": [
+                658.8,
+                1080
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-3117",
+              "index": 136,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3117\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Apply Parameter C",
+              "matchName": "BCC3Directional Blur-3023",
+              "index": 137,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Audio Apply Options C",
+              "matchName": "BCC3Directional Blur-3113",
+              "index": 138,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3113\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Effect on Parameter",
+              "matchName": "BCC3Directional Blur-3088",
+              "index": 139,
+              "value": 2,
+              "keys": []
+            },
+            {
+              "name": "Output Range",
+              "matchName": "BCC3Directional Blur-3033",
+              "index": 140,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Output Min",
+              "matchName": "BCC3Directional Blur-3038",
+              "index": 141,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Output Max",
+              "matchName": "BCC3Directional Blur-3043",
+              "index": 142,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Apply Strength (%)",
+              "matchName": "BCC3Directional Blur-3083",
+              "index": 143,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Falloff",
+              "matchName": "BCC3Directional Blur-3093",
+              "index": 144,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Falloff Time (sec)",
+              "matchName": "BCC3Directional Blur-3098",
+              "index": 145,
+              "value": 0.5,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Sampler",
+              "matchName": "BCC3Directional Blur-3128",
+              "index": 146,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Sampler Corner 1",
+              "matchName": "BCC3Directional Blur-3143",
+              "index": 147,
+              "value": [
+                237.6,
+                540
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Sampler Corner 2",
+              "matchName": "BCC3Directional Blur-3158",
+              "index": 148,
+              "value": [
+                777.6,
+                1080
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-3118",
+              "index": 149,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3118\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Audio Spectrum Options",
+              "matchName": "BCC3Directional Blur-3190",
+              "index": 150,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3190\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Freq Resolution",
+              "matchName": "BCC3Directional Blur-3189",
+              "index": 151,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Scale (%)",
+              "matchName": "BCC3Directional Blur-3184",
+              "index": 152,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Sub-Bass (%)",
+              "matchName": "BCC3Directional Blur-3181",
+              "index": 153,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Bass (%)",
+              "matchName": "BCC3Directional Blur-3180",
+              "index": 154,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Mid-Range (%)",
+              "matchName": "BCC3Directional Blur-3182",
+              "index": 155,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Treble (%)",
+              "matchName": "BCC3Directional Blur-3183",
+              "index": 156,
+              "value": 100,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Low Cutoff dB",
+              "matchName": "BCC3Directional Blur-3186",
+              "index": 157,
+              "value": -49.9999847412109,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Min Freq (Hz)",
+              "matchName": "BCC3Directional Blur-3187",
+              "index": 158,
+              "value": 20,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Max Freq (Hz)",
+              "matchName": "BCC3Directional Blur-3188",
+              "index": 159,
+              "value": 2000,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Smoothness (%)",
+              "matchName": "BCC3Directional Blur-3185",
+              "index": 160,
+              "value": 5,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-3191",
+              "index": 161,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3191\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Audio Graph Options",
+              "matchName": "BCC3Directional Blur-3004",
+              "index": 162,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3004\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Graph Opacity",
+              "matchName": "BCC3Directional Blur-3192",
+              "index": 163,
+              "value": 50,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Graph Top Left Corner",
+              "matchName": "BCC3Directional Blur-3173",
+              "index": 164,
+              "value": [
+                5.4,
+                5.4
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Graph Bottom Right Corner",
+              "matchName": "BCC3Directional Blur-3176",
+              "index": 165,
+              "value": [
+                1069.2,
+                1069.2
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-3005",
+              "index": 166,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3005\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "BCC3Directional Blur-3002",
+              "index": 167,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cBCC3Directional Blur-3002\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Compositing Options",
+              "matchName": "ADBE Effect Built In Params",
+              "index": 168,
+              "children": [
+                {
+                  "name": "Masks",
+                  "matchName": "ADBE Effect Mask Parade",
+                  "index": 1,
+                  "children": []
+                },
+                {
+                  "name": "Effect Opacity",
+                  "matchName": "ADBE Effect Mask Opacity",
+                  "index": 2,
+                  "value": 100,
+                  "expression": "",
+                  "expressionEnabled": false,
+                  "keys": []
+                },
+                {
+                  "name": "GPU Rendering",
+                  "matchName": "ADBE Force CPU GPU",
+                  "index": 3,
+                  "value": 1,
+                  "keys": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "layer_id": 1051,
+      "index": 36,
+      "name": "BODY | E2-13",
+      "inPoint": 21.09000667334,
+      "outPoint": 22.060018351685,
+      "effects": [
+        {
+          "name": "MOTION zoom in",
+          "matchName": "S_BlurMoCurves",
+          "index": 3,
+          "children": [
+            {
+              "name": "Load Preset",
+              "matchName": "S_BlurMoCurves-0239",
+              "index": 1,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0239\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Save Preset",
+              "matchName": "S_BlurMoCurves-0238",
+              "index": 2,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0238\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Mask from Layer",
+              "matchName": "S_BlurMoCurves-0002",
+              "index": 3,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Mask from Path",
+              "matchName": "S_BlurMoCurves-0235",
+              "index": 4,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Effect",
+              "matchName": "S_BlurMoCurves-0001",
+              "index": 5,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "mocha",
+              "matchName": "S_BlurMoCurves-0520",
+              "index": 6,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0520\u201d). This propertyValueType CUSTOM_VALUE has not been implemented.",
+              "keys": []
+            },
+            {
+              "name": "Edit Mocha",
+              "matchName": "S_BlurMoCurves-0241",
+              "index": 7,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0241\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Mocha",
+              "matchName": "S_BlurMoCurves-0250",
+              "index": 8,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0250\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Blur Mocha",
+              "matchName": "S_BlurMoCurves-0521",
+              "index": 9,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Mocha Opacity",
+              "matchName": "S_BlurMoCurves-0522",
+              "index": 10,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Invert Mocha",
+              "matchName": "S_BlurMoCurves-0523",
+              "index": 11,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Resize Mocha",
+              "matchName": "S_BlurMoCurves-0524",
+              "index": 12,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Resize Rel X",
+              "matchName": "S_BlurMoCurves-0525",
+              "index": 13,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Resize Rel Y",
+              "matchName": "S_BlurMoCurves-0526",
+              "index": 14,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shift Mocha X",
+              "matchName": "S_BlurMoCurves-0527",
+              "index": 15,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shift Mocha Y",
+              "matchName": "S_BlurMoCurves-0528",
+              "index": 16,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Bypass Mocha",
+              "matchName": "S_BlurMoCurves-0531",
+              "index": 17,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Show Mocha Only",
+              "matchName": "S_BlurMoCurves-0529",
+              "index": 18,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Combine Masks",
+              "matchName": "S_BlurMoCurves-0530",
+              "index": 19,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "S_BlurMoCurves-0251",
+              "index": 20,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0251\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Center XY",
+              "matchName": "S_BlurMoCurves-0050",
+              "index": 21,
+              "value": [
+                1352.29627990723,
+                717.037033081055
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Z Dist",
+              "matchName": "S_BlurMoCurves-0051",
+              "index": 22,
+              "value": 0.72623830713825,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": [
+                {
+                  "time": 21.09000667334,
+                  "value": 0.69999998807907,
+                  "inType": "6613",
+                  "outType": "6613",
+                  "inEase": [
+                    {
+                      "speed": 0,
+                      "influence": 0.4
+                    }
+                  ],
+                  "outEase": [
+                    {
+                      "speed": 2.96205390606982,
+                      "influence": 6.80533847264721
+                    }
+                  ],
+                  "auto": false,
+                  "continuous": false
+                },
+                {
+                  "time": 22.0637303970637,
+                  "value": 1,
+                  "inType": "6613",
+                  "outType": "6613",
+                  "inEase": [
+                    {
+                      "speed": 2.00648277495708,
+                      "influence": 9.65318753632934
+                    }
+                  ],
+                  "outEase": [
+                    {
+                      "speed": 0,
+                      "influence": 16.666666667
+                    }
+                  ],
+                  "auto": false,
+                  "continuous": false
+                }
+              ]
+            },
+            {
+              "name": "Rotate",
+              "matchName": "S_BlurMoCurves-0052",
+              "index": 23,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shift X",
+              "matchName": "S_BlurMoCurves-0053",
+              "index": 24,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shift Y",
+              "matchName": "S_BlurMoCurves-0054",
+              "index": 25,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shutter Duration",
+              "matchName": "S_BlurMoCurves-0055",
+              "index": 26,
+              "value": 0.34999999403954,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shutter Shift",
+              "matchName": "S_BlurMoCurves-0056",
+              "index": 27,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Exposure Bias",
+              "matchName": "S_BlurMoCurves-0057",
+              "index": 28,
+              "value": 0.5,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Brightness",
+              "matchName": "S_BlurMoCurves-0058",
+              "index": 29,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Wrap X",
+              "matchName": "S_BlurMoCurves-0059",
+              "index": 30,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Wrap Y",
+              "matchName": "S_BlurMoCurves-0060",
+              "index": 31,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Blur Res",
+              "matchName": "S_BlurMoCurves-0061",
+              "index": 32,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Subpixel",
+              "matchName": "S_BlurMoCurves-0062",
+              "index": 33,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Opacity",
+              "matchName": "S_BlurMoCurves-0063",
+              "index": 34,
+              "value": 2,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Mask Use",
+              "matchName": "S_BlurMoCurves-0540",
+              "index": 35,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Blur Mask",
+              "matchName": "S_BlurMoCurves-0541",
+              "index": 36,
+              "value": 12,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Invert Mask",
+              "matchName": "S_BlurMoCurves-0542",
+              "index": 37,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Crop Input",
+              "matchName": "S_BlurMoCurves-0252",
+              "index": 38,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0252\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Crop Left",
+              "matchName": "S_BlurMoCurves-0502",
+              "index": 39,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Crop Right",
+              "matchName": "S_BlurMoCurves-0503",
+              "index": 40,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Crop Top",
+              "matchName": "S_BlurMoCurves-0504",
+              "index": 41,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Crop Bottom",
+              "matchName": "S_BlurMoCurves-0505",
+              "index": 42,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "S_BlurMoCurves-0253",
+              "index": 43,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0253\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Show Center",
+              "matchName": "S_BlurMoCurves-0200",
+              "index": 44,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Show Transform",
+              "matchName": "S_BlurMoCurves-0201",
+              "index": 45,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Show Shift",
+              "matchName": "S_BlurMoCurves-0202",
+              "index": 46,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Help",
+              "matchName": "S_BlurMoCurves-0249",
+              "index": 47,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0249\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Compositing Options",
+              "matchName": "ADBE Effect Built In Params",
+              "index": 48,
+              "children": [
+                {
+                  "name": "Masks",
+                  "matchName": "ADBE Effect Mask Parade",
+                  "index": 1,
+                  "children": []
+                },
+                {
+                  "name": "Effect Opacity",
+                  "matchName": "ADBE Effect Mask Opacity",
+                  "index": 2,
+                  "value": 100,
+                  "expression": "",
+                  "expressionEnabled": false,
+                  "keys": []
+                },
+                {
+                  "name": "GPU Rendering",
+                  "matchName": "ADBE Force CPU GPU",
+                  "index": 3,
+                  "value": 1,
+                  "keys": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "layer_id": 1050,
+      "index": 37,
+      "name": "BODY | E2-12",
+      "inPoint": 20.130005005005,
+      "outPoint": 21.09000667334,
+      "effects": [
+        {
+          "name": "MOTION zoom out",
+          "matchName": "S_BlurMoCurves",
+          "index": 3,
+          "children": [
+            {
+              "name": "Load Preset",
+              "matchName": "S_BlurMoCurves-0239",
+              "index": 1,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0239\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Save Preset",
+              "matchName": "S_BlurMoCurves-0238",
+              "index": 2,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0238\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Mask from Layer",
+              "matchName": "S_BlurMoCurves-0002",
+              "index": 3,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Mask from Path",
+              "matchName": "S_BlurMoCurves-0235",
+              "index": 4,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Effect",
+              "matchName": "S_BlurMoCurves-0001",
+              "index": 5,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "mocha",
+              "matchName": "S_BlurMoCurves-0520",
+              "index": 6,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0520\u201d). This propertyValueType CUSTOM_VALUE has not been implemented.",
+              "keys": []
+            },
+            {
+              "name": "Edit Mocha",
+              "matchName": "S_BlurMoCurves-0241",
+              "index": 7,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0241\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Mocha",
+              "matchName": "S_BlurMoCurves-0250",
+              "index": 8,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0250\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Blur Mocha",
+              "matchName": "S_BlurMoCurves-0521",
+              "index": 9,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Mocha Opacity",
+              "matchName": "S_BlurMoCurves-0522",
+              "index": 10,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Invert Mocha",
+              "matchName": "S_BlurMoCurves-0523",
+              "index": 11,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Resize Mocha",
+              "matchName": "S_BlurMoCurves-0524",
+              "index": 12,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Resize Rel X",
+              "matchName": "S_BlurMoCurves-0525",
+              "index": 13,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Resize Rel Y",
+              "matchName": "S_BlurMoCurves-0526",
+              "index": 14,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shift Mocha X",
+              "matchName": "S_BlurMoCurves-0527",
+              "index": 15,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shift Mocha Y",
+              "matchName": "S_BlurMoCurves-0528",
+              "index": 16,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Bypass Mocha",
+              "matchName": "S_BlurMoCurves-0531",
+              "index": 17,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Show Mocha Only",
+              "matchName": "S_BlurMoCurves-0529",
+              "index": 18,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Combine Masks",
+              "matchName": "S_BlurMoCurves-0530",
+              "index": 19,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "S_BlurMoCurves-0251",
+              "index": 20,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0251\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Center XY",
+              "matchName": "S_BlurMoCurves-0050",
+              "index": 21,
+              "value": [
+                1382.16296386719,
+                528
+              ],
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Z Dist",
+              "matchName": "S_BlurMoCurves-0051",
+              "index": 22,
+              "value": 0.69999998807907,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": [
+                {
+                  "time": 20.1034367701034,
+                  "value": 1,
+                  "inType": "6613",
+                  "outType": "6613",
+                  "inEase": [
+                    {
+                      "speed": 0,
+                      "influence": 16.666666667
+                    }
+                  ],
+                  "outEase": [
+                    {
+                      "speed": -5.52507436490255,
+                      "influence": 3.79815401823624
+                    }
+                  ],
+                  "auto": false,
+                  "continuous": false
+                },
+                {
+                  "time": 21.0627293960627,
+                  "value": 0.69999998807907,
+                  "inType": "6613",
+                  "outType": "6613",
+                  "inEase": [
+                    {
+                      "speed": -2.71661653737568,
+                      "influence": 7.25596572212551
+                    }
+                  ],
+                  "outEase": [
+                    {
+                      "speed": 0,
+                      "influence": 16.666666667
+                    }
+                  ],
+                  "auto": false,
+                  "continuous": false
+                }
+              ]
+            },
+            {
+              "name": "Rotate",
+              "matchName": "S_BlurMoCurves-0052",
+              "index": 23,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shift X",
+              "matchName": "S_BlurMoCurves-0053",
+              "index": 24,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shift Y",
+              "matchName": "S_BlurMoCurves-0054",
+              "index": 25,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shutter Duration",
+              "matchName": "S_BlurMoCurves-0055",
+              "index": 26,
+              "value": 0.34999999403954,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Shutter Shift",
+              "matchName": "S_BlurMoCurves-0056",
+              "index": 27,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Exposure Bias",
+              "matchName": "S_BlurMoCurves-0057",
+              "index": 28,
+              "value": 0.5,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Brightness",
+              "matchName": "S_BlurMoCurves-0058",
+              "index": 29,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Wrap X",
+              "matchName": "S_BlurMoCurves-0059",
+              "index": 30,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Wrap Y",
+              "matchName": "S_BlurMoCurves-0060",
+              "index": 31,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Blur Res",
+              "matchName": "S_BlurMoCurves-0061",
+              "index": 32,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Subpixel",
+              "matchName": "S_BlurMoCurves-0062",
+              "index": 33,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Opacity",
+              "matchName": "S_BlurMoCurves-0063",
+              "index": 34,
+              "value": 2,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Mask Use",
+              "matchName": "S_BlurMoCurves-0540",
+              "index": 35,
+              "value": 1,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Blur Mask",
+              "matchName": "S_BlurMoCurves-0541",
+              "index": 36,
+              "value": 12,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Invert Mask",
+              "matchName": "S_BlurMoCurves-0542",
+              "index": 37,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Crop Input",
+              "matchName": "S_BlurMoCurves-0252",
+              "index": 38,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0252\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Crop Left",
+              "matchName": "S_BlurMoCurves-0502",
+              "index": 39,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Crop Right",
+              "matchName": "S_BlurMoCurves-0503",
+              "index": 40,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Crop Top",
+              "matchName": "S_BlurMoCurves-0504",
+              "index": 41,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "Crop Bottom",
+              "matchName": "S_BlurMoCurves-0505",
+              "index": 42,
+              "value": 0,
+              "expression": "",
+              "expressionEnabled": false,
+              "keys": []
+            },
+            {
+              "name": "",
+              "matchName": "S_BlurMoCurves-0253",
+              "index": 43,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0253\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Show Center",
+              "matchName": "S_BlurMoCurves-0200",
+              "index": 44,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Show Transform",
+              "matchName": "S_BlurMoCurves-0201",
+              "index": 45,
+              "value": 1,
+              "keys": []
+            },
+            {
+              "name": "Show Shift",
+              "matchName": "S_BlurMoCurves-0202",
+              "index": 46,
+              "value": 0,
+              "keys": []
+            },
+            {
+              "name": "Help",
+              "matchName": "S_BlurMoCurves-0249",
+              "index": 47,
+              "unreadable": "Error: After Effects error: Can not get or set a value from this property (matchname is \u201cS_BlurMoCurves-0249\u201d). This property\u2019s propertyValueType is PropertyValueType.NO_VALUE.",
+              "keys": []
+            },
+            {
+              "name": "Compositing Options",
+              "matchName": "ADBE Effect Built In Params",
+              "index": 48,
+              "children": [
+                {
+                  "name": "Masks",
+                  "matchName": "ADBE Effect Mask Parade",
+                  "index": 1,
+                  "children": []
+                },
+                {
+                  "name": "Effect Opacity",
+                  "matchName": "ADBE Effect Mask Opacity",
+                  "index": 2,
+                  "value": 100,
+                  "expression": "",
+                  "expressionEnabled": false,
+                  "keys": []
+                },
+                {
+                  "name": "GPU Rendering",
+                  "matchName": "ADBE Force CPU GPU",
+                  "index": 3,
+                  "value": 1,
+                  "keys": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "native_command_id": "tfx-b64a002236a54969b367a5661b3e7a1f"
+}

@@ -1,0 +1,11 @@
+# Current Dexter director succession — 3 November 2026
+
+LATEST HUMAN AUTHORITY: Tony explicitly requests Codex/Sol take over as actual director INSIDE Neural when Claude allowance ends. This overrides historical Claude-only-director wording for the current Dexter D03 continuation. It does not resume any unrelated production.
+
+Confirmed event: the resumed native Claude run be1aba7075f54b2a8c840dd543f574a4 returned FAILED with session-limit refusal (reset reported2:10AM Africa/Cairo), process_stopped=true, idle_inference=false, same session08d743a0-6ab0-4d99-b662-ee5c1567d9d2. At succession preflight no pending native command, active local job, station job or waiting completion watch was reported. No UNKNOWN command was replayed.
+
+Use the ordinary Neural sol-high director and existing saved thread01a16dbd-82ec-7840-8d69-d2197ee8cc19. Sol is now the SOLE authorized native editor/director, not merely a reviewer in the outside Codex chat. Preserve Claude's conversation for a possible later explicitly requested return. Do not start a competing Claude process or resume Gemini. Existing independent read-only Sol station specialist00db872c4e4c443db782a670faa17aed remains a separate reviewer with no native writes.
+
+Projecta16add7ec97a4e67a93f9dfccf26ece2, D03-musical-pacing: finish the SAME five Dexter repairs, preserve D02/good intros/manual work, E1 Chemical as relative benchmark, measured musical progression and strong selection. Reconcile current state/last Claude run before any mutation; unfinished D03-A01..A05 and plan/proof gates carry forward. Read data/dexter-repair-20261101/D03_CODEX_RESUME_PREFLIGHT_20261103.md: historical133/102 claim is unconfirmed; actual old blueprint is D02 E5 intro239f, current proof9shots[239,493),254f. Bind a genuine D03 blueprint rather than treating the old intro as its validator.
+
+Codex primary reserve was100%, which caused Neural to label even93% remaining as exhausted. Tony's explicit use-of-reset-allowance request authorizes reducing this holding reserve to4% for this takeover. This does not buy usage, bypass actual account limits or switch API/provider. Prior policy is backed up in .maintenance/dexter-resume-supervision-20261103/DIRECTOR_POLICY_BEFORE_SOL.json. No paid fallback. Keep all human/perceptual gates honest and use exact app-owned completion events, not outside timers.

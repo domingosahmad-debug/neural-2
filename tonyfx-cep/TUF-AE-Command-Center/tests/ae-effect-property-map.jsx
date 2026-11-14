@@ -1,0 +1,8 @@
+(function(){
+var output=new File(Folder.myDocuments.fsName+"/ae-mcp-bridge/tonyfx_effect_property_map.json"),original=app.project?app.project.activeItem:null,testComp=null,report={};
+function q(v){return'"'+String(v).replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\r/g,"\\r").replace(/\n/g,"\\n")+'"';}
+function s(v){if(v===null)return"null";var t=typeof v;if(t==="string")return q(v);if(t==="number")return isFinite(v)?String(v):"null";if(t==="boolean")return v?"true":"false";if(v instanceof Array){var a=[];for(var i=0;i<v.length;i++)a.push(s(v[i]));return"["+a.join(",")+"]";}var p=[];for(var k in v)if(v.hasOwnProperty(k)&&typeof v[k]!=="undefined")p.push(q(k)+":"+s(v[k]));return"{"+p.join(",")+"}";}
+function dump(effect){var list=[];for(var i=1;i<=effect.numProperties;i++){var p=effect.property(i),item={index:i,name:p.name,matchName:p.matchName,valueType:String(p.propertyValueType)};try{item.value=p.value;}catch(e){}try{item.min=p.minValue;item.max=p.maxValue;}catch(e2){}list.push(item);}return list;}
+try{testComp=app.project.items.addComp("__TONYFX_EFFECT_MAP__",1080,1080,1,2,30);var layer=testComp.layers.addSolid([0,0,0],"Map",1080,1080,1,2),fx=layer.property("ADBE Effect Parade"),defs=[{id:"exposure",match:"ADBE Exposure2"},{id:"magnify",match:"ADBE Magnify"},{id:"glow",match:"ADBE Glo2"}];for(var d=0;d<defs.length;d++){try{var effect=fx.addProperty(defs[d].match);report[defs[d].id]=dump(effect);}catch(e3){report[defs[d].id]={error:e3.toString()};}}}catch(error){report.setupError=error.toString();}
+finally{try{if(testComp)testComp.remove();}catch(x){}try{if(original&&original instanceof CompItem)original.openInViewer();}catch(y){}output.encoding="UTF-8";if(output.open("w")){output.write(s(report));output.close();}}
+}());

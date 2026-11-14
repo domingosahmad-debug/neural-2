@@ -1,0 +1,5 @@
+Project Goldfish — selective local adaptation for Tony, 2026.
+Based on Elephant-Goldfish Model, Copyright 2026 Google LLC.
+Upstream: https://github.com/google/elephant-goldfish-model
+Pinned commit: a119668d7dc5d558664ba711d4671d11fb7270a8
+This package modifies the workflow and adds a video review lens and bounded automatic routing; it is not an official Google product. Apache License 2.0 applies.

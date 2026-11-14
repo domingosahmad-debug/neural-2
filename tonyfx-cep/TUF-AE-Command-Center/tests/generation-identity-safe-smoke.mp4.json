@@ -1,0 +1,53 @@
+{
+  "engine": "TonyFX Local Video",
+  "backend": "Diffusers LTX-Video",
+  "model": "Lightricks/LTX-Video",
+  "prompt": "The same man looks toward the camera and blinks once, locked camera, subtle natural movement, 50mm cinematic lens, natural daylight. One continuous realistic shot. The same person remains clearly recognizable in every frame. Facial proportions, eyes, skin, hair, hands, clothing, and body anatomy stay consistent. Movement is restrained and physically natural. The background remains coherent. No cuts, transformations, new people, writing, logos, or captions. The supplied image is the exact first frame and identity reference.",
+  "negativePrompt": "shaky camera, flicker, jitter, frozen motion, duplicated person, extra person, scene cut, morphing face, changing identity, asymmetric eyes, melted skin, deformed hands, extra fingers, distorted anatomy, warped background, stretched image, text, letters, watermark, logo, subtitles, compression artifacts, low detail, blurry, cartoon, illustration, CGI, plastic skin, worst quality",
+  "seed": 12345,
+  "quality": "draft",
+  "steps": 4,
+  "width": 320,
+  "height": 320,
+  "duration": 1.0,
+  "fps": 16,
+  "baseFps": 16,
+  "generatedFrames": 17,
+  "generationProfile": "identity",
+  "referencePreparation": {
+    "sourceSize": [
+      183,
+      275
+    ],
+    "targetSize": [
+      320,
+      320
+    ],
+    "fit": "face",
+    "crop": [
+      0,
+      54,
+      183,
+      237
+    ],
+    "faceDetected": true,
+    "face": {
+      "x": 47.79972457885742,
+      "y": 54.624752044677734,
+      "width": 92.21971893310547,
+      "height": 123.60704803466797,
+      "confidence": 0.9323354363441467
+    }
+  },
+  "elapsedSeconds": 95.94,
+  "validation": {
+    "luminance": 125.69,
+    "detail": 45.812,
+    "motion": 4.704,
+    "flicker": 2.976,
+    "abruptCuts": 0.0,
+    "faceCoverage": 0.625,
+    "faceAreaVariation": 0.248,
+    "faceCenterJump": 0.043
+  }
+}

@@ -1,0 +1,11 @@
+/* ExtendScript does not guarantee a global JSON object. Local, side-effect-free encoder. */
+function neuralEncode(value){
+ if(value===null||value===undefined)return 'null';
+ if(typeof value==='string')return '"'+value.replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/\t/g,'\\t').replace(/[\x00-\x1f]/g,function(c){return '\\u'+('0000'+c.charCodeAt(0).toString(16)).slice(-4);})+'"';
+ if(typeof value==='number')return isFinite(value)?String(value):'null';
+ if(typeof value==='boolean')return String(value);
+ var parts=[],i,key;
+ if(value instanceof Array){for(i=0;i<value.length;i++)parts.push(neuralEncode(value[i]));return '['+parts.join(',')+']';}
+ for(key in value)if(value.hasOwnProperty(key))parts.push(neuralEncode(key)+':'+neuralEncode(value[key]));
+ return '{'+parts.join(',')+'}';
+}
