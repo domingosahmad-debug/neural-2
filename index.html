@@ -337,6 +337,13 @@ pre.code .cm{color:#8a8a86}pre.code .ky{color:var(--gold)}pre.code .st{color:#ff
 .closing h2{font-size:clamp(56px,11vw,200px);letter-spacing:-.065em;line-height:.86}
 .closing h2 b{color:var(--gold);font-weight:500}
 .closing .btn{margin-top:6vh}
+.dlbox{margin:5vh 0 4vh;padding:26px;border:1px solid var(--line2);border-radius:3px;background:rgba(255,255,255,.025);display:grid;gap:18px}
+.dlbox b{display:block;font-weight:500;margin-bottom:6px}
+.dlbox span{color:var(--mute);font-size:14px;line-height:1.55}
+.dlbox .btns{display:flex;gap:10px;flex-wrap:wrap}
+.dlbox code{overflow-wrap:anywhere}
+a.doc{text-decoration:none;color:inherit}
+a.doc b{overflow-wrap:anywhere}
 .foot{position:absolute;left:var(--pad);right:var(--pad);bottom:24px;display:flex;justify-content:space-between;gap:20px;font-size:10.5px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;border-top:1px solid var(--line);padding-top:18px;flex-wrap:wrap}
 
 /* responsive */
@@ -422,7 +429,7 @@ pre.code .cm{color:#8a8a86}pre.code .ky{color:var(--gold)}pre.code .st{color:#ff
 <nav id="nav" aria-label="Primary">
  <a class="logo" href="#hero" aria-label="Neural Posthouse, back to top"><i></i>NEURAL POSTHOUSE</a>
  <ul><li><a href="#film" data-s="1">Film</a></li><li><a href="#crew" data-s="2">Crew</a></li><li><a href="#pipeline" data-s="3">Pipeline</a></li><li><a href="#lane" data-s="5">AE lane</a></li></ul>
- <a class="pill mag mono" href="#start">Get started <span aria-hidden="true">→</span></a>
+ <a class="pill mag mono" href="#download">Download <span aria-hidden="true">↓</span></a>
 </nav>
 <aside id="rail" aria-label="Sections"></aside>
 <div id="hud" class="mono" aria-hidden="true"><span id="hform">FORM 01 · SPHERE</span><span><b id="hpts">160,000</b> pts</span><span><b id="hfps">60</b> fps</span></div>
@@ -443,7 +450,7 @@ pre.code .cm{color:#8a8a86}pre.code .ky{color:var(--gold)}pre.code .st{color:#ff
    <span class="kick mono">AI post-production studio · v2.0</span>
    <p class="lead">Your idea. A whole creative crew.</p>
    <p>Neural plans, cuts, reviews and delivers your edit inside After Effects. A director, a crew of specialist stations and one guarded hand on the timeline. You keep the final word.</p>
-   <div class="btns"><a class="btn pri mag" href="#film"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg>Watch the film</a><a class="btn ghost mag" href="#start">Set up Neural 2.0</a></div>
+   <div class="btns"><a class="btn pri mag" href="#film"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="currentColor"/></svg>Watch the film</a><a class="btn ghost mag" href="https://github.com/domingosahmad-debug/neural-2/archive/refs/heads/main.zip" target="_blank" rel="noopener"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1v7M3 5.5 6 8.5 9 5.5M1.5 11h9" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>Download Neural 2.0</a></div>
   </div>
   <div class="stats hx" style="--d:.75s" id="stats">
    <div><b data-count="9">9</b><span>stations</span></div>
@@ -596,9 +603,14 @@ pre.code .cm{color:#8a8a86}pre.code .ky{color:var(--gold)}pre.code .st{color:#ff
  <div class="wrap" style="padding-top:12vh">
   <div class="k mono rv"><b>07</b> / Start</div>
   <h2 class="split"><span class="ln"><span>Open the doors</span></span><span class="ln"><span><b>on your machine.</b></span></span></h2>
-  <p class="lede rv">Windows, After Effects with the TonyFX panel, and your own AI accounts. If an AI is helping you set up, point it at <span class="mono" style="color:var(--gold);font-size:.88em">AI_START_HERE.md</span> first.</p>
+  <p class="lede rv">Windows, After Effects with the TonyFX panel, and your own AI accounts. If an AI is helping you set up, point it at <span class="mono" style="color:var(--gold);font-size:.88em">BEFORE_YOU_LAUNCH_CHECKLIST.md</span> first. It lists every requirement with a check command.</p>
+  <div class="dlbox rv" id="download">
+   <div><b>Neural 2.0 · Windows 10/11 · free download</b><span>The full studio from GitHub, about 42 MB. Before extracting, right-click the ZIP → Properties → tick <i>Unblock</i>. Then follow the steps below.</span></div>
+   <div class="btns"><a class="btn pri mag" href="https://github.com/domingosahmad-debug/neural-2/archive/refs/heads/main.zip" target="_blank" rel="noopener"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1v7M3 5.5 6 8.5 9 5.5M1.5 11h9" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>Download ZIP</a><a class="btn ghost mag" href="https://github.com/domingosahmad-debug/neural-2" target="_blank" rel="noopener">View on GitHub</a></div>
+   <div class="cmds" style="margin-top:0"><div class="cmd"><code>git clone https://github.com/domingosahmad-debug/neural-2.git C:\Neural2</code><button class="cp" type="button">copy</button></div></div>
+  </div>
   <div class="steps">
-   <div class="step rv"><span class="sn mono">STEP 01</span><h4>Check the requirements</h4><p>Install each tool listed in REQUIREMENTS.md, then dry-run the setup.</p><div class="cmds"><div class="cmd"><code>Setup-Neural2.cmd -CheckOnly</code><button class="cp" type="button">copy</button></div></div></div>
+   <div class="step rv"><span class="sn mono">STEP 01</span><h4>Check the requirements</h4><p>Have your AI work through BEFORE_YOU_LAUNCH_CHECKLIST.md, then dry-run the setup.</p><div class="cmds"><div class="cmd"><code>Setup-Neural2.cmd -CheckOnly</code><button class="cp" type="button">copy</button></div></div></div>
    <div class="step rv" style="--d:.06s"><span class="sn mono">STEP 02</span><h4>Sign in to your CLIs</h4><p>Each provider signs in with its own account. Neural never handles your passwords.</p><div class="cmds"><div class="cmd"><code>claude</code><button class="cp" type="button">copy</button></div><div class="cmd"><code>codex login</code><button class="cp" type="button">copy</button></div><div class="cmd"><code>opencode auth login</code><button class="cp" type="button">copy</button></div><div class="cmd"><code>agy</code><button class="cp" type="button">copy</button></div></div></div>
    <div class="step rv"><span class="sn mono">STEP 03</span><h4>Run the setup</h4><p>Add <code>-Voice</code> for local voice and dictation.</p><div class="cmds"><div class="cmd"><code>Setup-Neural2.cmd</code><button class="cp" type="button">copy</button></div></div></div>
    <div class="step rv" style="--d:.06s"><span class="sn mono">STEP 04</span><h4>Health check, then launch</h4><p>Open Services in the app and confirm each provider reports ready.</p><div class="cmds"><div class="cmd"><code>python NEURAL_STUDIO_2\check_services.py</code><button class="cp" type="button">copy</button></div><div class="cmd"><code>python NEURAL_STUDIO_2\check_events.py</code><button class="cp" type="button">copy</button></div></div></div>
@@ -610,12 +622,13 @@ pre.code .cm{color:#8a8a86}pre.code .ky{color:var(--gold)}pre.code .st{color:#ff
    <div class="doc rv"><b>ARCHITECTURE.md</b><span>Stations, phases, routing, AE lane</span></div>
    <div class="doc rv" style="--d:.05s"><b>WORKFLOW_RULES.md</b><span>Safety and efficiency rules</span></div>
    <div class="doc ai rv" style="--d:.1s"><b>AI_START_HERE.md</b><span>The briefing for your AI</span></div>
+   <a class="doc ai rv" href="https://github.com/domingosahmad-debug/neural-2/blob/main/BEFORE_YOU_LAUNCH_CHECKLIST.md" target="_blank" rel="noopener"><b>BEFORE_YOU_LAUNCH_CHECKLIST.md</b><span>Every requirement, with a check command</span></a>
   </div>
  </div>
  <div class="closing" id="closing">
   <h2 class="split"><span class="ln"><span>You stay</span></span><span class="ln"><span><b>the director.</b></span></span></h2>
   <a class="btn ghost mag rv" href="#hero" style="--d:.25s">Back to the top ↑</a>
-  <footer class="foot mono"><span>Neural Posthouse · Neural 2.0 · private build · shared by invitation</span><span>You stay the director.</span></footer>
+  <footer class="foot mono"><span>Neural Posthouse · Neural 2.0 · public build · free on GitHub</span><span>You stay the director.</span></footer>
  </div>
 </section>
 </main>
