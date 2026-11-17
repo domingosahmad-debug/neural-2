@@ -417,7 +417,7 @@ a.doc b{overflow-wrap:anywhere}
  .closing h2{font-size:clamp(52px,16vw,84px)}
  .foot{flex-direction:column;gap:6px;letter-spacing:.12em}
 }
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}}
+/* reduced-motion freeze removed by owner request */
 </style>
 </head>
 <body>
@@ -640,7 +640,7 @@ a.doc b{overflow-wrap:anywhere}
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>Array.from(r.querySelectorAll(s));
 const html=document.documentElement;
 const Q=new URLSearchParams(location.search);const DBG=Q.has('y');const DY=parseFloat(Q.get('y')||'0')||0;
-const RM=!DBG&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const RM=false;/* owner wants the field alive even when the OS 'reduce motion' setting is on */
 if(DBG)html.classList.add('dbg');
 const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
 const sstep=(a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t)};

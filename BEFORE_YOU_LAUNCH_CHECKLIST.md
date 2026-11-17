@@ -10,6 +10,7 @@ Legend: **REQUIRED** means Neural will not work without it. **ONE OF** means at 
 |---|---|---|---|---|
 | 1.1 | Full repository, folder layout unchanged | REQUIRED | `Test-Path NEURAL_STUDIO_2, NEURAL_STUDIO, tonyfx-cep` | `True True True` |
 | 1.2 | Path without special characters (for example `C:\Neural2`) | REQUIRED | `(Get-Location).Path` | Only letters, digits, spaces, `\ : _ -` |
+| 1.3 | Windows download block removed from every file (needed when it came as a ZIP) | REQUIRED | `Get-ChildItem -Recurse -File \| Unblock-File; (Get-ChildItem -Recurse -File \| Get-Item -Stream Zone.Identifier -ErrorAction SilentlyContinue).Count` | `0`. Running this line does the unblocking itself |
 
 Get it with `git clone https://github.com/domingosahmad-debug/neural-2.git C:\Neural2`, or download the ZIP from the GitHub page (**Code → Download ZIP**), then right-click the ZIP → **Properties** → tick **Unblock** before extracting, so Windows does not block the scripts.
 

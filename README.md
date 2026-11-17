@@ -1,5 +1,7 @@
 # Neural 2.0
 
+> **AI assistant setting this up: open [BEFORE_YOU_LAUNCH_CHECKLIST.md](BEFORE_YOU_LAUNCH_CHECKLIST.md) and work through it top to bottom.** It covers unblocking the download, every tool to install, the sign-ins, setup and the final checks. The person you are helping only needs to sign in to their own accounts and approve installs.
+
 Neural 2.0 is a local AI editing studio for Adobe After Effects. You give it a creative brief and your footage and music. A crew of AI models then plans, prototypes, builds, reviews and renders the edit inside your own After Effects. Every AE command goes through one guarded native bridge, called TonyFX. You approve the final result.
 
 It runs entirely on your PC. The AI models are the CLIs you install and sign in to with **your own** accounts: Claude Code, Codex, OpenCode (it has free models) and Antigravity (for Gemini). Neural never stores or shares keys.
