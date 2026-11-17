@@ -70,7 +70,7 @@ class FailureTests(unittest.TestCase):
             invocations = [('COMPLETED', auth, None), (state, [json.dumps(e) for e in events], 'test failure')]
             with patch('providers_engine.transport.executable', return_value='fake-cli'), \
                  patch('providers_engine.transport.Path.home', return_value=folder), \
-                 patch.object(Transport, '_run', side_effect=invocations):
+                 patch.object(Transport, '_run', side_effect=invocations), patch('providers_engine.failures.probe_passed', lambda model: True):
                 return Transport().run({'route': route, 'model': model, 'effort': 'default' if route=='opencode' else 'medium'}, {}, folder, None, threading.Event())
 
     def test_actual_transport_parser_classifies_failed_structured_events(self):

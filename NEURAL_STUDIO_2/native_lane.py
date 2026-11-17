@@ -34,7 +34,7 @@ class NativeLane:
         state['integration'] = 'External TonyFX writer; cooperative exclusive ownership. No automatic native dispatch or lease expiry.'
         return state
 
-    def claim(self, owner, project, old_disabled):
+    def claim(self, owner, project, old_disabled, replace=None):
         if not all(isinstance(x,str) and x.strip() and len(x)<=200 for x in (owner,project)):
             raise ValueError('Provide owner and exact production project identity.')
         if old_disabled is not True: raise ValueError('Original Neural must be confirmed stopped before claiming AE.')
@@ -45,9 +45,13 @@ class NativeLane:
         if self.status()['unresolved']: raise ValueError('Native outcome unresolved. Reconcile existing command; never replay it.')
         with closing(sqlite3.connect(self.db)) as db, db:
             db.execute('BEGIN IMMEDIATE')
-            if db.execute('SELECT 1 FROM owner').fetchone(): raise ValueError('AE already has an owner; explicit safe release is required.')
+            existing = db.execute('SELECT body FROM owner WHERE id=1').fetchone()
+            previous = json.loads(existing[0]) if existing else None
+            # Hand-over is atomic and only for the exact idle owner the coordinator verified.
+            if previous and (not replace or previous['id'] != replace): raise ValueError('AE already has an owner; explicit safe release is required.')
             row = {'id':uuid4().hex,'owner':owner,'project':project,'claimed':datetime.now(timezone.utc).isoformat()}
-            db.execute('INSERT INTO owner VALUES(1,?)',(json.dumps(row),))
+            if previous: row['replaced'] = {k:previous.get(k) for k in ('id','owner','project','claimed')}
+            db.execute('INSERT OR REPLACE INTO owner VALUES(1,?)',(json.dumps(row),))
         return row
 
     def release(self, identity):

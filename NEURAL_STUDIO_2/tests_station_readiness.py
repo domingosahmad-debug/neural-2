@@ -1,4 +1,5 @@
 """Isolated regressions: no CLI, app, bridge or AE invocation."""
+import os;os.environ['NEURAL_AE_DIALOGS']='0'  # fixtures never probe or touch the real desktop
 import ast
 import copy
 import inspect

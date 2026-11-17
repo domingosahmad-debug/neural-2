@@ -19,6 +19,15 @@ from urllib.request import Request, urlopen
 from uuid import uuid4
 
 
+DIALOG_HANDLING=os.environ.get('NEURAL_AE_DIALOGS','1')!='0'  # tests switch real desktop probing off
+DIALOG_INTERVAL=3
+CRASH_INTERVAL=5  # The coordinator reads status twice a second; a process probe that often only burns CPU.
+DRAWN_MODAL_SECONDS=20
+DIALOG_CAP=12       # Acknowledgements one native command may receive in total; after that a dialog is a blocker.
+DIALOG_TARGET=None  # (process name, pid) for proofs against a stand-in process; None is After Effects itself.
+LOCK_WAIT=5     # The helper lock is held for milliseconds; a short wait covers honest contention.
+LOCK_STALE=120  # A lock this old belongs to a process that died holding it.
+
 def encoded(value): return json.dumps(value, ensure_ascii=False, separators=(',', ':'))
 def digest(value): return hashlib.sha256(value.encode('utf-8')).hexdigest()
 def now(): return datetime.now(timezone.utc).isoformat()
@@ -298,24 +307,43 @@ return enc({ok:report.ok,error:report.error||null,reportId:cfg.reportId});
         row['scriptPath']=str(wrapper);row['scriptSha256']=digest(script)
         with self.transaction() as db:
             self._authorize(db);row['state']='PUBLISHING';self._save(db,row)
-        lock=self.bridge/'tfx_skill_client.lock'; fd=None; owned=False
+        lock=self.bridge/'tfx_skill_client.lock'; fd=None; owned=False; written=False
         try:
-            fd=os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY);owned=True;os.write(fd,row['commandId'].encode());os.close(fd);fd=None
+            deadline=time.monotonic()+LOCK_WAIT
+            while True:
+                try:fd=os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY);break
+                except FileExistsError:
+                    try:age=time.time()-lock.stat().st_mtime
+                    except OSError:age=0
+                    if age>LOCK_STALE:
+                        # Set aside, never deleted: the rename is atomic, so only one claimant moves it.
+                        try:os.rename(lock,lock.with_name(lock.name+'.stale-'+uuid4().hex[:8]));row['staleLockSetAside']=round(age);continue
+                        except OSError:pass  # Held open or protected: it is contention like any other and ends at the deadline.
+                    if time.monotonic()>=deadline:raise
+                    time.sleep(.1)
+            owned=True;os.write(fd,row['commandId'].encode());os.close(fd);fd=None
             with self.transaction() as db:
                 self._authorize(db)
                 state=self._bridge_state();command=state['command'] or {};result=state['result'] or {}
                 if command.get('status') in ('pending','running') or command.get('id') and result.get('_commandId')!=command['id']: raise ValueError('TonyFX bridge unresolved; no command overwritten.')
                 request={'id':row['commandId'],'command':'runScriptFile','args':{'scriptPath':str(wrapper)},'timestamp':now(),'status':'pending'}
                 # Already durable PUBLISHING. A crash after this replace is UNKNOWN, never replayed.
+                written=True
                 atomic(self.bridge/'ae_command.json',request)
                 row.update(state='SUBMITTED',submitted=now());self._save(db,row)
         except BaseException as error:
-            row.update(state='UNKNOWN',error=str(error))
+            # Refused before the bridge command file was touched: After Effects never saw it, so it is a plain failure.
+            if written:row.update(state='UNKNOWN',error=str(error))
+            else:row.update(state='FAILED',notSubmitted=True,error='Not submitted; nothing reached After Effects: '+(str(error) or type(error).__name__),finished=now())
             with connect(self.database) as db:self._save(db,row)
             raise
         finally:
             if fd is not None:os.close(fd)
-            if owned:lock.unlink()
+            if owned:
+                # Remove only our own lock; a failure here never turns a submitted command into an error.
+                try:
+                    if lock.read_bytes()==row['commandId'].encode():lock.unlink()
+                except OSError:pass
         return self._public(row)
 
     def _public(self,row):
@@ -330,8 +358,13 @@ return enc({ok:report.ok,error:report.error||null,reportId:cfg.reportId});
                 output['wrongProject']='After Effects has a different project open than the scoped AEP '+str(scoped)+'. Work there cannot count. Call ae_open with this guard, then inspect again.'
         if row.get('resultPath'):output['resultPath']=row['resultPath']
         if row.get('report') is not None:output['report']=row['report']
+        if row.get('dialogsDismissed'):output['dialogsDismissed']=row['dialogsDismissed'][-5:]
         if row.get('aeCrash') and row['state'] not in ('COMPLETED','FAILED'):
             output['aeCrash']=row['aeCrash'];output['continuation']={'outcome':'blocked','reason':row['aeCrash']['message']}
+        elif row.get('aeDialog') and row['state']=='SUBMITTED':
+            # The command is still in flight behind a modal. The worker ends its turn; the coordinator's watcher owns the stop and the resume.
+            output['aeDialog']=row['aeDialog'];output['continuation']={'outcome':'waiting','waitNative':row['requestId']}
+            output['instruction']='After Effects is blocked by a dialog Neural must not answer. Do not poll, resubmit or work around it: return outcome waiting with this waitNative now.'
         elif row['state'] not in ('COMPLETED','FAILED'):
             output['continuation']={'outcome':'waiting','waitMedia':[row['mediaJobId']]} if row.get('mediaJobId') else {'outcome':'waiting','waitNative':row['requestId']} if row['kind']!='media' else {'outcome':'blocked','reason':'Mechanical admission outcome unknown; reconcile without replay.'}
         return output
@@ -365,9 +398,16 @@ return enc({ok:report.ok,error:report.error||null,reportId:cfg.reportId});
                     if Path(row['reportPath']).is_file():row['reportSha256']=hashlib.sha256(Path(row['reportPath']).read_bytes()).hexdigest()
                 elif command.get('id') and command['id']!=row['commandId']:row.update(state='UNKNOWN',error='Bridge command changed. Reconcile; never replay.')
             except (ValueError,OSError) as error:row.update(state='UNKNOWN',error=str(error))
+            if row['state']=='SUBMITTED' and time.time()-row.get('dialogChecked',0)>=DIALOG_INTERVAL:
+                row['dialogChecked']=time.time()
+                if self._ae_dialog(row):
+                    with connect(self.database) as db:self._save(db,row)
+                    return self._public(row)
             if row['state'] in ('COMPLETED','FAILED') or time.monotonic()>=deadline:
                 if row['state'] not in ('COMPLETED','FAILED'):
-                    crash=self._ae_crash(row)
+                    crash=row.get('aeCrash')  # Between probes the last known crash stands.
+                    if time.time()-row.get('crashChecked',0)>=CRASH_INTERVAL:
+                        row['crashChecked']=time.time();crash=self._ae_crash(row)
                     if crash:row.update(state='UNKNOWN',aeCrash=crash,error=crash['message'])
                     elif (command.get('id')==row['commandId'] and command.get('status') in ('pending','running') and row['state']=='SUBMITTED'):
                         # A bounded status read is not an execution deadline. Keep the
@@ -377,6 +417,35 @@ return enc({ok:report.ok,error:report.error||null,reportId:cfg.reportId});
                 with connect(self.database) as db:self._save(db,row)
                 return self._public(row)
             time.sleep(min(.2,max(0,deadline-time.monotonic())))
+    def _ae_dialog(self,row):
+        """Deterministic modal handling for the single native writer. True while an unhandled modal blocks After Effects.
+
+        Plain one-button notifications are acknowledged and logged by GuardedDesktop.
+        An application-drawn modal must persist before it counts, so a brief busy state is not a blocker.
+        """
+        if not DIALOG_HANDLING:return False
+        earlier=row.get('aeDialog') or (row.get('aeDialogSeen') or {}).get('blocker') or {}
+        spent=row.get('dialogCount',0)
+        try:found=self._dialog_probe(earlier.get('hwnd'),max(0,min(5,DIALOG_CAP-spent)))
+        except Exception as error:
+            row['dialogCheckError']=str(error)[:300];return bool(row.get('aeDialog'))
+        row.pop('dialogCheckError',None)
+        if found and found.get('dismissed'):row['dialogCount']=spent+len(found['dismissed']);row['dialogsDismissed']=(row.get('dialogsDismissed',[])+found['dismissed'])[-20:]
+        if not found or found.get('handled'):
+            row.pop('aeDialog',None);row.pop('aeDialogSeen',None);return False
+        if earlier.get('hwnd')==found['hwnd']:found=dict(earlier,dismissed=found['dismissed'])
+        found['message']='After Effects is waiting on a dialog: "'+found['title']+'" '+found['text'][:400]+' '+found['reason']+' The command is still in flight and must never be replayed.'
+        if found['class']!='#32770' and found.get('hwnd'):
+            seen=row.get('aeDialogSeen') or {}
+            if seen.get('hwnd')!=found['hwnd']:seen={'hwnd':found['hwnd'],'first':time.time()}
+            seen['blocker']=found;row['aeDialogSeen']=seen
+            if time.time()-seen['first']<DRAWN_MODAL_SECONDS:
+                row.pop('aeDialog',None);return False
+        row['aeDialog']=found;return True
+    def _dialog_probe(self,known,limit=5):
+        from guarded_desktop import GuardedDesktop
+        process,pid=DIALOG_TARGET or (None,None)
+        return GuardedDesktop(self.root).handle_ae_dialogs(process=process,pid=pid,known=known,limit=limit)
     def _ae_processes(self):
         """Start times (UTC ISO) of running AfterFX.exe processes; None when the check itself is unavailable."""
         import subprocess

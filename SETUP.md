@@ -3,7 +3,8 @@
 Keep the folder layout exactly as cloned. `NEURAL_STUDIO_2` finds `NEURAL_STUDIO` and `tonyfx-cep` as its siblings.
 
 1. **Clone** the repository to a path without special characters, for example `C:\Neural2`:
-   `git clone <private repo URL> C:\Neural2`
+   `git clone https://github.com/domingosahmad-debug/neural-2.git C:\Neural2`
+   Or on the GitHub page click **Code → Download ZIP**, right-click the ZIP → **Properties** → **Unblock**, then extract it. Then work through [BEFORE_YOU_LAUNCH_CHECKLIST.md](BEFORE_YOU_LAUNCH_CHECKLIST.md).
 2. **Install the prerequisites** in [REQUIREMENTS.md](REQUIREMENTS.md): Python 3.12+, After Effects, ffmpeg and at least one AI CLI.
 3. **Run the setup:** double-click `Setup-Neural2.cmd`, or run `Setup-Neural2.cmd -Voice` for the local models as well. You can run it again at any time; it skips what is already installed.
 4. **Check:** run `Setup-Neural2.cmd -CheckOnly`. Every core line should say `OK`.

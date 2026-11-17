@@ -10,6 +10,7 @@ import re
 import sys
 
 from .transport import Transport, environment, executable, CODEX_MODELS, FREE_ID, DENY
+from . import failures
 from .failures import classify_failure
 
 APP_ROOT = Path(__file__).resolve().parents[1]
@@ -87,6 +88,11 @@ def embedded_json(text):
         try: value = json.loads(candidate)
         except ValueError: continue
         if isinstance(value, dict): return value
+    # One complete object followed by stray characters (a duplicated closing brace) is still that object.
+    if '{' in text:
+        try: value, _ = json.JSONDecoder().raw_decode(text[text.find('{'):])
+        except ValueError: return None
+        if isinstance(value, dict): return value
     return None
 
 
@@ -147,6 +153,8 @@ class ProductionHost(Transport):
                 if cancel is not None and getattr(cancel, 'wait', None) and cancel.wait(2): break
             if state != 'COMPLETED' or model not in {s.strip() for s in lines}:
                 return {'status': state if state in ('CANCELLED', 'UNKNOWN') else 'FAILED', 'error': error or 'Free OpenCode model is absent from the installed CLI catalog', 'execution_started': False, 'session_id': session}
+            if not failures.probe_passed(model):
+                return {'status': 'FAILED', 'error': failures.PROBE_ERROR + model, 'execution_started': False, 'session_id': session}
             signed_in = True
         else:
             auth_args = [cli, 'auth', 'status'] if route == 'claude' else [cli, 'login', 'status']
@@ -185,7 +193,8 @@ class ProductionHost(Transport):
             permission = dict(DENY); permission.update({name: 'allow' for name in names})
             (folder / 'opencode.json').write_text(json.dumps({'permission': permission, 'mcp': {'servers': {
                 'neural': {'type': 'local', 'command': [sys.executable] + command}}}}), encoding='utf-8')
-            env.update(OPENCODE_DISABLE_AUTOUPDATE='true', OPENCODE_DISABLE_LSP_DOWNLOAD='true', OPENCODE_DISABLE_DEFAULT_PLUGINS='true')
+            env.update(OPENCODE_DISABLE_AUTOUPDATE='true', OPENCODE_DISABLE_LSP_DOWNLOAD='true', OPENCODE_DISABLE_DEFAULT_PLUGINS='true',
+                       PWD=str(folder))  # CLI 2.2.7 takes its session folder from PWD when set, not the process cwd (proved 15 Nov)
             args = [cli, 'run', '--standalone' if desktop else '--pure', '--format', 'json', '--model', model, '--title', 'Neural2 scoped production station']
             if not desktop: args += ['--dir', str(folder)]
             if session: args += ['--session', session]
@@ -296,7 +305,7 @@ class ProductionHost(Transport):
         if route == 'codex' and final.is_file(): result['text'] = final.read_text(encoding='utf-8')
         if result['status'] == 'COMPLETED':
             try: parsed = json.loads(result['text'])
-            except (ValueError, TypeError): parsed = embedded_json(result['text']) if route == 'opencode' else None
+            except (ValueError, TypeError): parsed = embedded_json(result['text'])  # exact identity is still enforced by valid_result
             if not terminal or not result['session_id'] or not valid_result(parsed, template): uncertain = True; result['error'] = 'Missing terminal/session or valid exact station result JSON'
             else: result['structured_result'] = parsed
         if result.pop('mcp_unavailable', False) and not result['tool_events'] and not uncertain:

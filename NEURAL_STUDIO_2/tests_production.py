@@ -1,4 +1,5 @@
 """Fault and event contracts for native production; fixtures never open AE."""
+import os;os.environ['NEURAL_AE_DIALOGS']='0'  # fixtures never probe or touch the real desktop
 import copy
 from contextlib import closing
 import json
@@ -439,7 +440,26 @@ class ProductionTests(unittest.TestCase):
         self.assertEqual(result['state'],'BLOCKED');self.assertIn('native',result['error'])
     def test_unknown_never_advances_or_replays(self):
         self.start();row=self.providers.rows[-1];row.update(status='UNKNOWN',error='lost command result')
-        self.production.terminal(row);self.assertEqual(self.production.status('alpha')['state'],'BLOCKED');self.assertEqual(len(self.providers.rows),1)
+        self.production.terminal(copy.deepcopy(row));run=self.production.status('alpha')
+        # A lost provider invocation with a settled native ledger is replaced, never advanced; the phase is unchanged.
+        self.assertEqual(run['phase'],'plan');self.assertNotEqual(run['state'],'BLOCKED');self.assertEqual(len(self.providers.rows),2)
+        self.assertEqual(run['history'][-1]['providerFailure'],'UNKNOWN');self.assertIn('PROVIDER RECOVERY',run['continuationContext'])
+    def test_provider_failure_budget_blocks_instead_of_looping(self):
+        self.start()
+        for expected in (2,3):
+            self.providers.rows[-1].update(status='FAILED',error='provider died');self.production.terminal(copy.deepcopy(self.providers.rows[-1]))
+            self.assertEqual(len(self.providers.rows),expected);self.assertNotEqual(self.production.status('alpha')['state'],'BLOCKED')
+        self.providers.rows[-1].update(status='FAILED',error='provider died');self.production.terminal(copy.deepcopy(self.providers.rows[-1]))
+        run=self.production.status('alpha');self.assertEqual(run['state'],'BLOCKED');self.assertIn('re-routing budget',run['error']);self.assertEqual(len(self.providers.rows),3)
+    def test_unknown_native_blocks_provider_recovery(self):
+        self.start();reg=self.root/'data/projects/alpha/.neural-gateway/registry.json';reg.parent.mkdir(parents=True,exist_ok=True);ledger=reg.parent/'ledger.sqlite3';reg.write_text(json.dumps({'database':str(ledger),'projectRoot':str(reg.parent.parent)}))
+        import sqlite3;db=sqlite3.connect(ledger);db.execute('CREATE TABLE requests(id TEXT PRIMARY KEY,body TEXT)');db.execute('INSERT INTO requests VALUES(?,?)',('m1',json.dumps({'requestId':'m1','state':'UNKNOWN'})));db.commit();db.close()
+        row=self.providers.rows[-1];row.update(status='UNKNOWN',error='lost command result');self.production.terminal(copy.deepcopy(row))
+        run=self.production.status('alpha');self.assertEqual(run['state'],'BLOCKED');self.assertEqual(len(self.providers.rows),1)
+    def test_stale_terminal_event_never_resumes_blocked_run(self):
+        self.start();run=self.complete('plan');self.assertEqual(run['state'],'BLOCKED')
+        old=copy.deepcopy(self.providers.rows[-1]);old.update(status='FAILED');self.production.terminal(old)
+        self.assertEqual(self.production.status('alpha')['state'],'BLOCKED');self.assertEqual(len(self.providers.rows),1)
     def test_pause_revokes_authority_before_generation_changes(self):
         self.start();row=self.providers.rows[-1];folder=self.root/'data/provider-jobs'/row['id'];folder.mkdir()
         with self.control.connection() as db:packet=self.control.projects(db)['alpha']['assignments'][row['assignmentId']]
@@ -457,7 +477,7 @@ class ProductionTests(unittest.TestCase):
     def test_repair_budget_stops_repeated_rejected_work(self):
         run=self.start()
         with self.control.connection() as db:
-            run=self.production._load(run['id'],db);run['repairs']=run['maxRepairs'];self.production.persist(db,run)
+            run=self.production._load(run['id'],db);run['repairs']=3*run['maxRepairs'];self.production.persist(db,run)
         result=self.complete('plan',{'issues':['Unresolved source clocks']},outcome='repair')
         self.assertEqual(result['state'],'BLOCKED');self.assertIn('budget',result['error']);self.assertEqual(len(self.providers.rows),1)
     def test_restart_recovers_missed_completion_without_replay(self):
@@ -478,13 +498,130 @@ class ProductionTests(unittest.TestCase):
         with self.assertRaises(ValueError):self.start()
         run=self.production.retry(dict(project='alpha'));self.assertEqual(run['phase'],'plan');self.assertEqual(len(self.providers.rows),2)
         self.providers.rows[-1]['status']='FAILED';self.production.terminal(copy.deepcopy(self.providers.rows[-1]))
-        run=self.production.status('alpha');self.assertEqual(run['state'],'BLOCKED')
+        run=self.production.status('alpha');self.assertNotEqual(run['state'],'BLOCKED');self.assertEqual(len(self.providers.rows),3)
         reg=self.root/'data/projects/alpha/.neural-gateway/registry.json';reg.parent.mkdir(parents=True,exist_ok=True);ledger=reg.parent/'ledger.sqlite3';reg.write_text(json.dumps({'database':str(ledger),'projectRoot':str(reg.parent.parent)}))
         import sqlite3;db=sqlite3.connect(ledger);db.execute('CREATE TABLE requests(id TEXT PRIMARY KEY,body TEXT)');db.execute('INSERT INTO requests VALUES(?,?)',('m1',json.dumps({'requestId':'m1','state':'UNKNOWN'})));db.commit();db.close()
+        self.providers.rows[-1]['status']='FAILED';self.production.terminal(copy.deepcopy(self.providers.rows[-1]))
+        self.assertEqual(self.production.status('alpha')['state'],'BLOCKED');self.assertEqual(len(self.providers.rows),3)
         with self.assertRaisesRegex(ValueError,'reconcile'):self.production.retry(dict(project='alpha'))
-        self.assertEqual(len(self.providers.rows),2)
+        self.assertEqual(len(self.providers.rows),3)
+    def test_idle_lease_is_handed_over_and_live_lease_is_not(self):
+        from native_lane import NativeLane
+        lane=NativeLane(self.root,bridge=self.root/'bridge');self.control.native=lane
+        with patch('socket.socket.connect_ex',return_value=1):
+            first=lane.claim('old edit','alpha',True);self.req['nativeLeaseId']=first['id'];self.start()
+            # A working run keeps After Effects: no hand-over ID is offered and the claim is refused.
+            self.assertIsNone(self.production.lease_handover())
+            with self.assertRaisesRegex(ValueError,'already has an owner'):lane.claim('new edit','beta',True,replace=self.production.lease_handover())
+            run=self.complete('plan');self.assertEqual(run['state'],'BLOCKED')
+            second=lane.claim('new edit','beta',True,replace=self.production.lease_handover())
+            self.assertEqual(lane.status()['owner']['project'],'beta');self.assertEqual(second['replaced']['id'],first['id'])
+            with self.assertRaisesRegex(ValueError,'exact settled native lease'):self.production.retry(dict(project='alpha'))
+            # Re-claimed for the old project once the new owner is idle (no run): the blocked run adopts the lease on Retry.
+            third=lane.claim('old edit again','alpha',True,replace=self.production.lease_handover())
+            run=self.production.retry(dict(project='alpha'));self.assertEqual(run['nativeLeaseId'],third['id']);self.assertEqual(len(self.providers.rows),2)
+    def test_lease_with_unsettled_native_request_is_never_handed_over(self):
+        self.start();run=self.complete('plan');self.assertEqual(run['state'],'BLOCKED');self.assertEqual(self.production.lease_handover(),'lease')
+        reg=self.root/'data/projects/alpha/.neural-gateway/registry.json';reg.parent.mkdir(parents=True,exist_ok=True);ledger=reg.parent/'ledger.sqlite3';reg.write_text(json.dumps({'database':str(ledger),'projectRoot':str(reg.parent.parent)}))
+        import sqlite3;db=sqlite3.connect(ledger);db.execute('CREATE TABLE requests(id TEXT PRIMARY KEY,body TEXT)');db.execute('INSERT INTO requests VALUES(?,?)',('m1',json.dumps({'requestId':'m1','state':'UNKNOWN'})));db.commit();db.close()
+        self.assertIsNone(self.production.lease_handover())
+    def blocked_technical(self,before):
+        from unittest.mock import Mock
+        run=self.start();self.providers.rows[-1]['status']='COMPLETED'
+        with self.control.connection() as db:
+            current=self.production._load(run['id'],db)
+            current.update(state='BLOCKED',state_before_block=before,phase='render',technicalJob='tech1',render=self.artifact('review.mp4'),expect={'frames':100},error='Technical verification could not finish')
+            self.production.persist(db,current)
+        engine=Mock();self.production.services.engine=engine;self.production.services.action=Mock(return_value={'id':'tech2'})
+        return engine
+    def test_retry_reverifies_blocked_technical_gate_without_rerender(self):
+        for before in ('WAIT_TECHNICAL','VERIFY_INTENT'):
+            with self.subTest(before=before):
+                self.providers.rows.clear();engine=self.blocked_technical(before);engine.job.side_effect=lambda key:{'id':key,'status':'FAILED' if key=='tech1' else 'QUEUED'}
+                run=self.production.retry(dict(project='alpha'))
+                self.assertEqual(run['state'],'WAIT_TECHNICAL');self.assertEqual(run['technicalJob'],'tech2');self.assertEqual(run['phase'],'render')
+                self.assertEqual(len(self.providers.rows),1)  # no model turn, no native replay
+                self.assertEqual(self.production.services.action.call_args[0][0]['action'],'media-submit')
+                self.production.shutdown();self.production=Production(self.control,Services());self.control.production=self.production
+                with closing(sqlite3.connect(self.db)) as db, db:db.execute('DELETE FROM production_runs')
+    def test_retry_refuses_while_technical_gate_still_runs(self):
+        engine=self.blocked_technical('WAIT_TECHNICAL');engine.job.return_value={'id':'tech1','status':'RUNNING'}
+        with self.assertRaisesRegex(ValueError,'still running'):self.production.retry(dict(project='alpha'))
+        self.production.services.action.assert_not_called();self.assertEqual(self.production.status('alpha')['state'],'BLOCKED')
     def test_restart_leaves_paused_run_untouched(self):
         self.start();self.control.pause('alpha','Human paused');before=self.production.status('alpha')
         self.production.recover();self.assertEqual(self.production.status('alpha'),before)
+
+class _ReviewFix:
+    def waiting(self,**marks):
+        run=self.production.status('alpha') or self.start()
+        for row in self.providers.rows:row['status']='COMPLETED'
+        with self.control.connection() as db:
+            run=self.production._load(run['id'],db);run.update(state='WAIT_NATIVE',waitScope='fixture',waitNative='cmd',waitStarted=__import__('time').time(),**marks);self.production.persist(db,run)
+        return run['id']
+    def test_retry_closes_the_runs_own_unknown_job_once_native_is_settled(self):
+        self.start();reg=self.root/'data/projects/alpha/.neural-gateway/registry.json';reg.parent.mkdir(parents=True,exist_ok=True);ledger=reg.parent/'ledger.sqlite3';reg.write_text(json.dumps({'database':str(ledger),'projectRoot':str(reg.parent.parent)}))
+        import sqlite3;db=sqlite3.connect(ledger);db.execute('CREATE TABLE requests(id TEXT PRIMARY KEY,body TEXT)');db.execute('INSERT INTO requests VALUES(?,?)',('m1',json.dumps({'requestId':'m1','state':'UNKNOWN'})));db.commit()
+        settled=[]
+        def settle(key,reason):
+            settled.append(key);next(r for r in self.providers.rows if r['id']==key)['status']='FAILED'
+        self.providers.settle=settle
+        row=self.providers.rows[-1];row.update(status='UNKNOWN',error='lost command result');self.production.terminal(copy.deepcopy(row))
+        # Native outcome unknown: blocked, and the provider job is NOT settled before the boundary is known.
+        self.assertEqual(self.production.status('alpha')['state'],'BLOCKED');self.assertEqual(settled,[]);self.assertEqual(row['status'],'UNKNOWN')
+        with self.assertRaisesRegex(ValueError,'unsettled native gateway request'):self.production.retry(dict(project='alpha'))
+        self.assertEqual(settled,[])
+        db.execute('UPDATE requests SET body=?',(json.dumps({'requestId':'m1','state':'COMPLETED'}),));db.commit();db.close()
+        run=self.production.retry(dict(project='alpha'))
+        self.assertEqual(settled,[row['id']]);self.assertNotEqual(run['state'],'BLOCKED');self.assertEqual(len(self.providers.rows),2)
+    def test_automatic_dialog_resume_is_bounded_per_native_wait(self):
+        import production as P
+        identity=self.waiting()
+        for n in range(P.DIALOG_RESUMES):
+            self.production.block(identity,'dialog '+str(n),dialogBlock=True)
+            self.assertTrue(self.production.resume_native_watch(identity,only_dialog=True))
+        self.production.block(identity,'dialog again',dialogBlock=True)
+        self.assertFalse(self.production.resume_native_watch(identity,only_dialog=True))
+        run=self.production.status('alpha');self.assertEqual(run['state'],'BLOCKED');self.assertIn('automatic resume stopped',run['error']);self.assertNotIn('dialogBlock',run)
+        # A human Retry path still re-attaches (read-only) and restarts the count.
+        self.assertTrue(self.production.resume_native_watch(identity));self.assertEqual(self.production.status('alpha')['dialogResumes']['n'],0)
+    def test_dialog_watcher_reports_when_it_gives_up(self):
+        identity=self.waiting();self.production.block(identity,'dialog',dialogBlock=True)
+        class Broken:
+            def ae_status(self,key):raise OSError('ledger unreadable')
+        self.production.completion_gateway=lambda scope:Broken()
+        with patch.object(self.production.closed,'wait',return_value=False):self.production.await_dialog(identity)
+        run=self.production.status('alpha');self.assertEqual(run['state'],'BLOCKED');self.assertIn('dialog watcher stopped',run['error']);self.assertNotIn('dialogBlock',run)
+    def test_recovery_that_waited_for_native_spends_the_same_budget(self):
+        import production as P
+        self.start()
+        with self.control.connection() as db:
+            run=self.production._load(self.production.status('alpha')['id'],db);run['providerRecoveries']={run['phase']:P.PROVIDER_RECOVERIES};self.production.persist(db,run)
+        class Done:
+            def ae_status(self,key):return {'state':'COMPLETED','requestId':key}
+        self.production.completion_gateway=lambda scope:Done()
+        with patch.object(self.production,'known_pending_native',return_value='cmd'),patch.object(self.production.watchers,'submit'):
+            self.providers.rows[-1].update(status='FAILED',error='provider died');self.production.terminal(copy.deepcopy(self.providers.rows[-1]))
+        run=self.production.status('alpha');self.assertEqual(run['state'],'WAIT_NATIVE');self.assertEqual(run['recoveryWait'],'cmd')
+        self.production.watch(run['id'])
+        run=self.production.status('alpha');self.assertEqual(run['state'],'BLOCKED');self.assertIn('re-routing budget',run['error']);self.assertEqual(run['state_before_block'],'READY');self.assertEqual(len(self.providers.rows),1)
+    def test_ordinary_native_wait_is_not_charged_to_the_provider_budget(self):
+        import production as P
+        identity=self.waiting(providerFailures=P.PROVIDER_FAILURES+1)
+        class Done:
+            def ae_status(self,key):return {'state':'COMPLETED','requestId':key}
+        self.production.completion_gateway=lambda scope:Done();before=len(self.providers.rows)
+        self.production.watch(identity)
+        self.assertNotEqual(self.production.status('alpha')['state'],'BLOCKED');self.assertEqual(len(self.providers.rows),before+1)
+    def test_lease_handover_is_recorded_on_the_run_that_loses_after_effects(self):
+        from native_lane import NativeLane
+        lane=NativeLane(self.root,bridge=self.root/'bridge');self.control.native=lane
+        with patch('socket.socket.connect_ex',return_value=1):
+            first=lane.claim('old edit','alpha',True);self.req['nativeLeaseId']=first['id'];self.start()
+            self.assertEqual(self.complete('plan')['state'],'BLOCKED')
+            self.assertEqual(self.production.lease_handover(),first['id'])
+        offered=[h for h in self.production.status('alpha')['history'] if h.get('leaseHandoverOffered')]
+        self.assertEqual(len(offered),1);self.assertEqual(offered[0]['leaseHandoverOffered'],first['id']);self.assertEqual(offered[0]['state'],'BLOCKED')
+for _name in [n for n in vars(_ReviewFix) if n.startswith('test_') or n=='waiting']:setattr(ProductionTests,_name,vars(_ReviewFix)[_name])
 
 if __name__=='__main__':unittest.main()

@@ -109,3 +109,48 @@ class DesktopTests(unittest.TestCase):
         self.assertEqual(states, ['INTENT', 'DONE'])
 
 if __name__ == '__main__': unittest.main()
+
+
+class DialogWin:
+    """Win32 stand-in for handle_ae_dialogs: a queue of dialogs; pressing the only button closes the front one."""
+    def __init__(self, dialogs, reopen=False): self.dialogs = list(dialogs); self.sent = []; self.reopen = reopen
+    def app_windows(self, process, pid=None): return [dict(d) for d in self.dialogs[:1]]
+    def click_dialog_ok(self, dlg, ok):
+        self.sent.append((dlg, ok))
+        if not self.reopen: self.dialogs.pop(0)
+        return True
+    def gone(self, hwnd): return True
+    def capture(self, hwnd): return Image.new('RGB', (4, 4), (9, 9, 9))
+
+
+def box(hwnd, text, *labels, title='After Effects'):
+    return {'hwnd': hwnd, 'pid': 200, 'class': '#32770', 'title': title, 'texts': [text], 'inputs': [], 'owned': True, 'enabled': True, 'rect': [0, 0, 4, 4],
+            'buttons': [{'hwnd': hwnd * 10 + i, 'text': label, 'enabled': True} for i, label in enumerate(labels)]}
+
+
+class DialogHandlingTests(unittest.TestCase):
+    def desk(self, dialogs, **kw):
+        self.tmp = tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
+        self.win = DialogWin(dialogs, **kw); return GuardedDesktop(Path(self.tmp.name), self.win, clock=lambda: 1.0)
+
+    def test_single_ok_is_acknowledged(self):
+        out = self.desk([box(5, 'After Effects warning: 3 files are missing.', 'OK')]).handle_ae_dialogs(process='afterfx.exe')
+        self.assertEqual(self.win.sent, [(5, 50)]); self.assertTrue(out['handled']); self.assertEqual(len(out['dismissed']), 1)
+
+    def test_known_warning_text_with_a_second_button_is_never_pressed(self):
+        for labels in (('OK', 'Cancel'), ('&Yes', '&No'), ('OK', 'Help')):
+            out = self.desk([box(6, 'After Effects warning: Undo group mismatch, will attempt to fix.', *labels)]).handle_ae_dialogs(process='afterfx.exe')
+            self.assertEqual(self.win.sent, []); self.assertFalse(out['handled']); self.assertIn('nothing was pressed', out['reason'])
+
+    def test_single_unsafe_button_is_not_pressed(self):
+        out = self.desk([box(7, 'Delete all cached frames', 'Delete')]).handle_ae_dialogs(process='afterfx.exe')
+        self.assertEqual(self.win.sent, []); self.assertFalse(out['handled'])
+
+    def test_reappearing_dialog_stops_at_the_limit_with_a_blocker(self):
+        out = self.desk([box(8, 'After Effects error', 'OK')], reopen=True).handle_ae_dialogs(process='afterfx.exe', limit=3)
+        self.assertEqual(len(self.win.sent), 3); self.assertFalse(out['handled']); self.assertEqual(out['hwnd'], 8); self.assertIn('allowance', out['reason'])
+
+    def test_spent_allowance_with_no_dialog_open_is_not_a_blocker(self):
+        self.assertIsNone(self.desk([]).handle_ae_dialogs(process='afterfx.exe', limit=0))
+        out = self.desk([box(9, 'After Effects error', 'OK')]).handle_ae_dialogs(process='afterfx.exe', limit=0)
+        self.assertEqual(self.win.sent, []); self.assertFalse(out['handled'])

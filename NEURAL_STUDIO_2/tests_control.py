@@ -1,4 +1,5 @@
 """Durable station-control contracts. No provider process or native editor is used."""
+import os;os.environ['NEURAL_AE_DIALOGS']='0'  # fixtures never probe or touch the real desktop
 import copy
 from contextlib import closing
 import json

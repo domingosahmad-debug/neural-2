@@ -61,6 +61,10 @@ def validate_phase_candidates(phase_candidates):
     return phase_candidates
 
 
+PROVIDER_RECOVERIES=2  # automatic re-routes per phase after a worker ends without a result
+PROVIDER_FAILURES=8    # lifetime ceiling for one run
+DIALOG_RESUMES=5       # automatic resumes of one native wait after blocking dialogs; then a human Retry is required
+
 class Production:
     def __init__(self, control, services):
         self.control, self.services = control, services
@@ -161,6 +165,12 @@ class Production:
             if not review_candidates:
                 run.update(state='BLOCKED',error='No distinct independent Goldfish reviewer is available.',updated=now());self.persist(db,run);return
             if phase=='goldfish_review':candidate=review_candidates[0]
+            avoid={tuple(a) for a in run.get('avoidRoutes',{}).get(phase,[])}
+            usable=[c for c in review_candidates if (c['route'],c['model']) not in avoid]
+            if avoid and usable:candidate=usable[0]
+            elif avoid:
+                order=[tuple(a) for a in run['avoidRoutes'][phase]]
+                candidate=min(review_candidates,key=lambda c:order.index((c['route'],c['model'])))
             aid=uuid4().hex; station=STATIONS[phase]
             template=dict(schema='neural.station-result.v2',project=p['id'],revision=p['revision'],station=station,assignmentId=aid,summary='')
             previous=[r for r in run['history'] if r.get('result') and not (phase=='goldfish_review' and r['phase']=='harsh_review')]
@@ -189,6 +199,34 @@ class Production:
             self.control.step_save(db,step);self.control.save_projects(db,{**self.control.projects(db),p['id']:p});self.persist(db,run)
         try: self.control.dispatch_intent(step)
         except Exception as e: self.block(identity,str(e))
+
+    def lease_handover(self):
+        """Exact ID of an idle After Effects lease a new claim may replace; None keeps explicit release.
+
+        Idle means nothing can still write: no unresolved native command, no active or
+        uncertain provider job, and the owning run is absent or parked for a human.
+        """
+        native=self.control.native.status();owner=native.get('owner')
+        if not owner or native['unresolved']:return None
+        old=owner['project']
+        if any(j.get('project')==old and str(j['status']).upper() in ('QUEUED','RUNNING','CANCELLING','UNKNOWN') for j in self.control.providers.status()):return None
+        run=self.status(old)
+        if run:
+            if run['state'] not in ('BLOCKED','HUMAN_REVIEW'):return None
+            from production_gateway import unresolved
+            if (Path(run['projectRoot'])/'.neural-gateway'/'registry.json').is_file() and unresolved(run['projectRoot']):return None
+        self.invalidate(old)
+        if run:
+            with self.control.lock,self.control.connection() as db:
+                latest=self._load(run['id'],db)
+                latest['history'].append(dict(phase=latest['phase'],leaseHandoverOffered=owner['id'],state=latest['state'],at=now()));self.persist(db,latest)
+        return owner['id']
+
+    def adopt_lease(self, run):
+        """The human re-claimed After Effects for this same project: continue under that exact lease."""
+        owner=self.control.native.status().get('owner') or {}
+        if owner.get('id') and owner.get('project')==run['project'] and owner['id']!=run['nativeLeaseId']:
+            run['history'].append(dict(phase=run['phase'],leaseAdopted=owner['id'],previousLease=run['nativeLeaseId'],at=now()));run['nativeLeaseId']=owner['id']
 
     def invalidate(self, project=None):
         """Revoke every outstanding per-job native authority BEFORE pause/revision/lease changes."""
@@ -239,6 +277,7 @@ class Production:
             if not run:raise ValueError('No production run exists. Save a notebook note or start a new project.')
             p=self._current(run,db)
             if request.get('revision')!=p['revision']:raise ValueError('Direction belongs to a different project revision.')
+            self.adopt_lease(run)
             previous=next((s for s in run.get('steeringHistory',[]) if s['requestId']==rid),None)
             if previous:
                 if previous['text']!=text or previous.get('phaseCandidates')!=phase_candidates:raise ValueError('Request ID already belongs to a different direction or routing policy.')
@@ -309,12 +348,94 @@ class Production:
                 run.update(state='BLOCKED',error=str(error),updated=now());self.persist(db,run)
             self.services.signal()
 
-    def block(self, identity, error):
+    def block(self, identity, error, **marks):
         with self.control.lock,self.control.connection() as db:
             run=self._load(identity,db)
             if run['state']!='BLOCKED':run['state_before_block']=run['state']
-            run.update(state='BLOCKED',error=str(error),updated=now());self.persist(db,run)
+            run.pop('dialogBlock',None)
+            run.update(state='BLOCKED',error=str(error),updated=now(),**marks);self.persist(db,run)
         self.services.signal()
+
+    def resume_native_watch(self, identity, only_dialog=False):
+        """Re-attach the read-only native watcher to a run blocked while waiting. Never submits or replays."""
+        with self.control.lock,self.control.connection() as db:
+            run=self._load(identity,db);self._current(run,db)
+            if run['state']!='BLOCKED' or run.get('state_before_block')!='WAIT_NATIVE' or not run.get('waitNative') or not run.get('waitScope'):return False
+            if only_dialog and not run.get('dialogBlock'):return False
+            count=run.get('dialogResumes') or {}
+            if count.get('id')!=run['waitNative']:count={'id':run['waitNative'],'n':0}
+            if only_dialog and count['n']>=DIALOG_RESUMES:
+                run.pop('dialogBlock',None)
+                run.update(error='After Effects blocked this command with dialogs '+str(count['n']+1)+' times; automatic resume stopped. Check After Effects, then Retry production (the command is re-read, never replayed). Last dialog: '+str(run.get('error'))[:600],updated=now())
+                self.persist(db,run);stopped=True
+            else:
+                stopped=False;count['n']=count['n']+1 if only_dialog else 0;run['dialogResumes']=count
+        if stopped:self.services.signal();return False
+        with self.control.lock,self.control.connection() as db:
+            run=self._load(identity,db);self._current(run,db)
+            if run['state']!='BLOCKED' or run.get('state_before_block')!='WAIT_NATIVE' or not run.get('waitNative') or not run.get('waitScope'):return False
+            run['dialogResumes']=count
+            run['history'].append(dict(phase=run['phase'],nativeWatchResumed=run['waitNative'],blockedError=run.get('error'),at=now()))
+            run.pop('state_before_block',None);run.pop('dialogBlock',None)
+            run.update(state='WAIT_NATIVE',error=None,waitStarted=time.time(),updated=now());self.persist(db,run)
+        self.services.signal();return True
+
+    def await_dialog(self, identity):
+        """The run is already BLOCKED and visible. Watch the modal with Win32 reads only; resume when it is gone."""
+        errors=0
+        while not self.closed.is_set():
+            try:
+                with self.control.connection() as db:run=self._load(identity,db);self._current(run,db)
+                if run['state']!='BLOCKED' or not run.get('dialogBlock'):return
+                result=self.completion_gateway(run['waitScope']).ae_status(run['waitNative']);errors=0
+            except Exception as error:
+                errors+=1
+                if errors>=5:
+                    # Never die silently while the message promises an automatic resume.
+                    try:
+                        with self.control.lock,self.control.connection() as db:
+                            run=self._load(identity,db)
+                            if run['state']=='BLOCKED' and run.get('dialogBlock'):
+                                run.pop('dialogBlock',None)
+                                run.update(error='The dialog watcher stopped ('+str(error)[:200]+'); automatic resume is off. Answer the dialog in After Effects, then Retry production. '+str(run.get('error'))[:600],updated=now());self.persist(db,run)
+                        self.services.signal()
+                    except Exception:pass
+                    return
+                self.closed.wait(3);continue
+            if result['state']!='SUBMITTED' or not result.get('aeDialog'):
+                if self.resume_native_watch(identity,only_dialog=True):self.watch(identity)
+                return
+            self.closed.wait(3)
+
+    def provider_recovery(self, run, row, db):
+        """A worker that ended without a usable result is replaced once its native boundary is settled.
+
+        Nothing is replayed: a still-running native command is watched, an UNKNOWN
+        native outcome blocks, and the bounded budget stops a failing provider loop.
+        """
+        phase=run['phase'];error=str(row.get('error') or row['status'])
+        entry=dict(phase=phase,jobId=row['id'],assignmentId=row.get('assignmentId'),model=row.get('model'),route=row.get('route'),providerFailure=row['status'],blockedError=error,at=now())
+        avoid=run.setdefault('avoidRoutes',{}).setdefault(phase,[])
+        if [row.get('route'),row.get('model')] not in avoid:avoid.append([row.get('route'),row.get('model')])
+        settle=getattr(self.control.providers,'settle',None) or (lambda *_:None)
+        spent=run.setdefault('providerRecoveries',{});spent[phase]=spent.get(phase,0)+1
+        run['providerFailures']=run.get('providerFailures',0)+1
+        note='\nPROVIDER RECOVERY: the previous '+phase+' worker ('+str(row.get('model'))+') ended '+row['status']+' without a usable result: '+error[:300]+'. Its native requests are settled. Inspect the saved After Effects project and existing artifacts first, reuse completed work, never repeat a completed native command, then finish this phase and return only the exact result JSON object.'
+        pending=self.known_pending_native(row,run)
+        if pending:
+            settle(row['id'],'Production coordinator: invocation ended '+row['status']+'; its one native command is still in flight and is watched from the gateway ledger.')
+            run['history'].append(dict(entry,waitNative=pending));run['consumedEvents'].append(row['id'])
+            run['continuationContext']=run.get('continuationContext','')+note
+            run.update(state='WAIT_NATIVE',waitScope=str(self.root/'data/provider-jobs'/row['id']/'scope.json'),waitNative=pending,waitMedia=[],waitStarted=time.time(),error=None,recoveryWait=pending,updated=now())
+            self.persist(db,run);return 'watch'
+        self.settled_native_boundary(run)
+        settle(row['id'],'Production coordinator: invocation ended '+row['status']+'; native boundary reconciled from the gateway ledger.')
+        if spent[phase]>PROVIDER_RECOVERIES or run['providerFailures']>PROVIDER_FAILURES:
+            raise ValueError('Provider failed repeatedly in '+phase+' ('+error[:300]+'); the automatic re-routing budget is spent. Fix the provider, then Retry production.')
+        run['history'].append(entry);run['consumedEvents'].append(row['id'])
+        run['continuationContext']=run.get('continuationContext','')+note
+        run.pop('jobId',None);run.update(state='READY',error=None,updated=now())
+        self.persist(db,run);return 'dispatch'
 
     def settled_native_boundary(self, run):
         """Bridge completion alone cannot settle a gateway command without its report."""
@@ -377,11 +498,13 @@ class Production:
                     if row['status']!='COMPLETED':
                         decode=next((s for s in row.get('steps',[]) if s['id']=='decode'),{})
                         audio=next((s.get('report',{}) for s in row.get('steps',[]) if s['id']=='audio'),{})
-                        if row['status']!='FAILED' or decode.get('status')!='COMPLETED' or audio.get('clipped_samples',0)<=0 or run.get('technicalRecoveries',0)>=2:
+                        if row['status']!='FAILED' or run.get('technicalRecoveries',0)>=2:
                             raise ValueError('Full-render technical verification failed: '+str(row.get('error')))
                         run['technicalRecoveries']=run.get('technicalRecoveries',0)+1
                         run.setdefault('technicalFailures',[]).append(copy.deepcopy(row))
-                        run['continuationContext']=run.get('continuationContext','')+'\nTECHNICAL AUDIO RECOVERY: Exact full-render decode/geometry/frame count/cadence passed; audio_measure found '+str(audio['clipped_samples'])+' PCM ceiling samples. Read technical job '+row['id']+' actual reports. Use media review_copy with audio_gain_db=-2 (or further measured headroom on the second bounded correction), same dimensions/cadence/frame_limit and original completed native master if available; never rerender AE for delivery headroom. Do not claim gain repairs baked-in source distortion or listening. Return corrected render with exact provenance; full technical gates and independent critique must run again. No gates waived.'
+                        if decode.get('status')!='COMPLETED' or audio.get('clipped_samples',0)<=0:
+                            run['continuationContext']=run.get('continuationContext','')+'\nTECHNICAL RENDER RECOVERY: full-render technical verification job '+row['id']+' FAILED: '+str(row.get('error'))[:400]+'. Read its actual step reports, correct the render/export for the same comp (exact expected geometry, frame count, cadence, audio) and return the corrected render with exact provenance. Full technical gates and independent critique run again. No gates waived.'
+                        else:run['continuationContext']=run.get('continuationContext','')+'\nTECHNICAL AUDIO RECOVERY: Exact full-render decode/geometry/frame count/cadence passed; audio_measure found '+str(audio['clipped_samples'])+' PCM ceiling samples. Read technical job '+row['id']+' actual reports. Use media review_copy with audio_gain_db=-2 (or further measured headroom on the second bounded correction), same dimensions/cadence/frame_limit and original completed native master if available; never rerender AE for delivery headroom. Do not claim gain repairs baked-in source distortion or listening. Return corrected render with exact provenance; full technical gates and independent critique must run again. No gates waived.'
                         run.update(phase='render',state='READY',error=None)
                     else:
                         audio=next(s['report'] for s in row['steps'] if s['id']=='audio')
@@ -398,6 +521,12 @@ class Production:
                         self.persist(db,run)
                         self.watchers.submit(self.quota_boundary,run['id'],copy.deepcopy(row))
                         return
+                    if row['status'] in ('FAILED','UNKNOWN') and run['state'] in ('DISPATCHING','WORKING') and run.get('assignmentId')==row.get('assignmentId'):
+                        recovery=self.provider_recovery(run,row,db)
+                        db.commit()  # The recovery decision is durable before any watcher or dispatch observes it.
+                        if recovery=='watch':self.watchers.submit(self.watch,run['id'])
+                        else:self.dispatch(run['id'])
+                        self.services.signal();return
                     if row['status']!='COMPLETED':raise ValueError('Provider did not complete: '+str(row.get('error') or row['status']))
                     from station_results import decode
                     data=decode(self.control.providers.result(row['id']));result=data.get('production')
@@ -473,7 +602,8 @@ class Production:
                         run.update(phase=target,state='READY',error=None)
                     elif outcome=='repair':
                         run['issues']+=result.get('issues') or ['Required phase/review gate failed; read its saved criterion evidence.']
-                        run['repairs']+=1  # Lifetime telemetry; not a shared budget across unrelated gates.
+                        run['repairs']+=1  # Per-gate budgets below; the lifetime ceiling only stops an endless cross-gate loop.
+                        if run['repairs']>run.get('maxTotalRepairs',3*run['maxRepairs']):raise ValueError('Repair budget exhausted for the whole run ('+str(run['repairs'])+' repair rounds); preserved evidence and precise issues require a human decision, not another loop.')
                         attempts=run.setdefault('repairAttempts',{})
                         attempts[phase]=attempts.get(phase,0)+1
                         if attempts[phase]>run['maxRepairs']:raise ValueError('Repair budget exhausted for '+phase+'; preserved evidence and precise issues require a new diagnosed action, not a loop.')
@@ -501,7 +631,9 @@ class Production:
                     elif phase=='goldfish_review':run.update(state='HUMAN_REVIEW',finished=now());advance=False
                     elif phase=='plan_review':run['phase']='prototype' if run.get('phaseCandidates') else 'build'
                     else:run['phase']=PHASES[PHASES.index(phase)+1]
-                    if outcome=='complete':run.setdefault('repairAttempts',{}).pop(phase,None)
+                    if outcome=='complete':
+                        run.setdefault('repairAttempts',{}).pop(phase,None)
+                        run.get('providerRecoveries',{}).pop(phase,None);run.get('avoidRoutes',{}).pop(phase,None)
                     if phase!='render' and run['state']!='HUMAN_REVIEW':run['state']='READY';advance=True
                     self.persist(db,run)
             if run['state']=='VERIFY_INTENT':self.verify_render(run)
@@ -554,7 +686,9 @@ class Production:
                     latest['history'].append(dict(phase=latest['phase'],jobId=row['id'],quotaPredecessor=row['id'],at=now()));self.persist(db,latest)
             self.control.terminal(row,production_boundary=True)
             successors=[j for j in self.control.providers.status() if j.get('project')==row['project'] and j.get('assignmentId')!=row['assignmentId'] and j.get('station')==row['station'] and j.get('status') in ('QUEUED','RUNNING')]
-            if not successors:raise ValueError('Subscription exhausted; no eligible fallback started. Configure an available provider and continue the saved task.')
+            if not successors:
+                step=next((s for s in self.control.steps(row['project']) if s.get('requestId')==row.get('request_id')),{})
+                raise ValueError('Subscription exhausted; no eligible fallback started'+(' ('+str(step['fallbackBlocked'])+')' if step.get('fallbackBlocked') else '')+'. Configure an available provider and continue the saved task.')
         except Exception as e:self.block(identity,str(e))
 
     def completion_gateway(self, scope):
@@ -637,7 +771,6 @@ class Production:
 
     def watch(self, identity):
         """Deterministic native/local watcher; no model turns while work is pending."""
-        last_dialog_check = 0.0
         try:
             while not self.closed.is_set():
                 with self.control.connection() as db:run=self._load(identity,db);self._current(run,db)
@@ -645,16 +778,14 @@ class Production:
                 if run.get('waitNative') and time.time()-run['waitStarted']>65*60:raise ValueError('Native/media completion deadline ended UNKNOWN; no action was replayed.')
                 gateway=self.completion_gateway(run['waitScope']);pending=False;completed=[];failed=False
                 if run.get('waitNative'):
-                    now_m = time.monotonic()
-                    if now_m - last_dialog_check >= 3.0:
-                        last_dialog_check = now_m
-                        try:
-                            from guarded_desktop import GuardedDesktop
-                            GuardedDesktop(self.root).dismiss_ae_warning()
-                        except Exception:
-                            pass
+                    # ae_status owns deterministic dialog handling: plain notifications are acknowledged there.
                     result=gateway.ae_status(run['waitNative'])
                     if result['state']=='FAILED':raise ValueError('Native command failed: '+str(result.get('error')))
+                    if result['state']=='UNKNOWN':raise ValueError('Native command outcome is UNKNOWN: '+str(result.get('error'))+' Inspect After Effects; nothing was replayed.')
+                    if result.get('aeDialog'):
+                        dialog=result['aeDialog']
+                        self.block(identity,dialog['message']+' Buttons: '+(', '.join(dialog.get('buttons') or []) or 'not readable')+'. Screenshot: '+str(dialog.get('screenshot'))+'. Answer it in After Effects; the run then resumes by itself.',dialogBlock=True)
+                        self.await_dialog(identity);return
                     if result['state']!='COMPLETED':pending=True
                     else:completed.append(result)
                 for key in run.get('waitMedia',[]):
@@ -671,7 +802,11 @@ class Production:
                         latest=self._load(identity,db);self._current(latest,db)
                         if latest['state'] not in ('WAIT_NATIVE','WAIT_MEDIA'):return
                         latest['history'].append(dict(phase=latest['phase'],completionEvidence=completed,at=now()))
+                        recovery=latest.pop('recoveryWait',None)
                         latest.update(state='READY');self.persist(db,latest)
+                        over=bool(recovery) and (latest.get('providerRecoveries',{}).get(latest['phase'],0)>PROVIDER_RECOVERIES or latest.get('providerFailures',0)>PROVIDER_FAILURES)
+                    if over:
+                        self.block(identity,'Provider failed repeatedly in '+latest['phase']+'; the automatic re-routing budget is spent. The native command it left has finished and is settled. Fix the provider, then Retry production.');return
                     self.dispatch(identity);return
                 self.closed.wait(.5)
         except Exception as e:self.block(identity,str(e))
@@ -700,6 +835,11 @@ class Production:
         if current and current['state']=='BLOCKED' and current.get('state_before_block')=='WAIT_MEDIA':
             if not self.resume_failed_media(current['id'],blocked=True):raise ValueError('Mechanical work is still pending; nothing restarted.')
             return self.status(current['project'])
+        if current and current['state']=='BLOCKED' and current.get('state_before_block')=='WAIT_NATIVE' and current.get('waitNative') and current.get('waitScope'):
+            # Reconciliation, not a retry: the watcher re-reads the exact request and either continues or blocks again with the precise reason.
+            if not self.resume_native_watch(current['id']):raise ValueError('The native wait could not be re-attached; nothing restarted.')
+            self.watchers.submit(self.watch,current['id'])
+            return self.status(current['project'])
         with self.control.lock, self.control.connection() as db:
             db.execute('BEGIN IMMEDIATE')
             rows=[json.loads(r[0]) for r in db.execute('SELECT body FROM production_runs WHERE project=? ORDER BY rowid',(request.get('project'),))]
@@ -708,9 +848,11 @@ class Production:
             if run.get('steering') and not run['steering'].get('appliedAt'):
                 raise ValueError('A saved direction awaits safe-boundary reconciliation. Apply a new direction after resolving the exact blocker; do not retry the obsolete phase.')
             jobs=self.control.providers.status()
-            if any(str(j['status']).upper() in ('QUEUED','RUNNING','UNKNOWN','CANCELLING') and j.get('project')==run['project'] for j in jobs):
+            own=[j for j in jobs if str(j['status']).upper()=='UNKNOWN' and j.get('project')==run['project'] and j.get('assignmentId')==run.get('assignmentId')]
+            if any(str(j['status']).upper() in ('QUEUED','RUNNING','UNKNOWN','CANCELLING') and j.get('project')==run['project'] and j not in own for j in jobs):
                 raise ValueError('Reconcile active or uncertain work before retrying production.')
             blocked=next((j['id'] for j in jobs if j.get('assignmentId')==run.get('assignmentId')),None) or run.get('jobId')
+            self.adopt_lease(run)
             owner=self.control.native.status().get('owner') or {}
             if self.control.native.status()['unresolved'] or owner.get('id')!=run['nativeLeaseId'] or owner.get('project')!=run['project']:
                 raise ValueError('An exact settled native lease for this project is required.')
@@ -718,11 +860,27 @@ class Production:
             from production_gateway import unresolved
             if registry.is_file() and unresolved(run['projectRoot']):
                 raise ValueError('An unsettled native gateway request exists; reconcile its exact result instead of retrying.')
-            if run.get('state_before_block') in ('VERIFY_INTENT','WAIT_TECHNICAL','WAIT_NATIVE','WAIT_MEDIA'):raise ValueError('Pending work outcome must be reconciled, not retried.')
-            run['history'].append(dict(phase=run['phase'],retryOf=blocked,blockedError=run.get('error'),at=now()))
-            run.pop('jobId',None);run.pop('state_before_block',None)
-            run.update(state='READY',error=None,updated=now());self.persist(db,run)
-        self.dispatch(run['id'])
+            for j in own:
+                if getattr(self.control.providers,'settle',None):self.control.providers.settle(j['id'],'Retry production: the native boundary is settled; the ended invocation is closed, never rerun.')
+            before=run.get('state_before_block')
+            if before in ('WAIT_NATIVE','WAIT_MEDIA'):raise ValueError('Pending work outcome must be reconciled, not retried.')
+            if before in ('VERIFY_INTENT','WAIT_TECHNICAL'):
+                technical=run.get('technicalJob') if before=='WAIT_TECHNICAL' else None
+                if technical and self.services.engine.job(technical)['status'] in ('QUEUED','RUNNING','CANCELLING'):
+                    raise ValueError('Technical verification is still running; nothing restarted.')
+                # Verification only reads the finished render: run it again rather than re-rendering or replaying anything native.
+                self.artifact(run,run.get('render'))
+                run['history'].append(dict(phase=run['phase'],reverifyOf=technical,blockedError=run.get('error'),at=now()))
+                run.pop('state_before_block',None);run.pop('technicalJob',None)
+                run.update(state='VERIFY_INTENT',error=None,updated=now());self.persist(db,run)
+            else:
+                run['history'].append(dict(phase=run['phase'],retryOf=blocked,blockedError=run.get('error'),at=now()))
+                run.pop('jobId',None);run.pop('state_before_block',None)
+                # The human fixed the cause: every configured route is eligible again.
+                run.get('providerRecoveries',{}).pop(run['phase'],None);run.get('avoidRoutes',{}).pop(run['phase'],None);run.pop('providerFailures',None);run.pop('recoveryWait',None)
+                run.update(state='READY',error=None,updated=now());self.persist(db,run)
+        if run['state']=='VERIFY_INTENT':self.verify_render(run)
+        else:self.dispatch(run['id'])
         return self.status(run['project'])
 
     def answer_question(self, request):
@@ -761,6 +919,12 @@ class Production:
         for run in latest.values():
             try:
                 state=run.get('state')
+                if state=='BLOCKED' and run.get('dialogBlock') and run.get('waitNative') and run.get('waitScope'):
+                    try:
+                        with self.control.connection() as db:self._current(run,db)
+                        self.watchers.submit(self.await_dialog,run['id'])
+                    except ValueError:pass
+                    continue
                 if state in ('BLOCKED','HUMAN_REVIEW','WAIT_HUMAN'):continue
                 try:
                     with self.control.connection() as db:self._current(run,db)
@@ -775,7 +939,7 @@ class Production:
                 elif state=='WAIT_TECHNICAL':
                     actual=self.services.engine.job(run['technicalJob'])
                     if actual['status'] not in ('QUEUED','RUNNING'):self.notify(actual)
-                elif state=='VERIFY_INTENT':self.block(run['id'],'Technical submit outcome requires reconciliation after restart; nothing was replayed.')
+                elif state=='VERIFY_INTENT':self.pool.submit(self.verify_render,run)  # read-only render verification; nothing native is replayed
                 elif state in ('DISPATCHING','WORKING'):
                     job=jobs.get(run.get('jobId')) or next((j for j in jobs.values() if j.get('request_id')==run.get('requestId')),None)
                     if not job:self.block(run['id'],'Provider dispatch outcome is unknown after restart; nothing was replayed.')

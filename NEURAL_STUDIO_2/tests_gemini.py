@@ -4,6 +4,9 @@ import tempfile
 import threading
 import unittest
 from unittest.mock import patch
+
+# A fresh download has no data/ folder until setup creates it; these tests write under it.
+(Path(__file__).resolve().parent / 'data').mkdir(exist_ok=True)
 from providers_engine.gemini import GeminiTransport, parse, session_settings, validate
 
 MODEL='gemini-4-argon-high'

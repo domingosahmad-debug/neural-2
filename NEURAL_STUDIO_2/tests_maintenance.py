@@ -1,4 +1,5 @@
 """GF-D01 reservation races and GF-D02 crash recovery for source repair."""
+import os;os.environ['NEURAL_AE_DIALOGS']='0'  # fixtures never probe or touch the real desktop
 import json, subprocess, sys, tempfile, threading, unittest
 from pathlib import Path
 

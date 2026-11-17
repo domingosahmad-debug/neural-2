@@ -170,11 +170,13 @@ class Transport:
             state,lines,error=self._run(discovery,folder,env,'',cancel,raw,timeout=15)
             if state!='COMPLETED' or model not in {s.strip() for s in lines}:
                 return {'status':state if state in ('CANCELLED','UNKNOWN') else 'FAILED','error':error or 'Free OpenCode model is absent from the installed CLI catalog','execution_started':False}
+            from . import failures
+            if not failures.probe_passed(model): return {'status':'FAILED','error':failures.PROBE_ERROR+model,'execution_started':False}
             config=folder/'opencode-config';config.mkdir(exist_ok=True)
             (config/'opencode.json').write_text(json.dumps({'permission':DENY}),encoding='utf-8')
             # CLI 2.2.7 ignores OPENCODE_CONFIG_DIR and reads opencode.json from the working directory; keep the deny-all there too.
             (folder/'opencode.json').write_text(json.dumps({'permission':DENY}),encoding='utf-8')
-            env.update(OPENCODE_CONFIG_DIR=str(config),OPENCODE_DISABLE_AUTOUPDATE='true',OPENCODE_DISABLE_PROJECT_CONFIG='true',OPENCODE_DISABLE_LSP_DOWNLOAD='true',OPENCODE_DISABLE_DEFAULT_PLUGINS='true')
+            env.update(OPENCODE_CONFIG_DIR=str(config),OPENCODE_DISABLE_AUTOUPDATE='true',OPENCODE_DISABLE_PROJECT_CONFIG='true',OPENCODE_DISABLE_LSP_DOWNLOAD='true',OPENCODE_DISABLE_DEFAULT_PLUGINS='true',PWD=str(folder))
             args=[cli,'run','--standalone' if desktop else '--pure','--format','json','--model',model,'--title','Neural2 bounded text station']
             if not desktop: args+=['--dir',str(folder)]
             if session: args+=['--session',session]

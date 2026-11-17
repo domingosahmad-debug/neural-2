@@ -9,6 +9,8 @@ def required(data, field, limit):
     return value
 
 def decode(outcome):
+    # The production host already validated this exact object against the task identity.
+    if isinstance(outcome.get('structured_result'),dict):return outcome['structured_result']
     text=outcome.get('text')
     if not isinstance(text,str):raise ValueError('Provider did not return a station-result document.')
     match=re.fullmatch(r'\s*```(?:json)?\s*\n(.*?)\n```\s*',text,re.DOTALL)

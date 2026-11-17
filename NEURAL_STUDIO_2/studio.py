@@ -414,7 +414,8 @@ def serve(db, port, open_browser=False):
                     if action == 'cancel': return self.json({'result':providers.cancel(request.get('id'))})
                     if action == 'result': return self.json({'result':providers.result(request.get('id'))})
                     if action == 'native-claim':
-                        with maintenance.admission(ROOT,'native-claim'): return self.json({'result':native.claim(request.get('owner'),request.get('project'),request.get('oldDisabled'))})
+                        with control.lock:
+                          with maintenance.admission(ROOT,'native-claim'): return self.json({'result':native.claim(request.get('owner'),request.get('project'),request.get('oldDisabled'),replace=production.lease_handover())})
                     if action == 'native-release':
                         with control.lock:
                             production.invalidate()

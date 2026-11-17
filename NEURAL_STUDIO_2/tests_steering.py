@@ -1,4 +1,5 @@
 """Safe-boundary steering fixtures; never use live jobs, media or AE."""
+import os;os.environ['NEURAL_AE_DIALOGS']='0'  # fixtures never probe or touch the real desktop
 import copy
 import json
 import threading

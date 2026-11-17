@@ -5,6 +5,18 @@ import re
 
 SUBSCRIPTION_WINDOWS = {'five_hour', 'seven_day', 'seven_day_opus', 'seven_day_sonnet'}
 FREE_MODEL = re.compile(r'opencode/[a-z0-9][a-z0-9_.-]*-free')
+PROBE_ROOT = __import__('pathlib').Path(__file__).resolve().parents[1] / 'data' / 'opencode-probe'
+PROBE_ERROR = 'Free OpenCode model has not passed the scoped tool probe; run: python tools/opencode_free_probe.py '
+
+
+def probe_passed(model):
+    """True only when tools/opencode_free_probe.py recorded a pass for this exact model.
+
+    Until then the seat is unproven: on 15 Nov 2026 CLI 2.2.7 ran shell and write for a free model
+    despite the deny-all config and exposed no Neural MCP tool, so it must never be given a turn."""
+    try: return __import__('json').loads((PROBE_ROOT / str(model).replace('/', '_') / 'summary.json').read_text(encoding='utf-8')).get('passed') is True
+    except (OSError, ValueError, AttributeError): return False
+
 # The ChatGPT-subscription Codex CLI reports plan exhaustion as a terminal
 # turn.failed whose error object carries only this fixed product refusal.
 CODEX_PLAN_LIMIT = re.compile(r"You’ve hit your usage limit\. .*try again at [^.]+\.?")

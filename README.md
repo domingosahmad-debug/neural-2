@@ -4,6 +4,12 @@ Neural 2.0 is a local AI editing studio for Adobe After Effects. You give it a c
 
 It runs entirely on your PC. The AI models are the CLIs you install and sign in to with **your own** accounts: Claude Code, Codex, OpenCode (it has free models) and Antigravity (for Gemini). Neural never stores or shares keys.
 
+## Download
+
+On https://github.com/domingosahmad-debug/neural-2 click **Code → Download ZIP** (or `git clone https://github.com/domingosahmad-debug/neural-2.git C:\Neural2`). Before extracting the ZIP, right-click it → **Properties** → **Unblock**.
+
+**Using an AI to set it up?** Give it [BEFORE_YOU_LAUNCH_CHECKLIST.md](BEFORE_YOU_LAUNCH_CHECKLIST.md). It lists every requirement with a check command and the expected result.
+
 ## Quick start (Windows 10/11)
 
 1. Install the third-party tools in [REQUIREMENTS.md](REQUIREMENTS.md). At minimum you need Python 3.12+, After Effects and one AI CLI.
@@ -18,6 +24,7 @@ It runs entirely on your PC. The AI models are the CLIs you install and sign in 
 
 | Read | For |
 |---|---|
+| [BEFORE_YOU_LAUNCH_CHECKLIST.md](BEFORE_YOU_LAUNCH_CHECKLIST.md) | Every requirement with a check command, for your AI to verify before launch |
 | [SETUP.md](SETUP.md) | Step-by-step install and troubleshooting |
 | [REQUIREMENTS.md](REQUIREMENTS.md) | Every external tool, model and plugin, with versions, links and hashes |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | How the stations, phases, routing, events and the AE bridge work |

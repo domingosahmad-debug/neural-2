@@ -21,6 +21,7 @@ decisionPanel.className = 'project-decision'; decisionPanel.hidden = true; decis
 decisionPanel.innerHTML = '<p class="eyebrow">Action needed · saved project decision</p><h3 id="decision-question"></h3><form id="decision-form"><label>Choose an answer<select id="decision-choices"></select></label><label>Or give a different answer<textarea id="decision-answer" rows="2" maxlength="4000" placeholder="Optional custom answer"></textarea></label><button class="primary-action" type="submit">Save answer & continue</button></form><p id="decision-feedback" aria-live="polite"></p>';
 projectBar.after(decisionPanel);
 let decisionIdentity = '';
+let attentionSeen = '';
 function stationState(name = station) { return controlState?.project === projectId ? controlState.stations?.find(row => row.station === name) : null; }
 function controlLabel(row) { return stateNames[String(row?.state || 'unknown').toLowerCase()] || 'Unknown'; }
 function controlCapabilities() { return Array.isArray(controlState?.capabilities) ? controlState.capabilities : []; }
@@ -71,6 +72,12 @@ window.neuralControlRender = () => {
   projectBar.dataset.state = projectActivity?.state || 'unknown';
   projectBar.setAttribute('role', ['blocked','unknown','human_review','needs_review','needs_input'].includes(projectActivity?.state) ? 'alert' : 'status');
   el('control-project-reason').textContent = valid ? projectActivity?.reason || controlState.pauseReason || 'Execution state unavailable. Refresh the app after the service update.' : controlError || 'Waiting for the control service.';
+  // A stopped run must reach the human even when this window is behind After Effects.
+  const attention = valid && ['blocked','unknown','human_review','needs_input'].includes(projectActivity?.state) ? projectActivity.state + '|' + (projectActivity.reason || '') : '';
+  if (attention && attention !== attentionSeen && typeof Notification === 'function') {
+    try { new Notification('Neural 2 · ' + state, {body: String(projectActivity.reason || '').slice(0, 300), requireInteraction: true}); } catch (error) { /* the in-app alert remains */ }
+  }
+  attentionSeen = attention;
   const question = valid && !controlState.paused && controlState.production?.state === 'WAIT_HUMAN' ? controlState.production.question : null;
   decisionPanel.hidden = !question;
   if (question && decisionIdentity !== projectId + ':' + question.id) {

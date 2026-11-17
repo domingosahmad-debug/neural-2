@@ -23,7 +23,7 @@ class OpenCodeProduction(unittest.TestCase):
             {'type': 'tool_use', 'sessionID': 'ses_1', 'part': {'type': 'tool', 'tool': 'neural_project_context', 'state': {'status': 'completed'}}},
             {'type': 'text', 'sessionID': 'ses_1', 'part': {'text': 'Done.\n```json\n' + self.result_text + '\n```'}},
             {'type': 'step_finish', 'sessionID': 'ses_1', 'part': {'tokens': {'input': 1}, 'cost': 0}}]
-        self.calls = []; self.host.popen = self.fake
+        self.calls = []; self.host.popen = self.fake; self.proven = True
 
     def fake(self, args, **kw):
         self.calls.append((args, kw))
@@ -33,8 +33,18 @@ class OpenCodeProduction(unittest.TestCase):
     def run_host(self, session=None):
         self.scope_path.write_text(json.dumps(self.scope), encoding='utf-8')
         with patch('providers_engine.production_host.APP_ROOT', self.root), patch('providers_engine.production_host.SCRIPT', self.script), \
-             patch('providers_engine.production_host.executable', return_value='opencode-cli.exe'):
+             patch('providers_engine.production_host.executable', return_value='opencode-cli.exe'), patch('providers_engine.failures.probe_passed', lambda model: self.proven):
             return self.host.run(self.row, self.packet, self.root / 'job evidence', session, threading.Event())
+
+    def test_model_without_a_passed_tool_probe_never_starts(self):
+        self.prepare(); self.proven = False; result = self.run_host()
+        self.assertEqual(result['status'], 'FAILED'); self.assertIs(result['execution_started'], False)
+        self.assertIn('opencode_free_probe.py ' + MODEL, result['error'])
+        self.assertTrue(all(args[1] == 'models' for args, _ in self.calls), self.calls)
+
+    def test_session_folder_is_forced_through_pwd(self):
+        self.prepare(); self.run_host(); args, kw = self.calls[-1]
+        self.assertEqual(kw['env']['PWD'], str(Path(kw['cwd'])))
 
     def test_scoped_tools_deny_all_builtins_and_embedded_json(self):
         self.prepare(); result = self.run_host()

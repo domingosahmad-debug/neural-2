@@ -173,6 +173,23 @@ class ProviderTests(unittest.TestCase):
         fake=FakeTransport();owner=self.owner(transport=fake)
         self.assertEqual(owner.status()[0]['status'],'UNKNOWN');self.assertEqual(fake.calls,[])
         self.assertTrue((folder/'terminal.json').is_file())
+    def test_settle_lifts_unknown_fence_without_rerunning(self):
+        folder=self.root/'data/provider-jobs'/'crash'
+        save(folder/'job.json',{'id':'crash','project':'p','assignmentId':'a','station':'analysis','session_key':'key','status':'RUNNING','created':1,'request_id':'r','request_hash':'h'})
+        fake=FakeTransport();owner=self.owner(transport=fake)
+        self.assertEqual(owner.status()[0]['status'],'UNKNOWN')
+        row=owner.settle('crash','owner reconciled the native boundary')
+        self.assertEqual(row['status'],'FAILED');self.assertEqual(fake.calls,[])
+        saved=json.loads((folder/'job.json').read_text(encoding='utf-8'))
+        self.assertEqual(saved['reconciled']['from'],'UNKNOWN');self.assertFalse(saved['conversation_blocked'])
+        # Idempotent: a settled or ordinary terminal job is left exactly as recorded.
+        again=owner.settle('crash','second call');self.assertEqual(again['status'],'FAILED')
+        self.assertEqual(json.loads((folder/'job.json').read_text(encoding='utf-8'))['reconciled']['reason'],'owner reconciled the native boundary')
+    def test_settle_refuses_active_job(self):
+        fake=FakeTransport(block=True);done=threading.Event();owner=self.owner(transport=fake,on_terminal=lambda row:done.set())
+        row=self.submit(owner);self.assertTrue(fake.started.wait(2))
+        with self.assertRaisesRegex(ValueError,'still active'):owner.settle(row['id'],'too early')
+        fake.release.set();self.assertTrue(done.wait(2))
     def test_cancel_running_requires_reconciliation(self):
         fake=FakeTransport(block=True);done=threading.Event();owner=self.owner(transport=fake,on_terminal=lambda row:done.set())
         row=self.submit(owner);self.assertTrue(fake.started.wait(2));owner.cancel(row['id']);self.assertTrue(done.wait(2))
@@ -223,7 +240,10 @@ class ProviderTests(unittest.TestCase):
                 if len(calls)==1:return 'COMPLETED',[model+'\n'],None
                 event={'type':'error','sessionID':'ses_mimo','error':{'type':'provider.free-limit','status':429,'message':'Free usage limit reached'}}
                 return 'COMPLETED',[json.dumps(event)+'\n'],None
-        with patch('providers_engine.transport.executable',return_value='opencode-cli.exe'):
+        with patch('providers_engine.transport.executable',return_value='opencode-cli.exe'),patch('providers_engine.failures.probe_passed',lambda m:False):
+            unproven=Rejected().run({'route':'opencode','model':model,'effort':'default'},packet(),self.root,None,threading.Event())
+        self.assertEqual((unproven['status'],unproven['execution_started'],len(calls)),('FAILED',False,1));calls.clear()
+        with patch('providers_engine.transport.executable',return_value='opencode-cli.exe'),patch('providers_engine.failures.probe_passed',lambda m:True):
             outcome=Rejected().run({'route':'opencode','model':model,'effort':'default'},packet(),self.root,None,threading.Event())
         self.assertEqual(len(calls),2)
         self.assertEqual(outcome['status'],'FAILED')

@@ -5,7 +5,8 @@ You are helping a new owner install and run Neural 2.0 on their own Windows PC w
 ## Read in this order
 
 1. `README.md`: what Neural is and the quick start.
-2. `REQUIREMENTS.md`: check each item on this machine. Install what is missing, with the user's consent. Never enter passwords or keys for them; they sign in to each CLI themselves.
+2. `BEFORE_YOU_LAUNCH_CHECKLIST.md`: go through every line, run each check and fix failures before launching. `REQUIREMENTS.md` has the versions, links and hashes behind it.
+   Details in `REQUIREMENTS.md`: check each item on this machine. Install what is missing, with the user's consent. Never enter passwords or keys for them; they sign in to each CLI themselves.
 3. `SETUP.md`: run `Setup-Neural2.cmd -CheckOnly`, then `Setup-Neural2.cmd` (add `-Voice` if they want local voice or dictation).
 4. `ARCHITECTURE.md`: stations, phases, routing, events and the AE lane.
 5. `WORKFLOW_RULES.md`: the non-negotiable safety rules and the efficiency rules.

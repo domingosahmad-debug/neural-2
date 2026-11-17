@@ -220,6 +220,23 @@ class ProviderJobs:
                 save(self.base/job_id/'result.json',{'status':row['status'],'error':row['error'],'execution_started':invocation_started})
         self._finish(row)
 
+    def settle(self,job_id,reason):
+        """Record that an ended UNKNOWN/blocked invocation was reconciled by its owner.
+
+        The invocation is never re-run; only its routing fence is lifted so a new
+        guarded assignment can be admitted. The original outcome stays on record.
+        """
+        with self.lock:
+            self._folder(job_id);row=self.rows[job_id]
+            if row['status'] in ACTIVE:raise ValueError('Provider job is still active; nothing settled')
+            if row['status']!='UNKNOWN' and not row.get('conversation_blocked'):return self._public(row)
+            row['reconciled']={'from':row['status'],'conversation_blocked':bool(row.get('conversation_blocked')),'reason':str(reason)[:500],'at':time.time()}
+            if row['status']=='UNKNOWN':row['status']='FAILED'
+            row['conversation_blocked']=False
+            self._save(row)
+        self._changed()
+        return self._public(row)
+
     def cancel(self,job_id):
         with self.lock:
             self._folder(job_id)

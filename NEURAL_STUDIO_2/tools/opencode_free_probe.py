@@ -13,7 +13,7 @@ def run(model):
     d = H.parent / 'data' / 'opencode-probe' / model.replace('/', '_'); cfg = d / 'cfg'; cfg.mkdir(parents=True, exist_ok=True)
     perm = dict(DENY); perm['probe_*'] = 'allow'
     (d / 'opencode.json').write_text(json.dumps({'permission': perm, 'mcp': {'servers': {'probe': {'type': 'local', 'command': [sys.executable, str(H / 'opencode_probe_mcp.py')]}}}}), encoding='utf-8')
-    env = dict(os.environ); env.update(OPENCODE_CONFIG_DIR=str(cfg), OPENCODE_DISABLE_AUTOUPDATE='true', OPENCODE_DISABLE_PROJECT_CONFIG='true', OPENCODE_DISABLE_LSP_DOWNLOAD='true', OPENCODE_DISABLE_DEFAULT_PLUGINS='true')
+    env = dict(os.environ); env.update(OPENCODE_CONFIG_DIR=str(cfg), OPENCODE_DISABLE_AUTOUPDATE='true', OPENCODE_DISABLE_LSP_DOWNLOAD='true', OPENCODE_DISABLE_DEFAULT_PLUGINS='true', PWD=str(d))  # same wiring as providers_engine/production_host.py
     t = time.time(); out = ''
     try:
         p = subprocess.run([str(CLI), 'run', '--standalone', '--format', 'json', '--model', model, '--title', 'Neural2 tool probe'], input=PROMPT, capture_output=True, text=True, encoding='utf-8', errors='replace', cwd=d, env=env, timeout=240)

@@ -38,7 +38,7 @@ class Win:
                 (self.u.SetForegroundWindow, wintypes.BOOL, (H,)), (self.u.GetDC, H, (H,)), (self.u.ReleaseDC, I, (H, H)),
                 (self.u.PrintWindow, wintypes.BOOL, (H, H, wintypes.UINT)), (self.u.GetWindowRect, wintypes.BOOL, (H, V)), (self.u.ShowWindow, wintypes.BOOL, (H, I)),
                 (self.u.IsIconic, wintypes.BOOL, (H,)), (self.u.IsWindowVisible, wintypes.BOOL, (H,)), (self.u.GetWindowTextW, I, (H, wintypes.LPWSTR, I)),
-                (self.u.GetWindowThreadProcessId, wintypes.DWORD, (H, V)), (self.u.GetClassNameW, I, (H, wintypes.LPWSTR, I)), (self.u.EnumChildWindows, wintypes.BOOL, (H, V, wintypes.LPARAM)), (self.u.SendMessageTimeoutW, V, (H, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM, wintypes.UINT, wintypes.UINT, V)),
+                (self.u.GetWindowThreadProcessId, wintypes.DWORD, (H, V)), (self.u.GetWindow, H, (H, wintypes.UINT)), (self.u.IsWindow, wintypes.BOOL, (H,)), (self.u.IsWindowEnabled, wintypes.BOOL, (H,)), (self.u.GetWindowLongW, wintypes.LONG, (H, I)), (self.u.GetClassNameW, I, (H, wintypes.LPWSTR, I)), (self.u.EnumChildWindows, wintypes.BOOL, (H, V, wintypes.LPARAM)), (self.u.SendMessageTimeoutW, V, (H, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM, wintypes.UINT, wintypes.UINT, V)),
                 (self.g.CreateCompatibleDC, H, (H,)), (self.g.CreateCompatibleBitmap, H, (H, I, I)), (self.g.SelectObject, H, (H, H)),
                 (self.g.DeleteObject, wintypes.BOOL, (H,)), (self.g.DeleteDC, wintypes.BOOL, (H,)), (self.g.GetDIBits, I, (H, H, wintypes.UINT, wintypes.UINT, V, V, wintypes.UINT)),
                 (self.k.OpenProcess, H, (wintypes.DWORD, wintypes.BOOL, wintypes.DWORD)), (self.k.CloseHandle, wintypes.BOOL, (H,)),
@@ -112,11 +112,56 @@ class Win:
             return True
         self.u.EnumWindows(each, 0); return rows
 
+    def app_windows(self, name, pid=None):
+        """Visible top-level windows of one executable name, with modal evidence: class, enabled, owner, Win32 buttons and texts."""
+        rows = []
+        @ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+        def each(hwnd, _):
+            if not self.u.IsWindowVisible(hwnd): return True
+            owner = wintypes.DWORD(); self.u.GetWindowThreadProcessId(hwnd, ctypes.byref(owner))
+            if pid is not None and owner.value != pid: return True
+            exe = self.exe(owner.value)
+            if Path(exe.lower()).name != name: return True
+            cls = ctypes.create_unicode_buffer(128); self.u.GetClassNameW(hwnd, cls, 128)
+            title = ctypes.create_unicode_buffer(512); self.u.GetWindowTextW(hwnd, title, 512)
+            texts, buttons, other = [], [], []
+            @ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+            def each_child(chwnd, __):
+                if not self.u.IsWindowVisible(chwnd): return True
+                ccls = ctypes.create_unicode_buffer(128); self.u.GetClassNameW(chwnd, ccls, 128)
+                ctext = ctypes.create_unicode_buffer(1024); self.u.GetWindowTextW(chwnd, ctext, 1024)
+                val = ctext.value.strip()
+                if ccls.value.lower() == 'button':
+                    kind = self.u.GetWindowLongW(chwnd, -16) & 0xF
+                    if kind in (0, 1, 0xB): buttons.append({'hwnd': int(chwnd), 'text': val, 'enabled': bool(self.u.IsWindowEnabled(chwnd))})
+                    elif kind != 7: other.append(val or ccls.value)  # checkbox/radio: a choice, not a notification
+                elif ccls.value.lower() in ('edit', 'combobox', 'listbox', 'syslistview32', 'systreeview32', 'directuihwnd'): other.append(ccls.value)
+                if val: texts.append(val)
+                return True
+            self.u.EnumChildWindows(hwnd, each_child, 0)
+            rows.append({'hwnd': int(hwnd), 'pid': owner.value, 'exe': exe, 'class': cls.value, 'title': title.value, 'rect': self.rect(hwnd), 'enabled': bool(self.u.IsWindowEnabled(hwnd)),
+                         'owned': bool(self.u.GetWindow(hwnd, 4)), 'texts': texts, 'buttons': buttons, 'inputs': other})
+            return True
+        self.u.EnumWindows(each, 0); return rows
+
+    def gone(self, hwnd, seconds=2.0):
+        """True once a window no longer exists or is hidden."""
+        end = time.monotonic() + seconds
+        while True:
+            if not self.u.IsWindow(hwnd) or not self.u.IsWindowVisible(hwnd): return True
+            if time.monotonic() >= end: return False
+            time.sleep(.05)
+
     def click_dialog_ok(self, dlg_hwnd, ok_hwnd):
-        result = ctypes.c_size_t(0)
-        ok = self.u.SendMessageTimeoutW(ok_hwnd, 0x00F5, 0, 0, 0x0002, 2000, ctypes.byref(result))
-        if not ok:
-            ok = self.u.SendMessageTimeoutW(dlg_hwnd, 0x0111, 1, ok_hwnd, 0x0002, 2000, ctypes.byref(result))
+        # BM_CLICK is silently ignored when the dialog is not its thread's active window (another
+        # application in front), so the command of this exact button is sent to its parent instead.
+        # Never a blind IDOK. BM_CLICK is only the fallback for a button without a control id.
+        H = wintypes.HWND; send = self.u.SendMessageTimeoutW; result = ctypes.c_size_t(0)
+        send.restype = ctypes.c_ssize_t; send.argtypes = (H, wintypes.UINT, ctypes.c_size_t, ctypes.c_ssize_t, wintypes.UINT, wintypes.UINT, ctypes.POINTER(ctypes.c_size_t))
+        self.u.GetDlgCtrlID.restype = ctypes.c_int; self.u.GetDlgCtrlID.argtypes = (H,); self.u.GetParent.restype = H; self.u.GetParent.argtypes = (H,)
+        ident = self.u.GetDlgCtrlID(ok_hwnd) & 0xFFFF
+        if ident: ok = send(self.u.GetParent(ok_hwnd) or dlg_hwnd, 0x0111, ident, ok_hwnd, 0x0002, 2000, ctypes.byref(result))
+        else: ok = send(ok_hwnd, 0x00F5, 0, 0, 0x0002, 2000, ctypes.byref(result))
         return bool(ok)
 
     def root_at(self, x, y):
@@ -259,3 +304,70 @@ class GuardedDesktop:
             self._append(done)
             return {'dismissed': bool(sent), 'title': title, 'text': text}
         return None
+
+    SAFE_LABELS = ('ok', 'continue', 'close', 'dismiss', 'got it')
+    KNOWN_OK_TEXT = ('after effects warning', 'undo group mismatch')
+
+    def ae_dialogs(self, process=None, pid=None):
+        """Modal evidence for After Effects from Win32 state alone: standard dialogs, and a disabled main frame with its enabled owned windows."""
+        process = process or targets(self.root)['after-effects']['name']
+        rows = self.win.app_windows(process, pid)
+        dialogs = [r for r in rows if r['class'] == '#32770']
+        frames = [r for r in rows if r['class'] != '#32770' and not r['owned']]
+        if any(not r['enabled'] for r in frames):
+            drawn = [r for r in rows if r['class'] != '#32770' and r['owned'] and r['enabled']]
+            # An application-drawn modal exposes no Win32 controls; a disabled frame with no visible modal is reported on the frame itself.
+            dialogs += drawn or ([] if dialogs else [dict(r, hiddenModal=True) for r in frames if not r['enabled']][:1])
+        return dialogs
+
+    def _evidence(self, row):
+        try:
+            image = self.win.capture(row['hwnd']); identity = 'dialog-' + uuid.uuid4().hex; path = self.folder / f'{identity}.png'; image.save(path, 'PNG'); return str(path)
+        except Exception: return None
+
+    def handle_ae_dialogs(self, process=None, pid=None, known=None, limit=5):
+        """Deterministic modal handling for the single native writer.
+
+        A standard dialog whose only push button carries a plain acknowledgement
+        label is acknowledged, logged INTENT then DONE, and verified closed. A
+        dialog with a second button is a choice whatever its text says. Anything that
+        offers a choice, takes input, is application-drawn or does not close is
+        never pressed blind: it is returned as an unhandled blocker with its
+        title, text, buttons and a screenshot. Returns None when no modal exists.
+        """
+        if not hasattr(self.win, 'app_windows'): return None
+        dismissed = []
+        label = lambda b: b['text'].replace('&', '').strip().lower()
+        def stop(row, reason):
+            title = str(row.get('title') or '').strip(); text = ' '.join(str(t) for t in row.get('texts', []))
+            blocker = {'handled': False, 'hwnd': row['hwnd'], 'class': row['class'], 'title': title[:200], 'text': text[:1200], 'buttons': [b['text'] for b in row.get('buttons', [])], 'reason': reason, 'dismissed': dismissed, 'at': self.clock()}
+            if known != row['hwnd']:
+                blocker['screenshot'] = self._evidence(row)
+                self._append({'requestId': 'ae-dialog-' + uuid.uuid4().hex[:12], 'target': 'after-effects-dialog', 'kind': 'dialog_blocker', 'state': 'BLOCKED', **{k: blocker[k] for k in ('hwnd', 'class', 'title', 'text', 'buttons', 'reason', 'screenshot', 'at')}})
+            return blocker
+        for _ in range(limit):
+            dialogs = self.ae_dialogs(process, pid)
+            if not dialogs: break
+            row = dialogs[0]; title = str(row.get('title') or '').strip(); text = ' '.join(str(t) for t in row.get('texts', []))
+            every = row.get('buttons', []); buttons = [b for b in every if b['enabled']]
+            target = None; reason = None
+            if row['class'] != '#32770': reason = 'After Effects is blocked by a modal it draws itself; its buttons cannot be read, so nothing was pressed.'
+            elif row.get('inputs'): reason = 'The dialog asks for input or a choice; nothing was pressed.'
+            elif len(every) == 1 and len(buttons) == 1 and label(buttons[0]) in self.SAFE_LABELS: target = buttons[0]
+            else: reason = 'The dialog offers ' + (', '.join(b['text'] or '?' for b in every) or 'no readable button') + '; choosing is not a notification acknowledgement, so nothing was pressed.'
+            if target:
+                entry = {'requestId': 'ae-dialog-' + uuid.uuid4().hex[:12], 'target': 'after-effects-dialog', 'kind': 'dialog_ok', 'hwnd': row['hwnd'], 'okHwnd': target['hwnd'], 'button': target['text'], 'title': title[:120], 'text': text[:600], 'at': self.clock(), 'state': 'INTENT'}
+                self._append(entry)
+                try: sent = self.win.click_dialog_ok(row['hwnd'], target['hwnd']); closed = bool(sent) and self.win.gone(row['hwnd'])
+                except BaseException as error:
+                    self._append(entry | {'state': 'UNKNOWN', 'reason': type(error).__name__, 'at': self.clock()}); raise
+                self._append(entry | {'state': 'DONE' if closed else 'UNKNOWN', 'at': self.clock()})
+                if closed:
+                    dismissed.append({'title': title[:120], 'text': text[:600], 'button': target['text'], 'at': self.clock()}); continue
+                reason = 'The acknowledgement was sent but the dialog did not close; it was not pressed again.'
+            return stop(row, reason)
+        else:
+            # The allowance is spent. Only a dialog that is actually still open is a blocker.
+            dialogs = self.ae_dialogs(process, pid)
+            if dialogs: return stop(dialogs[0], 'After Effects keeps raising dialogs; the acknowledgement allowance for this command is spent, so nothing more was pressed.')
+        return {'handled': True, 'dismissed': dismissed} if dismissed else None

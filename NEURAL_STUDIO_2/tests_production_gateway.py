@@ -1,4 +1,5 @@
 """Gateway fixtures only. Synthetic AE in Node, no live native/provider calls."""
+import os;os.environ['NEURAL_AE_DIALOGS']='0'  # fixtures never probe or touch the real desktop
 import base64,io,json,shutil,sqlite3,subprocess,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -100,6 +101,7 @@ class GatewayTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'unresolved'):self.gateway.ae_inspect('replacement')
   self.native_execute(row);self.assertEqual(self.gateway.ae_status('unknown')['state'],'COMPLETED')
  def test_ae_crash_after_submit_reports_blocker_without_replay(self):
+  import production_gateway;self.addCleanup(setattr,production_gateway,'CRASH_INTERVAL',production_gateway.CRASH_INTERVAL);production_gateway.CRASH_INTERVAL=0
   row=self.gateway.ae_inspect('crashy');self.gateway._ae_processes=lambda:[]
   out=self.gateway.ae_status('crashy');self.assertEqual(out['state'],'UNKNOWN');self.assertEqual(out['aeCrash']['kind'],'not_running');self.assertEqual(out['continuation']['outcome'],'blocked');self.assertIn('never be replayed',out['error'])
   self.gateway._ae_processes=lambda:['2099-01-01T00:00:00+00:00'];self.assertEqual(self.gateway.ae_status('crashy')['aeCrash']['kind'],'restarted')
@@ -117,9 +119,28 @@ class GatewayTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'unresolved'):self.gateway.ae_inspect('busy')
   self.assertEqual((self.bridge/'ae_command.json').read_bytes(),before)
  def test_foreign_lock_not_removed(self):
-  lock=self.bridge/'tfx_skill_client.lock';lock.write_text('other')
-  with self.assertRaises(FileExistsError):self.gateway.ae_inspect('locked')
+  import production_gateway as PG
+  lock=self.bridge/'tfx_skill_client.lock';lock.write_text('other');PG.LOCK_WAIT,old=.3,PG.LOCK_WAIT
+  try:
+   with self.assertRaises(FileExistsError):self.gateway.ae_inspect('locked')
+  finally:PG.LOCK_WAIT=old
   self.assertEqual(lock.read_text(),'other')
+  # Nothing reached the bridge, so the request is a settled failure and the next one is admitted.
+  self.assertEqual(self.gateway._row('locked')['state'],'FAILED');self.assertTrue(self.gateway._row('locked')['notSubmitted'])
+  self.assertFalse((self.bridge/'ae_command.json').exists())
+  lock.unlink();self.assertEqual(self.gateway.ae_inspect('after')['state'],'SUBMITTED')
+ def test_lock_of_dead_holder_is_set_aside_not_deleted(self):
+  import os,time
+  lock=self.bridge/'tfx_skill_client.lock';lock.write_text('dead');old=time.time()-600;os.utime(lock,(old,old))
+  self.assertEqual(self.gateway.ae_inspect('stale')['state'],'SUBMITTED')
+  kept=list(self.bridge.glob('tfx_skill_client.lock.stale-*'));self.assertEqual(len(kept),1);self.assertEqual(kept[0].read_text(),'dead')
+  self.assertFalse(lock.exists());self.assertGreaterEqual(self.gateway._row('stale')['staleLockSetAside'],599)
+ def test_busy_bridge_refusal_is_not_unknown(self):
+  atomic(self.bridge/'ae_command.json',{'id':'other','status':'running'})
+  with self.assertRaisesRegex(ValueError,'unresolved'):self.gateway.ae_inspect('busy')
+  self.assertEqual(self.gateway._row('busy')['state'],'FAILED')
+  atomic(self.bridge/'ae_command.json',{'id':'other','status':'completed'});atomic(self.bridge/'ae_mcp_result.json',{'_commandId':'other','ok':True})
+  self.assertEqual(self.gateway.ae_inspect('next')['state'],'SUBMITTED')
  def test_persisted_pause_revision_generation_model_lease(self):
   for key in ('revision','generation','model','paused'):
    if key=='revision':self.workspace['p']['revision']=9
@@ -176,4 +197,35 @@ class GatewayTests(unittest.TestCase):
    atomic(target,{'ok':True})
   self.assertEqual(len(attempts),3)
   self.assertEqual(json.loads(target.read_text(encoding='utf-8')),{'ok':True})
+
+class _ReviewFix:
+ def test_stale_lock_that_cannot_be_set_aside_is_bounded(self):
+  import os,time,production_gateway as PG
+  lock=self.bridge/'tfx_skill_client.lock';lock.write_text('held');old=time.time()-600;os.utime(lock,(old,old))
+  PG.LOCK_WAIT,keep=.5,PG.LOCK_WAIT;start=time.time()
+  try:
+   with unittest.mock.patch('production_gateway.os.rename',side_effect=PermissionError('held open')):
+    with self.assertRaises(FileExistsError):self.gateway.ae_inspect('held')
+  finally:PG.LOCK_WAIT=keep
+  self.assertLess(time.time()-start,5);self.assertEqual(lock.read_text(),'held')
+  self.assertEqual(self.gateway._row('held')['state'],'FAILED');self.assertTrue(self.gateway._row('held')['notSubmitted'])
+ def test_lock_cleanup_never_fails_a_submitted_command(self):
+  import production_gateway as PG
+  real=Path.unlink
+  def unlink(path,*a,**k):
+   if path.name=='tfx_skill_client.lock':raise PermissionError('scanner')
+   return real(path,*a,**k)
+  with unittest.mock.patch.object(Path,'unlink',unlink):row=self.gateway.ae_inspect('kept')
+  self.assertEqual(row['state'],'SUBMITTED')
+ def test_dialog_acknowledgements_are_capped_per_command(self):
+  import production_gateway as PG
+  self.gateway.ae_inspect('capped');self.gateway._ae_processes=lambda:None;limits=[]
+  def probe(known,limit=5):
+   limits.append(limit);return {'handled':True,'dismissed':[{'title':'After Effects','text':'x','button':'OK','at':1}]*limit} if limit else {'handled':False,'hwnd':7,'class':'#32770','title':'After Effects','text':'x','buttons':['OK'],'reason':'allowance spent','dismissed':[],'at':1}
+  self.gateway._dialog_probe=probe
+  with unittest.mock.patch.multiple(PG,DIALOG_HANDLING=True,DIALOG_INTERVAL=0,DIALOG_CAP=7):
+   for _ in range(4):out=self.gateway.ae_status('capped')
+  self.assertEqual(limits,[5,2,0,0]);self.assertEqual(self.gateway._row('capped')['dialogCount'],7)
+  self.assertEqual(out['state'],'SUBMITTED');self.assertEqual(out['aeDialog']['reason'],'allowance spent')
+for _name in [n for n in vars(_ReviewFix) if n.startswith('test_')]:setattr(GatewayTests,_name,vars(_ReviewFix)[_name])
 if __name__=='__main__':unittest.main()

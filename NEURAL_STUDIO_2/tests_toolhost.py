@@ -1,4 +1,5 @@
 """Fake CLI streams only; no provider inference or native operations."""
+import os;os.environ['NEURAL_AE_DIALOGS']='0'  # fixtures never probe or touch the real desktop
 import io
 import json
 from pathlib import Path
