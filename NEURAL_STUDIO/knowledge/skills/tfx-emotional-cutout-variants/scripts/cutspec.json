@@ -1,0 +1,52 @@
+{
+ "V5A": {
+  "1": {
+   "src": "src/The Mentalist S01E01 Pilot.mp4",
+   "in": 2374.0,
+   "nf": 36,
+   "name": "pilot dark stare close (memory)"
+  }
+ },
+ "V5B": {
+  "1": {
+   "src": "src/The Mentalist S01E01 Pilot.mp4",
+   "in": 1865.5,
+   "nf": 36,
+   "name": "pilot reading the note, devastated (r5)"
+  },
+  "2": {
+   "src": "src/The Mentalist S06E07 The Great Red Dragon.mp4",
+   "in": 1520.8,
+   "nf": 49,
+   "name": "E07 interview room head-down"
+  }
+ },
+ "V6A": {
+  "1": {
+   "src": "src/The Mentalist S06E08 Red John.mp4",
+   "in": 2345.0,
+   "nf": 36,
+   "name": "E08 park looking down"
+  },
+  "2": {
+   "src": "src/The Mentalist S06E08 Red John.mp4",
+   "in": 2415.0,
+   "nf": 49,
+   "name": "E08 park looking up"
+  }
+ },
+ "V6B": {
+  "1": {
+   "src": "src/The Mentalist S06E02 Black-Winged Redbird.mp4",
+   "in": 2102.4,
+   "nf": 36,
+   "name": "E02 interrogation close"
+  },
+  "2": {
+   "src": "src/The Mentalist S06E02 Black-Winged Redbird.mp4",
+   "in": 2118.7,
+   "nf": 49,
+   "name": "E02 interrogation close 2"
+  }
+ }
+}

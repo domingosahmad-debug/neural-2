@@ -242,5 +242,35 @@ class GeminiProductionTests(unittest.TestCase):
         for name in ('mcp_other_project_context','mcp_neural_ae_submit','call_mcp_tool','run_command'):
             data=events();data.insert(1,json.dumps({'event':'step_update','step_update':{'conversation_id':SID,'step_type':'tool','tool_name':name}}))
             self.assertEqual(parse(data,'COMPLETED',MODEL,tools=['project_context'])['status'],'UNKNOWN')
+        data=events();data.insert(1,json.dumps({'event':'step_update','step_update':{'conversation_id':SID,'step_type':'tool','tool_name':'read_file'}}))
+        self.assertEqual(parse(data,'COMPLETED',MODEL,tools=['project_context'],allow_read_file=False)['status'],'UNKNOWN')
+
+    def test_scoped_visual_read_file_admission(self):
+        from providers_engine.production_host import APP_ROOT
+        with tempfile.TemporaryDirectory(dir=APP_ROOT/'data') as temp:
+            base=Path(temp);row,packet=self.fixture(base,False,False)
+            scope=json.loads(Path(packet['productionScope']).read_text())
+            scope['allowVisualRead']=True;scope['visualRoots']=[scope['projectRoot']]
+            Path(packet['productionScope']).write_text(json.dumps(scope))
+            seen={}
+            def runner(args,cwd,env,prompt,cancel,raw_path,timeout=None):
+                if args[-1]=='models':return 'COMPLETED',[MODEL+' High'],None
+                seen['args']=args;seen['prompt']=prompt
+                seen['settings']=json.loads(Path(args[args.index('--settings')+1]).read_text())
+                result={**packet['resultTemplate'],'summary':'visual pass','production':{'outcome':'complete'}}
+                data=events(response=json.dumps(result),permission='request-review')
+                data.insert(1,json.dumps({'event':'step_update','step_update':{'conversation_id':SID,'step_type':'tool','tool_name':'read_file','tool_info':{'parameters':{}}}}))
+                return 'COMPLETED',data,None
+            with patch('providers_engine.gemini.executable',return_value=['official-agy']),patch('providers_engine.gemini.Path.home',return_value=base/'home'):
+                result=GeminiTransport(runner).run(row,packet,base/'job',None,threading.Event())
+            self.assertEqual(result['status'],'COMPLETED')
+            self.assertIn('--add-dir',seen['args'])
+            self.assertIn(str(Path(scope['projectRoot']).resolve()),seen['args'])
+            norm=str(Path(scope['projectRoot']).resolve()).replace('\\','/')
+            self.assertIn(f'read_file({norm}*)',seen['settings']['permissions']['allow'])
+            for denied in ('write_file(*)','read_url(*)','execute_url(*)','command(*)'):
+                self.assertIn(denied,seen['settings']['permissions']['deny'])
+            self.assertNotIn('read_file(*)',seen['settings']['permissions']['deny'])
+            self.assertIn('read_file',seen['prompt'])
 
 if __name__=='__main__':unittest.main()

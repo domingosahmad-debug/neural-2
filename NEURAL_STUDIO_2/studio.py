@@ -470,6 +470,8 @@ def serve(db, port, open_browser=False):
                 self.json({'error': str(error)}, 400)
 
     with ThreadingHTTPServer(('127.0.0.1', port), Handler) as server:
+        import model_discovery
+        model_discovery.sync_catalog_async(ROOT)
         production.service_url=f'http://127.0.0.1:{server.server_port}/'
         production.service_token=token
         production.recover()

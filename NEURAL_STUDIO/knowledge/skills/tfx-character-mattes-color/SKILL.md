@@ -6,7 +6,7 @@ description: Separate all visible characters and transfer user-authored color tr
 
 # Character mattes and color
 
-1. Inspect the user's actual approved example and native effect order/settings at matching times. Explain what the separation adds: independent character exposure/color, background atmosphere, rim and readable depth. Do not replace it with a universal Lumetri or saturation preset.
+1. Respect the user's manual finishing preference: **do NOT add automated color correction, `Exposure`, `Curves`, `CC Vignette`, `Brightness & Contrast`, `Hue/Saturation`, or `Sharpen`/`Unsharp Mask` stacks** to general edits unless explicitly requested for a matte/composite or palette replica. Inspect the user's actual approved example and native effect order/settings at matching times when color isolation IS requested, without replacing it with a universal Lumetri or saturation preset.
 2. Determine whether native Roto Brush or generated tracked luma/alpha media is appropriate and available. They are different techniques. Never call externally generated masks native Roto Brush strokes.
 3. Prompt/track each visible character independently, using distinct object IDs and correctly scaled image coordinates. Include secondary/distant characters, hats, hair, sleeves and weapons when appropriate. A box over a character can still select the floor: inspect pixels.
 4. Validate mask start/middle/end AND large motion/occlusion changes. Correct drift using additional frames/positive/negative points. Check black clothes becoming holes, missing hats, floor false positives and edge chatter. One good first frame does not validate propagation.

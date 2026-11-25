@@ -132,6 +132,48 @@
       "model": "opencode/nemotron-3.5-lightning-free",
       "label": "OpenCode nemotron-3.5-lightning (free)",
       "source": "Installed OpenCode CLI catalog 12 Nov 2026; shared free quota, checked at invocation; tool calling unproven until first live run"
+    },
+    {
+      "provider": "gemini",
+      "model": "gemini-4-neon-high",
+      "label": "Gemini 4 Neon (High) (Antigravity)",
+      "source": "Auto-discovered from installed Antigravity subscription catalog; quota checked at invocation"
+    },
+    {
+      "provider": "gemini",
+      "model": "gemini-4-carbon-high",
+      "label": "Gemini 4 Carbon (High) (Antigravity)",
+      "source": "Auto-discovered from installed Antigravity subscription catalog; quota checked at invocation"
+    },
+    {
+      "provider": "gemini",
+      "model": "gemini-pro-orchestrator-neon",
+      "label": "Orchestrator (Neon) (Antigravity)",
+      "source": "Auto-discovered from installed Antigravity subscription catalog; quota checked at invocation"
+    },
+    {
+      "provider": "gemini",
+      "model": "gemini-pro-orchestrator",
+      "label": "Orchestrator (Carbon) (Antigravity)",
+      "source": "Auto-discovered from installed Antigravity subscription catalog; quota checked at invocation"
+    },
+    {
+      "provider": "gemini",
+      "model": "gemini-pro-orchestrator-argon",
+      "label": "Orchestrator (Argon) (Antigravity)",
+      "source": "Auto-discovered from installed Antigravity subscription catalog; quota checked at invocation"
+    },
+    {
+      "provider": "opencode",
+      "model": "opencode/hy4-flash-free",
+      "label": "OpenCode hy4-flash (free)",
+      "source": "Auto-discovered from installed OpenCode CLI catalog; shared free quota; requires tools/opencode_free_probe.py pass before use"
+    },
+    {
+      "provider": "opencode",
+      "model": "opencode/tidepool-alpha-free",
+      "label": "OpenCode tidepool-alpha (free)",
+      "source": "Auto-discovered from installed OpenCode CLI catalog; shared free quota; requires tools/opencode_free_probe.py pass before use"
     }
   ]
 }

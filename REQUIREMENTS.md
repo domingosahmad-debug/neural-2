@@ -32,21 +32,24 @@ Optional: Node.js 20+ runs the JavaScript tests under `NEURAL_STUDIO_2/tests`.
 | Item | Type | Notes |
 |---|---|---|
 | Twixtor Pro (RE:Vision Effects) | paid | Velocity and speed ramps |
-| Boris FX Sapphire: S_BlurMoCurves, S_WarpChroma, S_DigitalDamage, S_Glow, S_EdgeDetect | paid | Transitions, glow, glitch |
-| BCC Directional Blur | paid, optional | Recipes fall back to native blur |
+| Boris FX Sapphire (`S_BlurMoCurves`, `S_WarpChroma`, `S_EdgeRays`, `S_DistortRGB`, `S_Shake`, `S_Glow`, `S_DigitalDamage`) | paid | Transitions, chromatic/light FX, glow, glitch |
+| Boris FX Continuum / BCC (`BCC Directional Blur`, `BCC Lens Blur OBS`) | paid, optional | Cut-boundary blur transitions; recipes fall back to native blur |
 | Mocha AE, Lumetri Color | bundled with AE | |
-| Montserrat Black | free, Google Fonts | Captions |
-| Social Gothic Rough | commercial font | Title cards; substitute if you do not own it |
+| Montserrat (`Montserrat-Black`, `Montserrat-Medium`) | free, Google Fonts | Captions & hero words |
+| Sitka Small | ships with Windows | Conversational dialogue captions |
+| Social Gothic Rough, Eastman Roman Trial Black | commercial fonts | Title cards / hero drops; substitute if you do not own them |
 | Impact | ships with Windows | |
 
-If a plugin is missing, the director must use a native substitute and say so in the plan. It must never fake a plugin's look.
+If a plugin is missing, the director must use a native substitute and say so in its plan. It must never fake a plugin's look.
 
-## Optional local models (`Setup-Neural2.cmd -Voice`, auto)
+## Optional local models (`Setup-Neural2.cmd -Voice`, auto) and audio/vision tools
 
 | Purpose | Package or model | Location | Source and SHA-256 |
 |---|---|---|---|
 | Relay local assistant | llama-cpp-python 0.3.36 (CPU) + Qwen3-0.6B-Q8_0.gguf (Apache-2.0, 639,446,688 B) | `NEURAL_STUDIO/.tools/helper-python`, `NEURAL_STUDIO/.models/` | https://huggingface.co/Qwen/Qwen3-0.6B-GGUF · `9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031` |
 | Voice (text-to-speech) | kokoro-onnx 0.6.1, onnxruntime, soundfile + kokoro-v1.0.onnx (325,505,369 B) and voices-v1.0.bin (28,214,398 B) | `NEURAL_STUDIO/.tools/voice-python`, `NEURAL_STUDIO/.models/kokoro/` | https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files-v1.1 · onnx `beb0d1848dee9a49da392cc3df26958d46cfa35d321edf434f52949153f0df3a` · bin `bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d` |
 | Dictation and captions (ASR) | faster-whisper 1.2.1 (pulls ctranslate2, av, tokenizers, huggingface_hub) + Systran faster-whisper `small.en` and `base` | `<repo>/.caption_deps`, `NEURAL_STUDIO/.models/faster-whisper-<size>/` | https://huggingface.co/Systran. Set `NEURAL_SPEECH_ROOT` to use another folder |
+| Dialogue isolation & stem censorship (optional) | Demucs (`htdemucs`, `pip install demucs`) | Python env | Isolates dialogue from background music/SFX and creates clean profanity stem dips |
+| Cutouts & vision helpers (optional) | OpenCV (`opencv-python`), SAM 2.1 | Python env / `.models/` | Used for subject detection and cutout workflows |
 
 Without these, Neural still edits. Only Relay, spoken replies and dictation are unavailable.

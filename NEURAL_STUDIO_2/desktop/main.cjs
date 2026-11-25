@@ -13,7 +13,7 @@ if (!locked) app.quit();
 app.on('second-instance', () => { if (window) { window.restore(); window.show(); window.focus(); } });
 function get(url) {
   return new Promise((resolve, reject) => {
-    const request = http.get(url, {timeout: 1500}, response => {
+    const request = http.get(url, {timeout: 15000}, response => {
       let text = '';
       response.on('data', part => text += part);
       response.on('end', () => {

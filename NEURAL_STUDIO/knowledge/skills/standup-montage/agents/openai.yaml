@@ -1,0 +1,4 @@
+interface:
+  display_name: "Stand-Up Montage"
+  short_description: "Load TUF stand-up editing workflow"
+  default_prompt: "STANDUP. Load the master handoff and inspect the active After Effects project through TonyFX before editing."

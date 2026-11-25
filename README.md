@@ -2,9 +2,18 @@
 
 > **AI assistant setting this up: open [BEFORE_YOU_LAUNCH_CHECKLIST.md](BEFORE_YOU_LAUNCH_CHECKLIST.md) and work through it top to bottom.** It covers unblocking the download, every tool to install, the sign-ins, setup and the final checks. The person you are helping only needs to sign in to their own accounts and approve installs.
 
-Neural 2.0 is a local AI editing studio for Adobe After Effects. You give it a creative brief and your footage and music. A crew of AI models then plans, prototypes, builds, reviews and renders the edit inside your own After Effects. Every AE command goes through one guarded native bridge, called TonyFX. You approve the final result.
+Neural 2.0 is a local AI editing studio for Adobe After Effects. You give it a creative brief and your footage and music. A crew of AI models then plans, prototypes, builds, visually reviews, and renders the edit inside your own After Effects. Every AE command goes through one guarded native bridge, called TonyFX (`tonyfx-cep/`). You approve the final result.
 
-It runs entirely on your PC. The AI models are the CLIs you install and sign in to with **your own** accounts: Claude Code, Codex, OpenCode (it has free models) and Antigravity (for Gemini). Neural never stores or shares keys.
+- **Website:** https://domingosahmad-debug.github.io/neural-2/
+- **Repository & ZIP:** https://github.com/domingosahmad-debug/neural-2
+
+It runs entirely on your PC. The AI models are the CLIs you install and sign in to with **your own** accounts: Antigravity (for Gemini 4 Neon, Orchestrator, Hydrogen, Carbon, Flash), Codex, OpenCode (free models), and Claude Code. Neural automatically discovers newly installed Antigravity and OpenCode models into `model_catalog.json` on startup, and never stores or shares keys.
+
+## What's included in the updated Neural 2.0 package
+- **22 editing & QA skills** (`NEURAL_STUDIO_2/knowledge/` & `NEURAL_STUDIO/knowledge/skills/`), including `tfx-antigravity-visual-review` (pixel-by-pixel inspection of contact sheets, 8-frame source strips, and renders via native `read_file`), `tfx-intro-mastery`, `tfx-emotional-cutout-variants`, `tfx-character-mattes-color`, `tfx-approved-example-study`, `tfx-event-montage`, `standup-montage`, and `accepted-workflow-updates-20261124.md`.
+- **Automatic model discovery** (`NEURAL_STUDIO_2/model_discovery.py`) so Gemini 4 Neon, Orchestrator Neon/Carbon/Argon, Hydrogen, and free OpenCode models appear automatically.
+- **Native visual pixel review** inside Neural stations (`Director`, `Plan`, `Review`, `Edit`) for Gemini models via scoped `read_file`.
+- **Bundled TonyFX CEP bridge** (`tonyfx-cep/`) installed automatically by `Setup-Neural2.cmd`.
 
 ## Download
 

@@ -68,29 +68,31 @@ All OPTIONAL. If one is missing, the director must use a native substitute and s
 
 | # | Item | Check |
 |---|---|---|
-| 5.1 | Twixtor Pro | AE → Effect menu → RE:Vision Plug-ins → Twixtor Pro |
-| 5.2 | Boris FX Sapphire (S_BlurMoCurves, S_WarpChroma, S_DigitalDamage, S_Glow, S_EdgeDetect) | AE → Effect menu → Sapphire |
-| 5.3 | BCC Directional Blur | AE → Effect menu → BCC |
+| 5.1 | Twixtor Pro (RE:Vision Effects) | AE → Effect menu → RE:Vision Plug-ins → Twixtor Pro |
+| 5.2 | Boris FX Sapphire (`S_BlurMoCurves`, `S_WarpChroma`, `S_EdgeRays`, `S_DistortRGB`, `S_Shake`, `S_Glow`, `S_DigitalDamage`) | AE → Effect menu → Sapphire |
+| 5.3 | Boris FX Continuum / BCC (`BCC Directional Blur`, `BCC Lens Blur OBS`) | AE → Effect menu → BCC |
 | 5.4 | Mocha AE and Lumetri Color | Bundled with AE |
-| 5.5 | Montserrat Black, Social Gothic Rough, Impact | `Get-ChildItem "$env:WINDIR\Fonts","$env:LOCALAPPDATA\Microsoft\Windows\Fonts" \| ? Name -match 'Montserrat\|Social\|impact'` |
+| 5.5 | Montserrat (`Montserrat-Black`, `Montserrat-Medium`), Sitka Small, Social Gothic Rough, Eastman Roman Trial Black, Impact | `Get-ChildItem "$env:WINDIR\Fonts","$env:LOCALAPPDATA\Microsoft\Windows\Fonts" \| ? Name -match 'Montserrat\|Sitka\|Social\|Eastman\|impact'` |
 
-## 6. Local voice, dictation and helper models
+## 6. Local voice, audio isolation, dictation and helper models
 
-OPTIONAL, about 1.5 GB. Install with `Setup-Neural2.cmd -Voice`. Without them, Relay, spoken replies and dictation are unavailable. Sources and SHA-256 hashes are in `REQUIREMENTS.md`.
+OPTIONAL. `Setup-Neural2.cmd -Voice` installs the Relay, Kokoro TTS, and faster-whisper models (~1.5 GB). Sources and SHA-256 hashes are in `REQUIREMENTS.md`.
 
-| # | Check | Expected |
+| # | Item / Check | Expected |
 |---|---|---|
-| 6.1 | `Test-Path NEURAL_STUDIO\.models\kokoro\kokoro-v1.0.onnx` | `True` |
-| 6.2 | `Test-Path NEURAL_STUDIO\.models\Qwen3-0.6B-Q8_0.gguf` | `True` |
-| 6.3 | `Get-ChildItem NEURAL_STUDIO\.models -Directory -Filter faster-whisper-*` | `small.en` and `base` folders |
+| 6.1 | `Test-Path NEURAL_STUDIO\.models\kokoro\kokoro-v1.0.onnx` | `True` (Kokoro TTS) |
+| 6.2 | `Test-Path NEURAL_STUDIO\.models\Qwen3-0.6B-Q8_0.gguf` | `True` (Relay local assistant) |
+| 6.3 | `Get-ChildItem NEURAL_STUDIO\.models -Directory -Filter faster-whisper-*` | `small.en` and `base` folders (ASR, word sync & profanity verification) |
+| 6.4 | `python -m demucs --help` (optional vocal/dialogue isolation & stem censorship) | Help banner (`pip install demucs`, uses `htdemucs`) |
+| 6.5 | `python -c "import cv2; print(cv2.__version__)"` (optional OpenCV / SAM 2.1 for frame/cutout work) | Version string |
 
 ## 7. Run the setup and final checks
 
 1. `Setup-Neural2.cmd -CheckOnly`: every REQUIRED line says `OK`.
 2. `Setup-Neural2.cmd` (add `-Voice` for section 6).
 3. `python NEURAL_STUDIO_2\check_services.py` and `python NEURAL_STUDIO_2\check_events.py`: no errors.
-4. Optional self-test, about 30 seconds: `cd NEURAL_STUDIO_2; python -m unittest discover -p "tests_*.py"` → `OK` (365 tests).
-5. Launch with `NEURAL_STUDIO_2\Launch-Neural-2.cmd`. Open **Services** and refresh: each signed-in CLI shows ready.
+4. Optional self-test, about 30 seconds: `cd NEURAL_STUDIO_2; python -m unittest discover -p "tests_*.py"` → `OK` (366 tests).
+5. Launch with `NEURAL_STUDIO_2\Launch-Neural-2.cmd`. Open **Services** / **Routing**: newly installed Antigravity Gemini models (`gemini-4-neon-high`, `gemini-pro-orchestrator-neon`, `gemini-4-hydrogen-high`, etc.) and free OpenCode models are auto-discovered into `model_catalog.json` on startup, and Gemini stations include native visual frame inspection (`read_file`) per `tfx-antigravity-visual-review`.
 6. Open After Effects with the TonyFX panel visible, then start the first project (`SETUP.md` step 8).
 
 ## What Neural does on its own during a run
